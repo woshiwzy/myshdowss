@@ -1,0 +1,35 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.melo.blog.wigetdemo.MainActivity">
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="1"
+        android:title="1"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_about"
+        android:orderInCategory="2"
+        android:title="2"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_share"
+        android:orderInCategory="3"
+        android:title="3"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_like"
+        android:orderInCategory="4"
+        android:title="4"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_collect"
+        android:orderInCategory="5"
+        android:title="5"
+        app:showAsAction="never" />
+
+</menu>

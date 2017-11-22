@@ -1,0 +1,6 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 选中样式 -->
+    <item android:drawable="@drawable/icon_stop" android:state_checked="true"/>
+    <!-- 未选中样式 -->
+    <item android:drawable="@drawable/icon_start" android:state_checked="false"/>
+</selector>
