@@ -18,12 +18,19 @@
         ar API-level can go here. -->
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
 
     <style name="StyledScrollerTextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="splite_view">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/split_clolor</item>
     </style>
 
 </resources>

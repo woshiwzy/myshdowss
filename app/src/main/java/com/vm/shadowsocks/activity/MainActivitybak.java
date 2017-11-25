@@ -1,4 +1,4 @@
-package com.vm.shadowsocks.ui;
+package com.vm.shadowsocks.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
@@ -81,9 +80,9 @@ public class MainActivitybak extends Activity implements
 
             ((ViewGroup) findViewById(R.id.AppSelectLayout).getParent()).removeView(findViewById(R.id.AppSelectLayout));
 
-            ViewParent gp =(ViewParent) (findViewById(R.id.viewAppSelectLine).getParent());
+//            ViewParent gp =(ViewParent) (findViewById(R.id.viewAppSelectLine).getParent());
 
-            ((ViewGroup) findViewById(R.id.viewAppSelectLine).getParent()).removeView(findViewById(R.id.viewAppSelectLine));
+//            ((ViewGroup) findViewById(R.id.viewAppSelectLine).getParent()).removeView(findViewById(R.id.viewAppSelectLine));
 
 
         }

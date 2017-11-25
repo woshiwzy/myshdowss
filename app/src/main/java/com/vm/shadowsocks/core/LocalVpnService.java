@@ -18,7 +18,7 @@ import com.vm.shadowsocks.tcpip.CommonMethods;
 import com.vm.shadowsocks.tcpip.IPHeader;
 import com.vm.shadowsocks.tcpip.TCPHeader;
 import com.vm.shadowsocks.tcpip.UDPHeader;
-import com.vm.shadowsocks.ui.MainActivity;
+import com.vm.shadowsocks.activity.MainActivity;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -426,7 +426,7 @@ public class LocalVpnService extends VpnService implements Runnable {
         } catch (Exception e) {
             // ignore
         }
-        onStatusChanged(ProxyConfig.Instance.getSessionName() + getString(R.string.vpn_disconnected_status), false);
+        onStatusChanged(getApplicationContext().getApplicationInfo().name +" "+ getString(R.string.vpn_disconnected_status), false);
         this.m_VPNOutputStream = null;
     }
 

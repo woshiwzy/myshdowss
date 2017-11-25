@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/input_item_height"
-        android:background="@android:color/black">
+        android:layout_height="60dp"
+        android:background="@android:color/black"
+        android:contentDescription="This is header">
 
         <TextView
             android:id="@+id/textViewTitle"
@@ -18,16 +19,17 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:text="@string/app_name"
-            android:textColor="@android:color/white" />
+            android:textColor="#5CC9F5"
+            android:textSize="@dimen/text_size_title" />
 
         <ImageView
-            android:id="@+id/imageViewBack"
+            android:id="@+id/imageViewMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/margin_content"
-            android:src="@drawable/back" />
+            android:src="@drawable/menu" />
 
         <ImageView
             android:id="@+id/imageViewCar"
@@ -36,163 +38,321 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/margin_content"
-            android:src="@drawable/icon_car" />
+            android:src="@drawable/icon_bu_car" />
 
     </RelativeLayout>
 
-    <LinearLayout
+
+    <android.support.v4.widget.DrawerLayout
+
+        android:id="@+id/drawerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/input_item_height"
-        android:orientation="vertical">
+        android:background="#E5E5E5">
 
-
-        <android.support.v4.widget.DrawerLayout
-            android:id="@+id/slideDrawerLayout"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2">
+            android:layout_height="match_parent"
+            android:contentDescription="This is content"
+            android:orientation="vertical">
 
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:id="@+id/ProxyUrlLayout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="13dp"
-                        android:tag="ProxyUrl">
-
-                        <TextView
-                            android:id="@+id/textViewProxyUrlTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/config_url"
-                            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                        <TextView
-                            android:id="@+id/textViewProxyUrl"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/config_not_set_value"
-                            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:alpha="0.4"
-                        android:background="@android:color/darker_gray" />
-
-                    <LinearLayout
-                        android:id="@+id/AppSelectLayout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="select app to proxy"
-                        android:orientation="vertical"
-                        android:padding="13dp"
-                        android:tag="AppSelect"
-                        android:visibility="gone">
-
-                        <TextView
-                            android:id="@+id/textViewAppSelectTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/select_app"
-                            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                        <TextView
-                            android:id="@+id/textViewAppSelectDetail"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/select_app_detail"
-                            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/viewAppSelectLine"
-                        android:layout_width="fill_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:alpha="0.4"
-                        android:background="@android:color/darker_gray" />
-
-
-                </LinearLayout>
-
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/listViewSlideMenu"
-                android:layout_width="200dp"
                 android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:background="@android:color/white">
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1.5">
 
 
-            </RelativeLayout>
+                    <LinearLayout
+                        android:id="@+id/viewSelectServer"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-        </android.support.v4.widget.DrawerLayout>
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/ProxyUrlLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/margin_content"
+                            android:orientation="vertical"
+                            android:tag="ProxyUrl"
+                            app:cardBackgroundColor="@android:color/white"
+                            app:cardCornerRadius="10dp"
+                            app:cardElevation="20dp">
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/relativeLayoutBottom"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_margin="@dimen/margin_content"
-            android:layout_weight="1"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="20dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+
+                                    <ImageView
+                                        android:id="@+id/imageViewCountry"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_centerVertical="true"
+                                        android:clickable="false"
+                                        android:duplicateParentState="true"
+                                        android:src="@drawable/not_set" />
+
+
+                                </LinearLayout>
+
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="3"
+                                    android:gravity="left"
+                                    android:orientation="vertical"
+                                    android:paddingLeft="@dimen/margin_content">
+
+                                    <TextView
+                                        android:id="@+id/textViewServerCountryName"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="@dimen/input_item_height"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_alignParentTop="true"
+                                        android:gravity="center_vertical|left"
+                                        android:hint="@string/select_server"
+                                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                                    <TextView
+                                        android:id="@+id/textViewCurrentConnectCount"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="@dimen/input_item_height"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_below="@id/textViewProxyUrlTitle"
+                                        android:gravity="center_vertical|left"
+                                        android:hint="@string/select_server"
+                                        android:singleLine="true"
+                                        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                                </LinearLayout>
+
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_centerVertical="true"
+                                        android:clickable="false"
+                                        android:duplicateParentState="true"
+                                        android:src="@drawable/icon_right" />
+
+
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+
+                        </android.support.v7.widget.CardView>
+
+
+                    </LinearLayout>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/relativeLayoutBottom"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/viewSelectServer"
+                        android:layout_margin="@dimen/margin_content"
+                        app:cardBackgroundColor="@android:color/white"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="20dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:minHeight="@dimen/input_item_height">
+
+                                <CheckBox
+                                    android:id="@+id/checkBoxLaw"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/margin_content"
+                                    android:gravity="center"
+                                    android:text="@string/law" />
+
+
+                            </LinearLayout>
+
+                            <View style="@style/splite_view" android:layout_margin="@dimen/margin_content"/>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+
+                                <ToggleButton
+                                    android:id="@+id/toggleButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_margin="@dimen/margin_content"
+                                    android:background="@null"
+                                    android:button="@drawable/toogle"
+                                    android:disabledAlpha="2.0"
+                                    android:textOff=""
+                                    android:textOn="" />
+
+
+                                <CheckBox
+                                    android:id="@+id/checkBox"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginRight="@dimen/margin_content"
+                                    android:text="For all website"
+                                    android:visibility="invisible" />
+                            </RelativeLayout>
+                        </LinearLayout>
+
+
+                    </android.support.v7.widget.CardView>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:padding="@dimen/margin_content">
+
+                    <TextView
+                        android:id="@+id/textViewStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/input_item_height"
+                        android:layout_alignParentTop="true"
+                        android:gravity="center" />
+
+
+                    <LinearLayout
+                        android:id="@+id/linearLayoutFastAccess"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/margin_content">
+
+                        <ImageView
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/icon_fb"
+                            android:tag="https://www.facebook.com" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_content"
+                            android:src="@drawable/icon_google"
+                            android:tag="https://www.google.com" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_content"
+                            android:src="@drawable/icon_twitter"
+                            android:tag="https://www.twitter.com" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_content"
+                            android:src="@drawable/icon_youtube"
+                            android:tag="https://www.youtube.com" />
+
+                    </LinearLayout>
+
+                    <View
+                        style="@style/splite_view"
+                        android:layout_above="@id/linearLayoutFastAccess" />
+                </RelativeLayout>
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="#E5E5E5"
+            android:orientation="vertical">
+
+            <View style="@style/splite_view" />
 
             <RelativeLayout
+                android:id="@+id/viewMenuExit"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="@dimen/input_item_height"
+                android:background="@android:color/black">
 
-                <ToggleButton
-                    android:id="@+id/toggleButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_centerVertical="true"
-                    android:layout_margin="@dimen/margin_content"
-                    android:background="@null"
-                    android:button="@drawable/toogle"
-                    android:disabledAlpha="2.0"
-                    android:textOff=""
-                    android:textOn="" />
-
-
-                <CheckBox
-                    android:id="@+id/checkBox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/margin_content"
-                    android:text="For all website"
-                    android:visibility="invisible" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/input_item_height"
+                    android:gravity="center"
+                    android:text="@string/menu_item_exit"
+                    android:textColor="#5CC9F5"
+                    android:textSize="@dimen/text_size_content" />
             </RelativeLayout>
 
-
-        </android.support.v7.widget.CardView>
-
-    </LinearLayout>
+            <View style="@style/splite_view" />
 
 
-</android.support.v7.widget.CardView>
+            <View style="@style/splite_view" />
+
+            <RelativeLayout
+                android:id="@+id/feedBack"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/input_item_height"
+                android:background="@android:color/black">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/input_item_height"
+                    android:gravity="center"
+                    android:text="@string/menu_feedback"
+                    android:textColor="#5CC9F5"
+                    android:textSize="@dimen/text_size_content" />
+            </RelativeLayout>
+
+            <View style="@style/splite_view" />
+
+
+        </LinearLayout>
+
+    </android.support.v4.widget.DrawerLayout>
+
+
+</LinearLayout>

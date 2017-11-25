@@ -1,4 +1,4 @@
-package com.vm.shadowsocks.ui;
+package com.vm.shadowsocks.activity;
 
 import android.animation.Animator;
 import android.app.ActionBar;

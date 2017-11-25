@@ -17,3 +17,7 @@
 #}
 -keep class com.journeyapps.barcodescanner.** { *; }
 -dontwarn org.bouncycastle.**
+#保护注解
+-keepattributes *Annotation*
+#忽略警告
+-ignorewarnings

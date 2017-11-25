@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Shadowsocks Fly</string>
+    <string name="app_name">Flicker VPN</string>
     <string name="menu_item_toggle_global">Toggle global mode</string>
     <string name="menu_item_switch">Proxy</string>
     <string name="menu_item_exit">Exit</string>
@@ -22,4 +22,12 @@
     <string name="config_url_hint">ss://method:password@host:port</string>
     <string name="connected">Connected</string>
     <string name="connected_not">Ready to connect</string>
+
+    <string name="menu_feedback">Feed Back</string>
+    <string name="title_activity_base">BaseActivity</string>
+    <string name="current">Current online:</string>
+    <string name="host_list">Select server</string>
+    <string name="select_server">Please select server</string>
+    <string name="select_server_befor">Please stop first.</string>
+    <string name="law">I will abide by the local laws. \nThe App developer will not take any responsibility for my actions.</string>
 </resources>

@@ -1,6 +1,6 @@
 package com.vm.shadowsocks.constant;
 
-import com.vm.shadowsocks.ui.MainActivity;
+import com.vm.shadowsocks.activity.MainActivity;
 
 /**
  * Created by wangzy on 2017/11/22.

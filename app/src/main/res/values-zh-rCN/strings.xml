@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Shadowsocks Fly</string>
+    <string name="app_name">闪烁VPN</string>
     <string name="menu_item_switch">代理</string>
     <string name="menu_item_toggle_global">开/关全局模式</string>
-    <string name="menu_item_about">关于</string>
     <string name="menu_item_exit">退出</string>
     <string name="config_url">选择代理服务器</string>
     <string name="config_not_set_value">未设置</string>
@@ -24,4 +23,10 @@
 
     <string name="connected">已连接</string>
     <string name="connected_not">未连接</string>
+    <string name="menu_feedback">反馈</string>
+    <string name="current">当前在线:</string>
+    <string name="host_list">选择代理服务器</string>
+    <string name="select_server">请选择代理服务器</string>
+    <string name="select_server_befor">请先停止然后再选择</string>
+    <string name="law">我将遵守本地法律，本App开发者对我的行为不负任何责任。</string>
 </resources>
