@@ -1,0 +1,78 @@
+{
+  "message": "OK",
+  "code": 200,
+  "data": [
+    {
+      "name": "AMERICA HIGH",
+      "serverurl": "65.49.201.127",
+      "id": 1,
+      "method": "aes-256-cfb",
+      "password": "666666",
+      "port": 9000
+    },
+    {
+      "name": "AMERICA HIGH SPEED",
+      "serverurl": "65.49.201.127",
+      "id": 3,
+      "method": "aes-256-cfb",
+      "password": "666666",
+      "port": 9001
+    },
+    {
+      "name": "AMERICA HIGH SPEED",
+      "serverurl": "65.49.201.127",
+      "id": 4,
+      "method": "aes-256-cfb",
+      "password": "666666",
+      "port": 9002
+    },
+    {
+      "name": "AMERICA HIGH SPEED",
+      "serverurl": "65.49.201.127",
+      "id": 5,
+      "method": "aes-256-cfb",
+      "password": "666666",
+      "port": 9003
+    },
+    {
+      "name": "AMERICA HIGH SPEED",
+      "serverurl": "65.49.201.127",
+      "id": 6,
+      "method": "aes-256-cfb",
+      "password": "666666",
+      "port": 9004
+    },
+    {
+      "name": "AMERICA HIGH SPEED",
+      "serverurl": "65.49.201.127",
+      "id": 7,
+      "method": "aes-256-cfb",
+      "password": "password1",
+      "port": 8381
+    },
+    {
+      "name": "AMERICA HIGH SPEED",
+      "serverurl": "65.49.201.127",
+      "id": 8,
+      "method": "aes-256-cfb",
+      "password": "password2",
+      "port": 8382
+    },
+    {
+      "name": "AMERICA HIGH SPEED",
+      "serverurl": "65.49.201.127",
+      "id": 9,
+      "method": "aes-256-cfb",
+      "password": "password3",
+      "port": 8384
+    },
+    {
+      "name": "AMERICA HIGH SPEED",
+      "serverurl": "65.49.201.127",
+      "id": 10,
+      "method": "aes-256-cfb",
+      "password": "666666",
+      "port": 9000
+    }
+  ]
+}

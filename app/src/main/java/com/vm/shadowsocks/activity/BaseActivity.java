@@ -20,15 +20,27 @@ public class BaseActivity extends Activity {
 
 
     public void showCover() {
-        ViewGroup rootView = getWindow().getDecorView().findViewById(android.R.id.content);
 
-        rootView.addView(loadingView);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ViewGroup rootView = getWindow().getDecorView().findViewById(android.R.id.content);
+                rootView.addView(loadingView);
+            }
+        });
+
     }
 
     public void hideCover() {
-        ViewGroup rootView = getWindow().getDecorView().findViewById(android.R.id.content);
 
-        rootView.removeView(loadingView);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ViewGroup rootView = getWindow().getDecorView().findViewById(android.R.id.content);
+                rootView.removeView(loadingView);
+            }
+        });
+
     }
 
 

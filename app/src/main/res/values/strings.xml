@@ -29,5 +29,5 @@
     <string name="host_list">Select server</string>
     <string name="select_server">Please select server</string>
     <string name="select_server_befor">Please stop first.</string>
-    <string name="law">I will abide by the local laws. \nThe App developer will not take any responsibility for my actions.</string>
+    <string name="law">I will abide by my laws.</string>
 </resources>

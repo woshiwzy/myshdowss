@@ -84,9 +84,9 @@ public class LocalVpnService extends VpnService implements Runnable {
     }
 
     public interface onStatusChangedListener {
-        public void onStatusChanged(String status, Boolean isRunning);
+        void onStatusChanged(String status, Boolean isRunning);
 
-        public void onLogReceived(String logString);
+        void onLogReceived(String logString);
     }
 
     public static void addOnStatusChangedListener(onStatusChangedListener listener) {
@@ -200,9 +200,8 @@ public class LocalVpnService extends VpnService implements Runnable {
                     try {
                         ProxyConfig.Instance.m_ProxyList.clear();
                         ProxyConfig.Instance.addProxyToList(ProxyUrl);
-                        writeLog("Proxy is: %s", ProxyConfig.Instance.getDefaultProxy());
+//                        writeLog("Proxy is: %s", ProxyConfig.Instance.getDefaultProxy());
                     } catch (Exception e) {
-                        ;
                         String errString = e.getMessage();
                         if (errString == null || errString.isEmpty()) {
                             errString = e.toString();
@@ -373,7 +372,7 @@ public class LocalVpnService extends VpnService implements Runnable {
 
 
         Class<?> SystemProperties = Class.forName("android.os.SystemProperties");
-        Method method = SystemProperties.getMethod("get", new Class[]{String.class});
+        Method method = SystemProperties.getMethod("get", String.class);
         ArrayList<String> servers = new ArrayList<String>();
         for (String name : new String[]{"net.dns1", "net.dns2", "net.dns3", "net.dns4",}) {
             String value = (String) method.invoke(null, name);

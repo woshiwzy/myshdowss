@@ -46,8 +46,6 @@
             </intent-filter>
         </service>
 
-        <activity android:name="com.avos.avoscloud.feedback.ThreadActivity" />
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="$(applicationId).fileprovider"
@@ -57,21 +55,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/lc_fileprovider_path" />
         </provider>
-
         <activity android:name=".activity.HostListActivity" />
-        <activity
-            android:name=".activity.BaseActivity"
-            android:label="@string/title_activity_base"></activity>
-
-        <service android:name="com.avos.avoscloud.PushService" />
-
-        <receiver android:name="com.avos.avoscloud.AVBroadcastReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.USER_PRESENT" />
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
 
     </application>
 

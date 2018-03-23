@@ -12,7 +12,10 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -22,12 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.avos.avoscloud.AVAnalytics;
-import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVObject;
-import com.avos.avoscloud.SaveCallback;
-import com.avos.avoscloud.feedback.FeedbackAgent;
-import com.squareup.picasso.Picasso;
+import com.orhanobut.logger.Logger;
 import com.vm.shadowsocks.App;
 import com.vm.shadowsocks.R;
 import com.vm.shadowsocks.constant.Constant;
@@ -35,6 +33,7 @@ import com.vm.shadowsocks.core.AppInfo;
 import com.vm.shadowsocks.core.AppProxyManager;
 import com.vm.shadowsocks.core.LocalVpnService;
 import com.vm.shadowsocks.core.ProxyConfig;
+import com.vm.shadowsocks.domain.Server;
 import com.vm.shadowsocks.tool.Tool;
 
 public class MainActivity extends Activity implements
@@ -50,15 +49,20 @@ public class MainActivity extends Activity implements
     private TextView textViewStatus;
     private CheckBox checkBoxLaw;
     private int INT_GO_SELECT = 100;
-    public static AVObject selectDefaultServer;
+    public static Server selectDefaultServer;
+    public Animation animationRotate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        initView();
+        animationRotate=AnimationUtils.loadAnimation(this,R.anim.rotate);
+        animationRotate.setRepeatCount(Animation.INFINITE);
+        animationRotate.setRepeatMode(Animation.RESTART);
+        animationRotate.setInterpolator(new LinearInterpolator());
 
+        initView();
     }
 
     private void initView() {
@@ -82,17 +86,6 @@ public class MainActivity extends Activity implements
             }
         });
 
-        //menu feedback
-
-        findViewById(R.id.feedBack).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FeedbackAgent agent = new FeedbackAgent(App.getInstance());
-                agent.startDefaultThreadActivity();
-
-            }
-        });
-
 
         textViewTitle = findViewById(R.id.textViewTitle);
 
@@ -110,22 +103,13 @@ public class MainActivity extends Activity implements
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 ProxyConfig.Instance.globalMode = !ProxyConfig.Instance.globalMode;
                 if (ProxyConfig.Instance.globalMode) {
-                    Log.i(App.tag, "Proxy global mode is on");
+                    Log.i(App.Companion.getTag(), "Proxy global mode is on");
                 } else {
-                    Log.i(App.tag, "Proxy global mode is off");
+                    Log.i(App.Companion.getTag(), "Proxy global mode is off");
                 }
             }
         });
 
-
-        findViewById(R.id.imageViewCar).setOnClickListener(new View.OnClickListener() {
-
-
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
 
         findViewById(R.id.viewMenuExit).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,7 +117,6 @@ public class MainActivity extends Activity implements
                 exitApp();
             }
         });
-
 
         findViewById(R.id.ProxyUrlLayout).setOnClickListener(this);
 
@@ -174,13 +157,6 @@ public class MainActivity extends Activity implements
 
     }
 
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        AVAnalytics.onPause(this);
-    }
-
     private void exitApp() {
 
 
@@ -215,19 +191,14 @@ public class MainActivity extends Activity implements
             return;
         }
 
-
         if (checkBoxLaw.isChecked() == false) {
-
             checkBoxLaw.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.shake));
             toggleButton.setChecked(false);
             return;
         }
 
-
-
         if (LocalVpnService.IsRunning != isChecked) {
 //                    toggleButton.setEnabled(false);
-
             if (isChecked) {
 
                 Intent intent = LocalVpnService.prepare(MainActivity.this);
@@ -277,7 +248,6 @@ public class MainActivity extends Activity implements
             }
         }
 
-
     }
 
     private void startVPNService() {
@@ -294,7 +264,6 @@ public class MainActivity extends Activity implements
     @Override
     protected void onResume() {
         super.onResume();
-        AVAnalytics.onResume(this);
         if (AppProxyManager.isLollipopOrAbove) {
             if (AppProxyManager.Instance.proxyAppInfo.size() != 0) {
 
@@ -320,60 +289,41 @@ public class MainActivity extends Activity implements
     }
 
 
+    private void updateInfo(Server server){
+        textViewServerCountryName.setText(server.getName());
+        textViewCurrentConnectCount.setText(server.getMethod()+" "+server.getPort());
+        LocalVpnService.ProxyUrl = selectDefaultServer.toString();
+    }
+
+
+
     LocalVpnService.onStatusChangedListener statusChangedListener = new LocalVpnService.onStatusChangedListener() {
         @Override
         public void onStatusChanged(String status, Boolean isRunning) {
-
-            Log.i(App.tag, "status:" + status + " isrunning:" + isRunning);
+            Log.i(App.Companion.getTag(), "status:" + status + " isrunning:" + isRunning);
             onLogReceived(status);
             textViewStatus.setText((getResources().getString(R.string.app_name)) + ":" + getResources().getString(isRunning ? R.string.connected : R.string.connected_not));
-//            Toast.makeText(MainActivity.this, status, Toast.LENGTH_SHORT).show();
 
-
-            if (null != selectDefaultServer) {
-                selectDefaultServer.increment("client_count", isRunning ? 1 : -1);
-                selectDefaultServer.setFetchWhenSave(true);
-                selectDefaultServer.saveEventually(new SaveCallback() {
-                    @Override
-                    public void done(AVException e) {
-                        updateConnectInfo(selectDefaultServer);
-                    }
-                });
+            if(isRunning){
+                imageViewCountry.startAnimation(animationRotate);
+            }else {
+                imageViewCountry.clearAnimation();
             }
-
-
+//            Toast.makeText(MainActivity.this, status, Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onLogReceived(String logString) {
-            Log.e(App.tag, logString);
+            Log.e(App.Companion.getTag(), logString);
         }
     };
 
 
-    private void updateConnectInfo(AVObject selectDefaultServer) {
-        if (null != selectDefaultServer) {
-            Picasso.with(this).load(selectDefaultServer.getAVFile("icon").getUrl()).placeholder(R.drawable.loading).into(imageViewCountry);
-            textViewServerCountryName.setText(selectDefaultServer.getString("country") + "(" + selectDefaultServer.getString("name") + ")");
-            textViewCurrentConnectCount.setText(getResources().getString(R.string.current) + String.valueOf(selectDefaultServer.get("client_count")));
-        }
-
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         if (requestCode == INT_GO_SELECT && resultCode == RESULT_OK) {
             if (null != selectDefaultServer) {
-
-                updateConnectInfo(selectDefaultServer);
-
-                String url = selectDefaultServer.getString("proxy");
-//                String url = App.test;
-                Log.i(App.tag, "poxy url:" + url);
-
-                LocalVpnService.ProxyUrl = url;
-
+                updateInfo(selectDefaultServer);
             }
         }
     }

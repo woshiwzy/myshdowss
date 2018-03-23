@@ -1,5 +1,6 @@
 package com.vm.shadowsocks.tool;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
@@ -24,6 +25,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -67,18 +69,6 @@ import java.util.Random;
 public class Tool {
 
 
-    public static String getImei(Context context) {
-
-        try {
-            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(context.TELEPHONY_SERVICE);
-            String imei = telephonyManager.getDeviceId();
-            return imei;
-        } catch (Exception e) {
-            return "error:" + e.getMessage();
-        }
-
-
-    }
 
 
     public static String getLocalIpAddress() {
@@ -93,7 +83,6 @@ public class Tool {
                 }
             }
         } catch (SocketException ex) {
-            Log.e("WifiPreference IpAddress", ex.toString());
         }
         return null;
     }
@@ -205,12 +194,9 @@ public class Tool {
     }
 
     public static boolean isZh() {
-        Locale locale = App.getInstance().getResources().getConfiguration().locale;
+        Locale locale = App.instance.getResources().getConfiguration().locale;
         String language = locale.getLanguage();
-        if (language.endsWith("zh"))
-            return true;
-        else
-            return false;
+        return language.endsWith("zh");
     }
 
     public static boolean isValidUrl(String url) {
@@ -266,11 +252,7 @@ public class Tool {
         List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
         for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
             if (appProcess.processName.equals(context.getPackageName())) {
-                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_BACKGROUND) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_BACKGROUND;
             }
         }
         return false;
@@ -308,11 +290,8 @@ public class Tool {
                 = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         boolean gps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         boolean network = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        if (gps || network) {
-            return true;
-        }
+        return gps || network;
 
-        return false;
     }
 
 
@@ -444,11 +423,8 @@ public class Tool {
 
     public static boolean isInstallGMS(Context context) {
 
-        if (Tool.isAppInstalled(context, "com.google.android.gms") /*&& Tool.isAppInstalled(context, "com.google.android.gms")*/) {
-            return true;
-        }
+        return Tool.isAppInstalled(context, "com.google.android.gms");
 
-        return false;
     }
 
 
@@ -460,11 +436,7 @@ public class Tool {
             packageInfo = null;
             e.printStackTrace();
         }
-        if (packageInfo == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return packageInfo != null;
     }
 
     public static String getSignature(String pkgname, Context context) {
@@ -776,10 +748,7 @@ public class Tool {
      * @return
      */
     public static boolean existSDCard() {
-        if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-            return true;
-        } else
-            return false;
+        return android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
     }
 
     /**
@@ -1064,11 +1033,7 @@ public class Tool {
         try {
             float lt = Math.abs(Float.parseFloat(lat));
             float lg = Math.abs(Float.parseFloat(lng));
-            if ((lg > 0 && lg <= 180) && (lt > 0 && lt <= 90)) {
-                return true;
-            } else {
-                return false;
-            }
+            return (lg > 0 && lg <= 180) && (lt > 0 && lt <= 90);
         } catch (Exception e) {
             return false;
         }

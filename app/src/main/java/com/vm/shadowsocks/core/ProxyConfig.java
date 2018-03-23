@@ -406,11 +406,7 @@ public class ProxyConfig {
         if (valueString == null || valueString.isEmpty())
             return false;
         valueString = valueString.toLowerCase(Locale.ENGLISH).trim();
-        if (valueString.equals("on") || valueString.equals("1") || valueString.equals("true") || valueString.equals("yes")) {
-            return true;
-        } else {
-            return false;
-        }
+        return valueString.equals("on") || valueString.equals("1") || valueString.equals("true") || valueString.equals("yes");
     }
 
 

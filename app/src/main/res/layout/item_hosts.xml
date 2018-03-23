@@ -29,6 +29,7 @@
                 <ImageView
                     android:id="@+id/imageViewFlag"
                     android:layout_width="70dp"
+                    android:src="@drawable/icon_earch"
                     android:layout_height="70dp" />
 
             </LinearLayout>
@@ -46,7 +47,7 @@
                     android:layout_height="@dimen/input_item_height" />
 
                 <TextView
-                    android:id="@+id/textViewConectCount"
+                    android:id="@+id/textViewMethodPort"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/input_item_height" />
 
@@ -60,7 +61,7 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/imageViewSpeed"
+                    android:id="@+id/imageViewHook"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/icon_yes_p" />

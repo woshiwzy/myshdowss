@@ -28,8 +28,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:visibility="gone"
-            app:fastscroll__handleColor="#607D8B"
-            app:fastscroll__bubbleColor="#607D8B"
-            app:fastscroll__bubbleTextAppearance="@style/StyledScrollerTextAppearance"/>
+           />
     </FrameLayout>
 </LinearLayout>

@@ -28,5 +28,5 @@
     <string name="host_list">选择代理服务器</string>
     <string name="select_server">请选择代理服务器</string>
     <string name="select_server_befor">请先停止然后再选择</string>
-    <string name="law">我将遵守本地法律，本App开发者对我的行为不负任何责任。</string>
+    <string name="law">我将遵守本国法律,非法使用后果自负!</string>
 </resources>
