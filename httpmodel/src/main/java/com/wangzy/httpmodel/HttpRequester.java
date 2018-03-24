@@ -22,7 +22,6 @@ import okhttp3.Response;
 public class HttpRequester {
 
     public static OkHttpClient okHttpClient = null;
-//    http://65.49.201.127:7000/list_servers
     public static String baseHost = "http://65.49.201.127:7000/";
     public static final MediaType MEDIA_TYPE_MARKDOWN
             = MediaType.parse("text/x-markdown; charset=utf-8");
@@ -31,7 +30,6 @@ public class HttpRequester {
 
     static {
         okHttpClient = new OkHttpClient();
-
         okHttpClient.newBuilder().connectTimeout(time_out, TimeUnit.SECONDS);
         okHttpClient.newBuilder().readTimeout(time_out, TimeUnit.SECONDS);
         okHttpClient.newBuilder().writeTimeout(time_out, TimeUnit.SECONDS);

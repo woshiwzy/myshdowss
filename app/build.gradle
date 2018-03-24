@@ -10,6 +10,14 @@ buildscript {
 }
 
 android {
+    signingConfigs {
+        wzy {
+            keyAlias 'wzy'
+            keyPassword 'wzy2006'
+            storeFile file('/Users/wangzy/appKeys/wzykey.jks')
+            storePassword 'wzy2006'
+        }
+    }
     compileSdkVersion 26
     buildToolsVersion '26.0.2'
     useLibrary 'org.apache.http.legacy'
@@ -30,14 +38,30 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.wzy
+        }
+        debug {
+            debuggable true
+            minifyEnabled false
+            signingConfig signingConfigs.wzy
         }
     }
     productFlavors {
     }
-
 }
+
+
+
+repositories {
+    mavenCentral()
+    maven {
+        url "http://maven.aliyun.com/nexus/content/repositories/releases"
+    }
+}
+
+
 
 dependencies {
     //    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -54,10 +78,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
     implementation 'com.google.code.gson:gson:2.8.1'
+    compile 'com.aliyun.ams:alicloud-android-hotfix:3.2.1'
 }
 
 
 
-repositories {
-    mavenCentral()
-}

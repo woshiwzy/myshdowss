@@ -87,7 +87,11 @@ class HostListActivity : BaseActivity() {
             val hostAdapter = object : HostAdapter(this@HostListActivity, servers) {
                 override fun onClickServerItem(server: Server, hostAdapter: HostAdapter, position: Int) {
 
+
                     MainActivity.selectDefaultServer = server
+
+
+
                     setResult(Activity.RESULT_OK)
                     hostAdapter.notifyDataSetChanged()
                     hostAdapter.selected = position

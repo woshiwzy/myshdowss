@@ -186,11 +186,11 @@ public class Tool {
 
 
     public static void toast(String tips, Activity activity) {
-        Toast.makeText(activity, R.string.select_server_befor, Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, tips, Toast.LENGTH_SHORT).show();
     }
 
     public static void toast(int tips, Activity activity) {
-        Toast.makeText(activity, R.string.select_server_befor, Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, tips, Toast.LENGTH_SHORT).show();
     }
 
     public static boolean isZh() {

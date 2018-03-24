@@ -12,8 +12,6 @@ class Server(@SerializedName("serverurl") var host: String,
              @SerializedName("name") var name:String) {
 
     override fun toString(): String {
-//      var test = "ss://aes-256-cfb:666666@65.49.201.127:9000"
         return "ss://${method}:${passWord}@${host}:${port}"
     }
-
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">闪烁VPN</string>
+    <string name="app_name">闪烁V-P-N</string>
     <string name="menu_item_switch">代理</string>
     <string name="menu_item_toggle_global">开/关全局模式</string>
     <string name="menu_item_exit">退出</string>

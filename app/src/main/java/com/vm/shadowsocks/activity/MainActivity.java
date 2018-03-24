@@ -49,7 +49,9 @@ public class MainActivity extends Activity implements
     private TextView textViewStatus;
     private CheckBox checkBoxLaw;
     private int INT_GO_SELECT = 100;
+
     public static Server selectDefaultServer;
+
     public Animation animationRotate;
 
     @Override
@@ -61,7 +63,6 @@ public class MainActivity extends Activity implements
         animationRotate.setRepeatCount(Animation.INFINITE);
         animationRotate.setRepeatMode(Animation.RESTART);
         animationRotate.setInterpolator(new LinearInterpolator());
-
         initView();
     }
 
@@ -203,7 +204,6 @@ public class MainActivity extends Activity implements
 
                 Intent intent = LocalVpnService.prepare(MainActivity.this);
                 if (intent == null) {
-
                     ProxyConfig.Instance.globalMode = true;
                     startVPNService();
                 } else {
@@ -221,9 +221,7 @@ public class MainActivity extends Activity implements
     @Override
     public void onClick(View v) {
         if (LocalVpnService.IsRunning) {
-
             Tool.toast(R.string.select_server_befor, this);
-
             return;
         }
 
@@ -264,9 +262,9 @@ public class MainActivity extends Activity implements
     @Override
     protected void onResume() {
         super.onResume();
+
         if (AppProxyManager.isLollipopOrAbove) {
             if (AppProxyManager.Instance.proxyAppInfo.size() != 0) {
-
                 String tmpString = "";
                 for (AppInfo app : AppProxyManager.Instance.proxyAppInfo) {
                     tmpString += app.getAppLabel() + ", ";
@@ -321,9 +319,16 @@ public class MainActivity extends Activity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         if (requestCode == INT_GO_SELECT && resultCode == RESULT_OK) {
             if (null != selectDefaultServer) {
                 updateInfo(selectDefaultServer);
+            }
+        }else if(Constant.START_VPN_SERVICE_REQUEST_CODE==requestCode){
+
+            Intent intent = LocalVpnService.prepare(MainActivity.this);
+            if(null==intent){
+                startVPNService();
             }
         }
     }
