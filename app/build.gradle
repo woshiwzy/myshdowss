@@ -65,21 +65,23 @@ repositories {
 
 dependencies {
     //    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'org.bouncycastle:bcprov-jdk15on:1.57'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile "org.jetbrains.anko:anko:$anko_version"
-    compile 'com.android.support:cardview-v7:26.1.0'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    compile 'com.orhanobut:logger:1.15'
-    compile 'com.android.support:multidex:1.0.1'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.57'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation "org.jetbrains.anko:anko:$anko_version"
+    implementation 'com.android.support:cardview-v7:26.1.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.orhanobut:logger:1.15'
+    implementation 'com.android.support:multidex:1.0.1'
     implementation project(':httpmodel')
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
     implementation 'com.google.code.gson:gson:2.8.1'
-    compile 'com.aliyun.ams:alicloud-android-hotfix:3.2.1'
+    implementation 'com.aliyun.ams:alicloud-android-hotfix:3.2.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'cn.leancloud.android:avoscloud-sdk:v4.6.4'
+    implementation 'com.android.support:design:26.1.0'
 }
 
 

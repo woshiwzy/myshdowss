@@ -29,4 +29,5 @@
     <string name="select_server">Please select server</string>
     <string name="select_server_befor">Please stop first.</string>
     <string name="law">I will abide by my laws.</string>
+    <string name="be_law">Please don\'t do anything illegal.</string>
 </resources>

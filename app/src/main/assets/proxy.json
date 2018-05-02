@@ -3,7 +3,7 @@
   "code": 200,
   "data": [
     {
-      "name": "AMERICA HIGH SPEED",
+      "name": "High-speed server1",
       "serverurl": "65.49.201.127",
       "id": 1,
       "method": "aes-256-cfb",
@@ -11,7 +11,7 @@
       "port": 9000
     },
     {
-      "name": "AMERICA HIGH SPEED",
+      "name": "High-speed server2",
       "serverurl": "65.49.201.127",
       "id": 3,
       "method": "aes-256-cfb",
@@ -19,7 +19,7 @@
       "port": 9001
     },
     {
-      "name": "AMERICA HIGH SPEED",
+      "name": "High-speed server3",
       "serverurl": "65.49.201.127",
       "id": 4,
       "method": "aes-256-cfb",
@@ -27,7 +27,7 @@
       "port": 9002
     },
     {
-      "name": "AMERICA HIGH SPEED",
+      "name": "High-speed server4",
       "serverurl": "65.49.201.127",
       "id": 5,
       "method": "aes-256-cfb",
@@ -35,7 +35,7 @@
       "port": 9003
     },
     {
-      "name": "AMERICA HIGH SPEED",
+      "name": "High-speed server5",
       "serverurl": "65.49.201.127",
       "id": 6,
       "method": "aes-256-cfb",
@@ -43,7 +43,7 @@
       "port": 9004
     },
     {
-      "name": "AMERICA HIGH SPEED",
+      "name": "High-speed server6",
       "serverurl": "65.49.201.127",
       "id": 7,
       "method": "aes-256-cfb",
@@ -51,7 +51,7 @@
       "port": 8381
     },
     {
-      "name": "AMERICA HIGH SPEED",
+      "name": "High-speed server7",
       "serverurl": "65.49.201.127",
       "id": 8,
       "method": "aes-256-cfb",
@@ -59,7 +59,7 @@
       "port": 8382
     },
     {
-      "name": "AMERICA HIGH SPEED",
+      "name": "High-speed server8",
       "serverurl": "65.49.201.127",
       "id": 9,
       "method": "aes-256-cfb",
@@ -67,7 +67,7 @@
       "port": 8384
     },
     {
-      "name": "AMERICA HIGH SPEED",
+      "name": "High-speed server9",
       "serverurl": "65.49.201.127",
       "id": 10,
       "method": "aes-256-cfb",

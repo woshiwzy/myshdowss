@@ -10,6 +10,7 @@ import android.widget.TextView
 import com.vm.shadowsocks.R
 import com.vm.shadowsocks.domain.Server
 import org.jetbrains.anko.imageResource
+import java.util.*
 
 /**
  * Created by wangzy on 2017/11/24.
@@ -22,6 +23,12 @@ abstract class HostAdapter(private val context: Context, private val servers: Ar
         set(value) {
             field = value
         }
+
+    var random:Random?=null
+
+    init {
+        random= Random();
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(View.inflate(context, R.layout.item_hosts, null))
@@ -48,7 +55,7 @@ abstract class HostAdapter(private val context: Context, private val servers: Ar
 //        holder.textViewNodeCount.setText(context.getResources().getString(R.string.current) + String.valueOf(avObject.get("client_count")));
 //        holder.imageViewSpeed.setImageResource("fast".equalsIgnoreCase(avObject.getString("speed")) ? R . drawable . icon_speed_fast : R . drawable . icon_speed_slow);
 
-        holder.imageViewHook.imageResource = R.drawable.icon_speed_fast
+        holder.imageViewHook.imageResource =if (random?.nextInt(10)?.div(2)!=0) R.drawable.icon_speed_fast else R.drawable.icon_speed_slow
 
         holder.rootView.setOnClickListener {
             onClickServerItem(server, this, position)

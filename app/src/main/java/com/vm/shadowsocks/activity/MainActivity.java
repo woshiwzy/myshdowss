@@ -7,6 +7,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
@@ -37,13 +38,10 @@ import com.vm.shadowsocks.domain.Server;
 import com.vm.shadowsocks.tool.Tool;
 
 public class MainActivity extends Activity implements
-        View.OnClickListener,
-        OnCheckedChangeListener {
+        View.OnClickListener{
 
     private TextView textViewServerCountryName, textViewCurrentConnectCount;
-    private ToggleButton toggleButton;
-    private TextView textViewTitle;
-    private DrawerLayout drawerLayout;
+    private ImageView toggleButton;
     private ImageView imageViewCountry;
     private TextView textViewStatus;
     private int INT_GO_SELECT = 100;
@@ -67,41 +65,21 @@ public class MainActivity extends Activity implements
         setContentView(R.layout.activity_main);
         imageViewCountry = findViewById(R.id.imageViewCountry);
         //draw
-        drawerLayout = findViewById(R.id.drawerLayout);
         textViewStatus = findViewById(R.id.textViewStatus);
 
-        findViewById(R.id.imageViewMenu).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
-                    drawerLayout.closeDrawer(Gravity.LEFT);
-                } else {
-                    drawerLayout.openDrawer(Gravity.LEFT);
-                }
-
-            }
-        });
-
-
-        textViewTitle = findViewById(R.id.textViewTitle);
 
         toggleButton = findViewById(R.id.toggleButton);
-        toggleButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+        toggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                startOrStopVpn(isChecked);
+            public void onClick(View v) {
+
+                startOrStopVpn(!LocalVpnService.IsRunning);
             }
         });
 
 
 
-        findViewById(R.id.viewMenuExit).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                exitApp();
-            }
-        });
 
         findViewById(R.id.ProxyUrlLayout).setOnClickListener(this);
 
@@ -146,10 +124,8 @@ public class MainActivity extends Activity implements
     private void startOrStopVpn(boolean isChecked) {
 
         if (isChecked && null == selectDefaultServer) {
-
             findViewById(R.id.ProxyUrlLayout).startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.shake));
             Toast.makeText(this, R.string.select_server, Toast.LENGTH_SHORT).show();
-            toggleButton.setChecked(false);
             return;
         }
 
@@ -184,25 +160,6 @@ public class MainActivity extends Activity implements
         startActivityForResult(intent, INT_GO_SELECT);
     }
 
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-        if (LocalVpnService.IsRunning != isChecked) {
-            if (isChecked) {
-                Intent intent = LocalVpnService.prepare(this);
-                if (intent == null) {
-                    startVPNService();
-                } else {
-                    startActivityForResult(intent, Constant.START_VPN_SERVICE_REQUEST_CODE);
-                }
-            } else {
-                LocalVpnService.IsRunning = false;
-            }
-        }
-
-    }
-
     private void startVPNService() {
 
         if (!Tool.isValidUrl(LocalVpnService.ProxyUrl)) {
@@ -217,7 +174,6 @@ public class MainActivity extends Activity implements
     @Override
     protected void onResume() {
         super.onResume();
-
         if (AppProxyManager.isLollipopOrAbove) {
             if (AppProxyManager.Instance.proxyAppInfo.size() != 0) {
                 String tmpString = "";
@@ -228,9 +184,9 @@ public class MainActivity extends Activity implements
         }
 
         if (LocalVpnService.IsRunning) {
-            toggleButton.setChecked(true);
+            toggleButton.setImageResource(R.drawable.icon_stop);
         } else {
-            toggleButton.setChecked(false);
+            toggleButton.setImageResource(R.drawable.icon_start);
         }
 
     }
@@ -241,13 +197,11 @@ public class MainActivity extends Activity implements
         super.onDestroy();
     }
 
-
     private void updateInfo(Server server){
         textViewServerCountryName.setText(server.getName());
         textViewCurrentConnectCount.setText(server.getMethod());
         LocalVpnService.ProxyUrl = selectDefaultServer.toString();
     }
-
 
 
     LocalVpnService.onStatusChangedListener statusChangedListener = new LocalVpnService.onStatusChangedListener() {
@@ -256,15 +210,14 @@ public class MainActivity extends Activity implements
             Log.i(App.Companion.getTag(), "status:" + status + " isrunning:" + isRunning);
             onLogReceived(status);
             textViewStatus.setText((getResources().getString(R.string.app_name)) + ":" + getResources().getString(isRunning ? R.string.connected : R.string.connected_not));
-
             if(isRunning){
                 imageViewCountry.startAnimation(animationRotate);
+                toggleButton.setImageResource(R.drawable.icon_stop);
             }else {
                 imageViewCountry.clearAnimation();
+                toggleButton.setImageResource(R.drawable.icon_start);
             }
-//            Toast.makeText(MainActivity.this, status, Toast.LENGTH_SHORT).show();
         }
-
         @Override
         public void onLogReceived(String logString) {
             Log.e(App.Companion.getTag(), logString);
@@ -274,13 +227,11 @@ public class MainActivity extends Activity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         if (requestCode == INT_GO_SELECT && resultCode == RESULT_OK) {
             if (null != selectDefaultServer) {
                 updateInfo(selectDefaultServer);
             }
         }else if(Constant.START_VPN_SERVICE_REQUEST_CODE==requestCode){
-
             Intent intent = LocalVpnService.prepare(MainActivity.this);
             if(null==intent){
                 startVPNService();

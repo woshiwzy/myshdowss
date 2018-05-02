@@ -45,238 +45,161 @@
     </RelativeLayout>
 
 
-    <android.support.v4.widget.DrawerLayout
-
-        android:id="@+id/drawerLayout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#E5E5E5">
+        android:contentDescription="This is content"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="This is content"
+            android:id="@+id/viewSelectServer"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
-            <LinearLayout
+            <android.support.v7.widget.CardView
+                android:id="@+id/ProxyUrlLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_content"
+                android:orientation="vertical"
+                android:tag="ProxyUrl"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="20dp">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1.6">
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
 
                     <LinearLayout
-                        android:id="@+id/viewSelectServer"
-                        android:layout_width="fill_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:layout_weight="1"
+                        android:gravity="center">
 
-                        <android.support.v7.widget.CardView
-                            android:id="@+id/ProxyUrlLayout"
-                            android:layout_width="match_parent"
+                        <ImageView
+                            android:id="@+id/imageViewCountry"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/margin_content"
-                            android:orientation="vertical"
-                            android:tag="ProxyUrl"
-                            app:cardBackgroundColor="@android:color/white"
-                            app:cardCornerRadius="10dp"
-                            app:cardElevation="20dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:orientation="horizontal">
-
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:gravity="center">
-
-                                    <ImageView
-                                        android:id="@+id/imageViewCountry"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_alignParentRight="true"
-                                        android:layout_centerVertical="true"
-                                        android:clickable="false"
-                                        android:duplicateParentState="true"
-                                        android:src="@drawable/icon_earch" />
-
-
-                                </LinearLayout>
-
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="3"
-                                    android:gravity="left"
-                                    android:orientation="vertical"
-                                    android:paddingLeft="@dimen/margin_content">
-
-                                    <TextView
-                                        android:id="@+id/textViewServerCountryName"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="@dimen/input_item_height"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_alignParentTop="true"
-                                        android:gravity="center_vertical|left"
-                                        android:hint="@string/select_server"
-                                        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                                    <TextView
-                                        android:id="@+id/textViewCurrentConnectCount"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="@dimen/input_item_height"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_below="@id/textViewProxyUrlTitle"
-                                        android:gravity="center_vertical|left"
-                                        android:hint="@string/select_server"
-                                        android:singleLine="true"
-                                        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                                </LinearLayout>
-
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:gravity="center">
-
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_alignParentRight="true"
-                                        android:layout_centerVertical="true"
-                                        android:clickable="false"
-                                        android:duplicateParentState="true"
-                                        android:src="@drawable/icon_right" />
-
-
-                                </LinearLayout>
-
-
-                            </LinearLayout>
-
-                        </android.support.v7.widget.CardView>
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:clickable="false"
+                            android:duplicateParentState="true"
+                            android:src="@drawable/icon_earch" />
 
 
                     </LinearLayout>
 
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/relativeLayoutBottom"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_below="@id/viewSelectServer"
-                        android:layout_margin="@dimen/margin_content"
-                        app:cardBackgroundColor="@android:color/white"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="20dp">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:gravity="left"
+                        android:orientation="vertical"
+                        android:paddingLeft="@dimen/margin_content">
 
-                            <TextView
-                                android:id="@+id/textViewStatus"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:minHeight="@dimen/input_item_height"
-                                android:layout_alignParentTop="true"
-                                android:gravity="center" />
+                        <TextView
+                            android:id="@+id/textViewServerCountryName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/input_item_height"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentTop="true"
+                            android:gravity="center_vertical|left"
+                            android:hint="@string/select_server"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                        <TextView
+                            android:id="@+id/textViewCurrentConnectCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/input_item_height"
+                            android:layout_alignParentLeft="true"
+                            android:layout_below="@id/textViewProxyUrlTitle"
+                            android:gravity="center_vertical|left"
+                            android:hint="@string/select_server"
+                            android:singleLine="true"
+                            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                    </LinearLayout>
 
 
-                            <ToggleButton
-                                android:id="@+id/toggleButton"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/margin_content"
-                                android:background="@null"
-                                android:button="@drawable/toogle"
-                                android:disabledAlpha="2.0"
-                                android:textOff=""
-                                android:textOn="" />
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center">
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="100dp">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:clickable="false"
+                            android:duplicateParentState="true"
+                            android:src="@drawable/icon_right" />
 
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content" />
-                            </LinearLayout>
 
-                        </LinearLayout>
+                    </LinearLayout>
 
-                    </android.support.v7.widget.CardView>
-                </RelativeLayout>
 
-            </LinearLayout>
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+
         </LinearLayout>
 
 
         <LinearLayout
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:background="#E5E5E5"
+            android:gravity="top"
             android:orientation="vertical">
 
-            <View style="@style/splite_view" />
-
-            <RelativeLayout
-                android:id="@+id/viewMenuExit"
+            <TextView
+                android:id="@+id/textViewStatus"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/input_item_height"
-                android:background="@android:color/black">
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:minHeight="@dimen/input_item_height" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/input_item_height"
-                    android:gravity="center"
-                    android:text="@string/menu_item_exit"
-                    android:textColor="#5CC9F5"
-                    android:textSize="@dimen/text_size_content" />
-            </RelativeLayout>
-
-            <View style="@style/splite_view" />
-
-
-            <View style="@style/splite_view" />
-
-            <RelativeLayout
-                android:id="@+id/feedBack"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/input_item_height"
-                android:background="@android:color/black">
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:gravity="center">
 
-                <TextView
+                <ImageView
+                    android:id="@+id/toggleButton"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/input_item_height"
-                    android:gravity="center"
-                    android:text="@string/menu_feedback"
-                    android:textColor="#5CC9F5"
-                    android:textSize="@dimen/text_size_content" />
-            </RelativeLayout>
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:src="@drawable/icon_start"
+                    android:textOff=""
+                    android:textOn="" />
 
-            <View style="@style/splite_view" />
+            </LinearLayout>
 
+
+            <TextView
+                android:id="@+id/textViewNotify"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.5"
+                android:gravity="center"
+                android:text="@string/be_law"
+                android:textColor="@android:color/holo_red_dark"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
-    </android.support.v4.widget.DrawerLayout>
+
+    </LinearLayout>
 
 
 </LinearLayout>

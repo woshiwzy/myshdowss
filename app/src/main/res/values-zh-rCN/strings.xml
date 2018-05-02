@@ -29,4 +29,5 @@
     <string name="select_server">请选择代理服务器</string>
     <string name="select_server_befor">请先停止然后再选择</string>
     <string name="law">我将遵守本国法律,非法使用后果自负!</string>
+    <string name="be_law">请不要做违法的事情!</string>
 </resources>
