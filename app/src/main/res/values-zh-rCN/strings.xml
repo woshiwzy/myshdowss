@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">闪烁V-P-N</string>
+    <string name="app_name">闪烁VPN</string>
     <string name="menu_item_switch">代理</string>
     <string name="menu_item_toggle_global">开/关全局模式</string>
     <string name="menu_item_exit">退出</string>
@@ -15,13 +15,13 @@
     <string name="btn_ok">确定</string>
     <string name="btn_cancel">取消</string>
     <string name="btn_more">更多&#8230;</string>
-    <string name="vpn_connected_status">已连接</string>
+    <string name="vpn_connected_status">已连接,你可以自由访问了！</string>
     <string name="vpn_disconnected_status">已断开</string>
     <string name="exit_confirm_info">这将会断开VPN连接，确定要退出吗？</string>
     <string name="err_invalid_url">无效的配置地址</string>
     <string name="config_url_hint">ss://method:password@host:port</string>
 
-    <string name="connected">已连接</string>
+    <string name="connected">已连接,你可以自由访问了！</string>
     <string name="connected_not">未连接</string>
     <string name="menu_feedback">反馈</string>
     <string name="current">当前在线:</string>

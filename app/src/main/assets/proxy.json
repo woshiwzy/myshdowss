@@ -3,7 +3,7 @@
   "code": 200,
   "data": [
     {
-      "name": "6 Tail",
+      "name": "AMERICA HIGH SPEED",
       "serverurl": "65.49.201.127",
       "id": 1,
       "method": "aes-256-cfb",
@@ -11,7 +11,7 @@
       "port": 9000
     },
     {
-      "name": "JieJie",
+      "name": "AMERICA HIGH SPEED",
       "serverurl": "65.49.201.127",
       "id": 3,
       "method": "aes-256-cfb",
@@ -19,7 +19,7 @@
       "port": 9001
     },
     {
-      "name": "ChaoChao",
+      "name": "AMERICA HIGH SPEED",
       "serverurl": "65.49.201.127",
       "id": 4,
       "method": "aes-256-cfb",

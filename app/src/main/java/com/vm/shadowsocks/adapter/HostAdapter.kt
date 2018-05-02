@@ -15,7 +15,7 @@ import org.jetbrains.anko.imageResource
  * Created by wangzy on 2017/11/24.
  */
 
-abstract class HostAdapter(private val context: Context, private val servers: List<Server>) : RecyclerView.Adapter<HostAdapter.ViewHolder>() {
+abstract class HostAdapter(private val context: Context, private val servers: ArrayList<Server>) : RecyclerView.Adapter<HostAdapter.ViewHolder>() {
 
     var selected: Int = -1
         get() = field
@@ -43,7 +43,7 @@ abstract class HostAdapter(private val context: Context, private val servers: Li
 //            holder.imageViewHook.imageResource=R.drawable.icon_yes_p
 //        }
 
-        holder.textViewMethodPort.text = server.method + ":" + server.port
+        holder.textViewMethodPort.text = server.method
 
 //        holder.textViewNodeCount.setText(context.getResources().getString(R.string.current) + String.valueOf(avObject.get("client_count")));
 //        holder.imageViewSpeed.setImageResource("fast".equalsIgnoreCase(avObject.getString("speed")) ? R . drawable . icon_speed_fast : R . drawable . icon_speed_slow);

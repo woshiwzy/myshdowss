@@ -15,12 +15,12 @@
     <string name="btn_ok">OK</string>
     <string name="btn_cancel">Cancel</string>
     <string name="btn_more">More&#8230;</string>
-    <string name="vpn_connected_status">connected</string>
+    <string name="vpn_connected_status">connected,You can access internet free!</string>
     <string name="vpn_disconnected_status">disconnected</string>
     <string name="exit_confirm_info">This will disconnect the VPN connection, Are you sure to exit?</string>
     <string name="err_invalid_url">The config URL is invalid.</string>
     <string name="config_url_hint">ss://method:password@host:port</string>
-    <string name="connected">Connected</string>
+    <string name="connected">Connected,You can access internet free!</string>
     <string name="connected_not">Ready to connect</string>
 
     <string name="menu_feedback">Feed Back</string>

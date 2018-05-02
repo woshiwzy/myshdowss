@@ -42,12 +42,10 @@ public class MainActivity extends Activity implements
 
     private TextView textViewServerCountryName, textViewCurrentConnectCount;
     private ToggleButton toggleButton;
-    private CheckBox checkBox;
     private TextView textViewTitle;
     private DrawerLayout drawerLayout;
     private ImageView imageViewCountry;
     private TextView textViewStatus;
-    private CheckBox checkBoxLaw;
     private int INT_GO_SELECT = 100;
 
     public static Server selectDefaultServer;
@@ -57,7 +55,6 @@ public class MainActivity extends Activity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         animationRotate=AnimationUtils.loadAnimation(this,R.anim.rotate);
         animationRotate.setRepeatCount(Animation.INFINITE);
@@ -72,7 +69,6 @@ public class MainActivity extends Activity implements
         //draw
         drawerLayout = findViewById(R.id.drawerLayout);
         textViewStatus = findViewById(R.id.textViewStatus);
-        checkBoxLaw = findViewById(R.id.checkBoxLaw);
 
         findViewById(R.id.imageViewMenu).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,18 +94,6 @@ public class MainActivity extends Activity implements
             }
         });
 
-        checkBox = findViewById(R.id.checkBox);
-        checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                ProxyConfig.Instance.globalMode = !ProxyConfig.Instance.globalMode;
-                if (ProxyConfig.Instance.globalMode) {
-                    Log.i(App.Companion.getTag(), "Proxy global mode is on");
-                } else {
-                    Log.i(App.Companion.getTag(), "Proxy global mode is off");
-                }
-            }
-        });
 
 
         findViewById(R.id.viewMenuExit).setOnClickListener(new View.OnClickListener() {
@@ -126,29 +110,6 @@ public class MainActivity extends Activity implements
 
 
         LocalVpnService.addOnStatusChangedListener(statusChangedListener);
-
-
-        LinearLayout fastAcessLeayout = findViewById(R.id.linearLayoutFastAccess);
-
-        int childCount = fastAcessLeayout.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-
-            final ImageView fac = (ImageView) fastAcessLeayout.getChildAt(i);
-
-            fastAcessLeayout.getChildAt(i).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String website = (String) fac.getTag();
-                    Intent intent = new Intent();
-                    intent.setAction("android.intent.action.VIEW");
-                    Uri content_url = Uri.parse(website);
-                    intent.setData(content_url);
-                    startActivity(intent);
-
-                }
-            });
-
-        }
 
 
         //Pre-App Proxy
@@ -188,12 +149,6 @@ public class MainActivity extends Activity implements
 
             findViewById(R.id.ProxyUrlLayout).startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.shake));
             Toast.makeText(this, R.string.select_server, Toast.LENGTH_SHORT).show();
-            toggleButton.setChecked(false);
-            return;
-        }
-
-        if (checkBoxLaw.isChecked() == false) {
-            checkBoxLaw.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.shake));
             toggleButton.setChecked(false);
             return;
         }
@@ -289,7 +244,7 @@ public class MainActivity extends Activity implements
 
     private void updateInfo(Server server){
         textViewServerCountryName.setText(server.getName());
-        textViewCurrentConnectCount.setText(server.getMethod()+" "+server.getPort());
+        textViewCurrentConnectCount.setText(server.getMethod());
         LocalVpnService.ProxyUrl = selectDefaultServer.toString();
     }
 

@@ -15,6 +15,7 @@ import com.vm.shadowsocks.adapter.HostAdapter
 import com.vm.shadowsocks.domain.Server
 import com.wangzy.httpmodel.HttpRequester
 import com.wangzy.httpmodel.JsonSelector
+import com.wangzy.httpmodel.KHttpRequester
 import com.wangzy.httpmodel.MyNetCallBack
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
@@ -40,24 +41,44 @@ class HostListActivity : BaseActivity() {
 
     private fun loadHosts() {
         showCover()
-        HttpRequester.get("list_servers", object : MyNetCallBack() {
 
-            override fun onSuccessFinish(call: Call, response: Response) {
 
-                async(UI) {
-                    hideCover()
-                    setUpAdapter(response.body()!!.string()!!)
-                }
+        KHttpRequester.get("list_servers", onstart = { call: Call? ->
 
+
+        }, onResponseCallBack = { call: Call?, response: Response? ->
+            async(UI) {
+                hideCover()
+                setUpAdapter(response?.body()!!.string()!!)
             }
-            override fun onFailureFinish(call: Call, e: Exception) {
-                async(UI) {
-                    hideCover()
-                    var json = readAssetsTxt(this@HostListActivity, "proxy.json")
-                    setUpAdapter(json)
-                }
+
+        }, onFailureCallBack = { call: Call?, e: IOException? ->
+            async(UI) {
+                hideCover()
+                var json = readAssetsTxt(this@HostListActivity, "proxy.json")
+                setUpAdapter(json)
             }
         })
+
+//        HttpRequester.get("list_servers", object : MyNetCallBack() {
+//
+//            override fun onSuccessFinish(call: Call, response: Response) {
+//
+//                async(UI) {
+//                    hideCover()
+//                    setUpAdapter(response.body()!!.string()!!)
+//                }
+//
+//            }
+//
+//            override fun onFailureFinish(call: Call, e: Exception) {
+//                async(UI) {
+//                    hideCover()
+//                    var json = readAssetsTxt(this@HostListActivity, "proxy.json")
+//                    setUpAdapter(json)
+//                }
+//            }
+//        })
 
     }
 
@@ -80,31 +101,30 @@ class HostListActivity : BaseActivity() {
 
 
     fun setUpAdapter(json: String) {
-            val data = JsonSelector.getJsonObject(json, "data")
-            val gson = Gson()
-            val servers = gson.fromJson<ArrayList<Server>>(data, object : TypeToken<ArrayList<Server>>() {}.type)
+        val data = JsonSelector.getJsonObject(json, "data")
+        val gson = Gson()
+        val servers = gson.fromJson<ArrayList<Server>>(data, object : TypeToken<ArrayList<Server>>() {}.type)
+        servers.shuffle()
 
-            val hostAdapter = object : HostAdapter(this@HostListActivity, servers) {
-                override fun onClickServerItem(server: Server, hostAdapter: HostAdapter, position: Int) {
-
-
-                    MainActivity.selectDefaultServer = server
+        val hostAdapter = object : HostAdapter(this@HostListActivity, servers) {
+            override fun onClickServerItem(server: Server, hostAdapter: HostAdapter, position: Int) {
 
 
+                MainActivity.selectDefaultServer = server
 
-                    setResult(Activity.RESULT_OK)
-                    hostAdapter.notifyDataSetChanged()
-                    hostAdapter.selected = position
-                    finish()
-                }
+                setResult(Activity.RESULT_OK)
+                hostAdapter.notifyDataSetChanged()
+                hostAdapter.selected = position
+                finish()
             }
+        }
 
-            val divider = DividerItemDecoration(this@HostListActivity, DividerItemDecoration.VERTICAL)
-            divider.setDrawable(resources.getDrawable(R.drawable.custom_divider))
-            recyclerViewHosts!!.addItemDecoration(divider)
+        val divider = DividerItemDecoration(this@HostListActivity, DividerItemDecoration.VERTICAL)
+        divider.setDrawable(resources.getDrawable(R.drawable.custom_divider))
+        recyclerViewHosts!!.addItemDecoration(divider)
 
-            recyclerViewHosts!!.adapter = hostAdapter
-            recyclerViewHosts!!.layoutManager = LinearLayoutManager(this@HostListActivity, LinearLayoutManager.VERTICAL, false)
+        recyclerViewHosts!!.adapter = hostAdapter
+        recyclerViewHosts!!.layoutManager = LinearLayoutManager(this@HostListActivity, LinearLayoutManager.VERTICAL, false)
     }
 
 
