@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.LogUtil;
 import com.vm.shadowsocks.App;
 import com.vm.shadowsocks.R;
 import com.vm.shadowsocks.constant.Constant;
@@ -24,6 +26,7 @@ import com.vm.shadowsocks.core.LocalVpnService;
 import com.vm.shadowsocks.core.ProxyConfig;
 import com.vm.shadowsocks.domain.EventMessage;
 import com.vm.shadowsocks.domain.Server;
+import com.vm.shadowsocks.tool.SystemUtil;
 import com.vm.shadowsocks.tool.Tool;
 
 import org.greenrobot.eventbus.EventBus;
@@ -68,7 +71,8 @@ public class MainActivity extends Activity implements
     public void onMessageEvent(EventMessage event) {
         if (null != textViewSent && null != textViewReceived) {
             textViewSent.setText(event.sent / 1024 + " KB");
-            textViewReceived.setText(+event.received / 1024 + " KB");
+            textViewReceived.setText(event.received / 1024 + " KB");
+            textViewCurrentConnectCount.setText("Sent:"+event.sent / 1024 + " kb/s Received:"+event.received / 1024 + " kb/s");
         }
     }
 
@@ -232,6 +236,8 @@ public class MainActivity extends Activity implements
             if (isRunning) {
                 imageViewCountry.startAnimation(animationRotate);
                 toggleButton.setImageResource(R.drawable.icon_stop);
+                saveLog();
+
             } else {
                 imageViewCountry.clearAnimation();
                 toggleButton.setImageResource(R.drawable.icon_start);
@@ -243,6 +249,30 @@ public class MainActivity extends Activity implements
             Log.e(App.Companion.getTag(), logString);
         }
     };
+
+    public void saveLog() {
+        try {
+            String address = Tool.getAdresseMAC(App.instance);
+            String ip = Tool.getLocalIpAddress();
+            String brand = SystemUtil.getDeviceBrand();
+            String imei = SystemUtil.getIMEI(MainActivity.this);
+
+//            String ret = address + "," + ip + "," + brand + "," + imei;
+            AVObject avObject = new AVObject("VPLOG");
+//            avObject.put("log", ret);
+
+            avObject.put("mac",address);
+            avObject.put("ip",ip);
+            avObject.put("brand",brand);
+            avObject.put("imei",imei);
+
+
+            avObject.saveEventually();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
 
 
     @Override

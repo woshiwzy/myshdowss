@@ -7,6 +7,7 @@ import android.support.multidex.MultiDex
 import android.support.multidex.MultiDexApplication
 import android.text.TextUtils
 import android.util.Log
+import com.avos.avoscloud.AVOSCloud
 import com.orhanobut.logger.Logger
 import com.taobao.sophix.PatchStatus
 import com.taobao.sophix.SophixManager
@@ -26,6 +27,8 @@ class App : MultiDexApplication() {
         super.onCreate()
         instance = this
         SophixManager.getInstance().queryAndLoadNewPatch();
+
+        AVOSCloud.initialize(this,"jadP41WoqD4mptx79gok48JY-gzGzoHsz","VbupgDD0dyLX3pHuxgV8QAp7")
     }
 
     companion object {

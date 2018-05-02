@@ -1,6 +1,7 @@
 package com.vm.shadowsocks.core;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -169,8 +170,8 @@ public class LocalVpnService extends VpnService implements Runnable {
         }
     }
 
-    String getAppInstallID() {
-        SharedPreferences preferences = getSharedPreferences("SmartProxy", MODE_PRIVATE);
+    public static String getAppInstallID(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences("SmartProxy", MODE_PRIVATE);
         String appInstallID = preferences.getString("AppInstallID", null);
         if (appInstallID == null || appInstallID.isEmpty()) {
             appInstallID = UUID.randomUUID().toString();
@@ -198,7 +199,7 @@ public class LocalVpnService extends VpnService implements Runnable {
         try {
             System.out.printf("VPNService(%s) work thread is runing...\n", ID);
 
-            ProxyConfig.AppInstallID = getAppInstallID();//获取安装ID
+            ProxyConfig.AppInstallID = getAppInstallID(this);//获取安装ID
             ProxyConfig.AppVersion = getVersionName();//获取版本号
             System.out.printf("AppInstallID: %s\n", ProxyConfig.AppInstallID);
             writeLog("Android version: %s", Build.VERSION.RELEASE);
