@@ -5,28 +5,16 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
 import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
-import com.orhanobut.logger.Logger;
 import com.vm.shadowsocks.App;
 import com.vm.shadowsocks.R;
 import com.vm.shadowsocks.constant.Constant;
@@ -34,18 +22,26 @@ import com.vm.shadowsocks.core.AppInfo;
 import com.vm.shadowsocks.core.AppProxyManager;
 import com.vm.shadowsocks.core.LocalVpnService;
 import com.vm.shadowsocks.core.ProxyConfig;
+import com.vm.shadowsocks.domain.EventMessage;
 import com.vm.shadowsocks.domain.Server;
 import com.vm.shadowsocks.tool.Tool;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 public class MainActivity extends Activity implements
-        View.OnClickListener{
+        View.OnClickListener {
 
     private TextView textViewServerCountryName, textViewCurrentConnectCount;
     private ImageView toggleButton;
     private ImageView imageViewCountry;
     private TextView textViewStatus;
-    private int INT_GO_SELECT = 100;
 
+    private TextView textViewSent;
+    private TextView textViewReceived;
+
+    private int INT_GO_SELECT = 100;
     public static Server selectDefaultServer;
 
     public Animation animationRotate;
@@ -54,11 +50,32 @@ public class MainActivity extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        animationRotate=AnimationUtils.loadAnimation(this,R.anim.rotate);
+        animationRotate = AnimationUtils.loadAnimation(this, R.anim.rotate);
         animationRotate.setRepeatCount(Animation.INFINITE);
         animationRotate.setRepeatMode(Animation.RESTART);
         animationRotate.setInterpolator(new LinearInterpolator());
         initView();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventMessage event) {
+        if (null != textViewSent && null != textViewReceived) {
+            textViewSent.setText(event.sent / 1024 + " KB");
+            textViewReceived.setText(+event.received / 1024 + " KB");
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 
     private void initView() {
@@ -67,6 +84,8 @@ public class MainActivity extends Activity implements
         //draw
         textViewStatus = findViewById(R.id.textViewStatus);
 
+        textViewReceived = findViewById(R.id.textViewReceived);
+        textViewSent = findViewById(R.id.textViewSent);
 
         toggleButton = findViewById(R.id.toggleButton);
 
@@ -77,8 +96,6 @@ public class MainActivity extends Activity implements
                 startOrStopVpn(!LocalVpnService.IsRunning);
             }
         });
-
-
 
 
         findViewById(R.id.ProxyUrlLayout).setOnClickListener(this);
@@ -174,12 +191,14 @@ public class MainActivity extends Activity implements
     @Override
     protected void onResume() {
         super.onResume();
+
         if (AppProxyManager.isLollipopOrAbove) {
             if (AppProxyManager.Instance.proxyAppInfo.size() != 0) {
                 String tmpString = "";
                 for (AppInfo app : AppProxyManager.Instance.proxyAppInfo) {
                     tmpString += app.getAppLabel() + ", ";
                 }
+                Log.e(App.Companion.getTag(), "tempStr:" + tmpString);
             }
         }
 
@@ -197,7 +216,7 @@ public class MainActivity extends Activity implements
         super.onDestroy();
     }
 
-    private void updateInfo(Server server){
+    private void updateInfo(Server server) {
         textViewServerCountryName.setText(server.getName());
         textViewCurrentConnectCount.setText(server.getMethod());
         LocalVpnService.ProxyUrl = selectDefaultServer.toString();
@@ -210,14 +229,15 @@ public class MainActivity extends Activity implements
             Log.i(App.Companion.getTag(), "status:" + status + " isrunning:" + isRunning);
             onLogReceived(status);
             textViewStatus.setText((getResources().getString(R.string.app_name)) + ":" + getResources().getString(isRunning ? R.string.connected : R.string.connected_not));
-            if(isRunning){
+            if (isRunning) {
                 imageViewCountry.startAnimation(animationRotate);
                 toggleButton.setImageResource(R.drawable.icon_stop);
-            }else {
+            } else {
                 imageViewCountry.clearAnimation();
                 toggleButton.setImageResource(R.drawable.icon_start);
             }
         }
+
         @Override
         public void onLogReceived(String logString) {
             Log.e(App.Companion.getTag(), logString);
@@ -231,9 +251,9 @@ public class MainActivity extends Activity implements
             if (null != selectDefaultServer) {
                 updateInfo(selectDefaultServer);
             }
-        }else if(Constant.START_VPN_SERVICE_REQUEST_CODE==requestCode){
+        } else if (Constant.START_VPN_SERVICE_REQUEST_CODE == requestCode) {
             Intent intent = LocalVpnService.prepare(MainActivity.this);
-            if(null==intent){
+            if (null == intent) {
                 startVPNService();
             }
         }

@@ -18,6 +18,7 @@
         ar API-level can go here. -->
         <item name="android:windowFullscreen">false</item>
         <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/d</item>
     </style>
 
     <style name="StyledScrollerTextAppearance" parent="@android:style/TextAppearance">

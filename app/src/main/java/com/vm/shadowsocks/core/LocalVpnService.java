@@ -12,13 +12,16 @@ import android.os.Handler;
 import android.os.ParcelFileDescriptor;
 
 import com.vm.shadowsocks.R;
+import com.vm.shadowsocks.activity.MainActivity;
 import com.vm.shadowsocks.core.ProxyConfig.IPAddress;
 import com.vm.shadowsocks.dns.DnsPacket;
+import com.vm.shadowsocks.domain.EventMessage;
 import com.vm.shadowsocks.tcpip.CommonMethods;
 import com.vm.shadowsocks.tcpip.IPHeader;
 import com.vm.shadowsocks.tcpip.TCPHeader;
 import com.vm.shadowsocks.tcpip.UDPHeader;
-import com.vm.shadowsocks.activity.MainActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -29,6 +32,9 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class LocalVpnService extends VpnService implements Runnable {
 
@@ -52,8 +58,15 @@ public class LocalVpnService extends VpnService implements Runnable {
     private UDPHeader m_UDPHeader;
     private ByteBuffer m_DNSBuffer;
     private Handler m_Handler;
-    private long m_SentBytes;
-    private long m_ReceivedBytes;
+
+
+    private long lastSent;
+    private long lastReceived;
+
+    public static long m_SentBytes;
+    public static long m_ReceivedBytes;
+    private ScheduledExecutorService executor;
+
 
     public LocalVpnService() {
         ID++;
@@ -74,6 +87,29 @@ public class LocalVpnService extends VpnService implements Runnable {
         // Start a new session by creating a new thread.
         m_VPNThread = new Thread(this, "VPNServiceThread");
         m_VPNThread.start();
+        executor = Executors.newScheduledThreadPool(1);
+        executor.scheduleAtFixedRate(
+                new Runnable() {
+                    @Override
+                    public void run() {
+
+                        EventMessage eventMessage = new EventMessage();
+                        eventMessage.sent = m_SentBytes-lastSent;
+                        eventMessage.received = m_ReceivedBytes-lastReceived;
+                        EventBus.getDefault().post(eventMessage);
+
+                        lastReceived=m_ReceivedBytes;
+                        lastSent=m_SentBytes;
+                    }
+                },
+                0,
+                1,
+                TimeUnit.SECONDS);
+
+
+        lastReceived=m_ReceivedBytes;
+        lastSent=m_SentBytes;
+
         super.onCreate();
     }
 
@@ -192,10 +228,10 @@ public class LocalVpnService extends VpnService implements Runnable {
             m_DnsProxy.start();
             writeLog("LocalDnsProxy started.");
 
+
             while (true) {
                 if (IsRunning) {
                     //加载配置文件
-
                     writeLog("set shadowsocks/(http proxy)");
                     try {
                         ProxyConfig.Instance.m_ProxyList.clear();
@@ -297,6 +333,7 @@ public class LocalVpnService extends VpnService implements Runnable {
                                 System.out.printf("No host name found: %s", session.RemoteHost);
                             }
                         }
+//                        Log.e(App.Companion.getTag(),"remote host:"+session.RemoteHost);
 
                         // 转发给本地TCP服务器
                         ipHeader.setSourceIP(ipHeader.getDestinationIP());
@@ -378,7 +415,7 @@ public class LocalVpnService extends VpnService implements Runnable {
             String value = (String) method.invoke(null, name);
             if (value != null && !"".equals(value) && !servers.contains(value)) {
                 servers.add(value);
-                if (value.replaceAll("\\d", "").length() == 3){//防止IPv6地址导致问题
+                if (value.replaceAll("\\d", "").length() == 3) {//防止IPv6地址导致问题
                     builder.addRoute(value, 32);
                 } else {
                     builder.addRoute(value, 128);
@@ -388,16 +425,16 @@ public class LocalVpnService extends VpnService implements Runnable {
             }
         }
 
-        if (AppProxyManager.isLollipopOrAbove){
-            if (AppProxyManager.Instance.proxyAppInfo.size() == 0){
+        if (AppProxyManager.isLollipopOrAbove) {
+            if (AppProxyManager.Instance.proxyAppInfo.size() == 0) {
                 writeLog("Proxy All Apps");
             }
-            for (AppInfo app : AppProxyManager.Instance.proxyAppInfo){
+            for (AppInfo app : AppProxyManager.Instance.proxyAppInfo) {
                 builder.addAllowedApplication("com.vm.shadowsocks");//需要把自己加入代理，不然会无法进行网络连接
-                try{
+                try {
                     builder.addAllowedApplication(app.getPkgName());
                     writeLog("Proxy App: " + app.getAppLabel());
-                } catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     writeLog("Proxy App Fail: " + app.getAppLabel());
                 }
@@ -425,7 +462,7 @@ public class LocalVpnService extends VpnService implements Runnable {
         } catch (Exception e) {
             // ignore
         }
-        onStatusChanged(getApplicationContext().getApplicationInfo().name +" "+ getString(R.string.vpn_disconnected_status), false);
+        onStatusChanged(getApplicationContext().getApplicationInfo().name + " " + getString(R.string.vpn_disconnected_status), false);
         this.m_VPNOutputStream = null;
     }
 
