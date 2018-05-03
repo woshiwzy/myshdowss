@@ -255,6 +255,7 @@ public class MainActivity extends Activity implements
             String address = Tool.getAdresseMAC(App.instance);
             String ip = Tool.getLocalIpAddress();
             String brand = SystemUtil.getDeviceBrand();
+            String model=SystemUtil.getSystemModel();
             String imei = SystemUtil.getIMEI(MainActivity.this);
 
 //            String ret = address + "," + ip + "," + brand + "," + imei;
@@ -263,7 +264,7 @@ public class MainActivity extends Activity implements
 
             avObject.put("mac",address);
             avObject.put("ip",ip);
-            avObject.put("brand",brand);
+            avObject.put("brand",brand+","+model);
             avObject.put("imei",imei);
 
 
