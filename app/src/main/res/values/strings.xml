@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Free VPN Master</string>
+    <string name="app_name">VPN</string>
     <string name="menu_item_toggle_global">Toggle global mode</string>
     <string name="menu_item_switch">Proxy</string>
     <string name="menu_item_exit">Exit</string>
@@ -25,7 +25,7 @@
 
     <string name="menu_feedback">Feed Back</string>
     <string name="current">Current online:</string>
-    <string name="host_list">Select server</string>
+    <string name="host_list">Proxy Server List</string>
     <string name="select_server">Please select server</string>
     <string name="select_server_befor">Please stop first.</string>
     <string name="law">I will abide by my laws.</string>

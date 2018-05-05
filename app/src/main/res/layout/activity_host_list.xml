@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@android:color/black"
+        android:background="#1296db"
         android:contentDescription="This is header">
 
         <TextView
@@ -20,7 +20,7 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:text="@string/host_list"
-            android:textColor="#5CC9F5"
+            android:textColor="@android:color/white"
             android:textSize="@dimen/text_size_title" />
 
         <ImageView
@@ -30,7 +30,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/margin_content"
-            android:src="@drawable/icon_back" />
+            android:src="@drawable/back" />
 
 
     </RelativeLayout>

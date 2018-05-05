@@ -23,6 +23,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
@@ -62,6 +63,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.TimeZone;
 
 /**
  * Created by wangzy on 2017/11/22.
@@ -70,7 +72,22 @@ import java.util.Random;
 public class Tool {
 
 
+    public static String getSystemVersion(){
+        return Build.VERSION.RELEASE;
+    }
 
+    public static String getCountryCode(){
+        return Locale.getDefault().getCountry();
+    }
+
+
+
+    public static String getTimeZone(){
+
+        TimeZone tz=TimeZone.getDefault();
+        String s=tz.getDisplayName(false,TimeZone.SHORT)+"/"+tz.getID();
+        return s;
+    }
 
     public static String getLocalIpAddress() {
 

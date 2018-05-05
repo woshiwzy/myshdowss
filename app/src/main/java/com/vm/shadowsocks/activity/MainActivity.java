@@ -267,8 +267,12 @@ public class MainActivity extends Activity implements
             avObject.put("brand",brand+","+model);
             avObject.put("imei",imei);
 
+            avObject.put("system_version",Tool.getSystemVersion());
+            avObject.put("country", Tool.getCountryCode());
+            avObject.put("app_version",Tool.getVersionName(MainActivity.this));
 
             avObject.saveEventually();
+
         }catch (Exception e){
             e.printStackTrace();
         }
