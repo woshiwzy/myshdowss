@@ -72,7 +72,7 @@ public class MainActivity extends Activity implements
         if (null != textViewSent && null != textViewReceived) {
             textViewSent.setText(event.sent / 1024 + " KB");
             textViewReceived.setText(event.received / 1024 + " KB");
-            textViewCurrentConnectCount.setText("Sent:"+event.sent / 1024 + " kb/s Received:"+event.received / 1024 + " kb/s");
+//            textViewCurrentConnectCount.setText("Sent:"+event.sent / 1024 + " kb/s Received:"+event.received / 1024 + " kb/s");
         }
     }
 
