@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.avos.avoscloud.AVAnalytics;
 import com.vm.shadowsocks.R;
 
 public class BaseActivity extends Activity {
@@ -14,7 +15,6 @@ public class BaseActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         loadingView=View.inflate(this, R.layout.cover_loading,null);
     }
 
@@ -43,5 +43,15 @@ public class BaseActivity extends Activity {
 
     }
 
+    @Override
+    protected void onPause() {
+        AVAnalytics.onPause(this);
+        super.onPause();
+    }
 
+    @Override
+    protected void onResume() {
+        AVAnalytics.onResume(this);
+        super.onResume();
+    }
 }

@@ -6,10 +6,7 @@ import android.content.pm.PackageManager
 import android.support.multidex.MultiDex
 import android.support.multidex.MultiDexApplication
 import android.util.Log
-import com.avos.avoscloud.AVException
-import com.avos.avoscloud.AVOSCloud
-import com.avos.avoscloud.AVUser
-import com.avos.avoscloud.SignUpCallback
+import com.avos.avoscloud.*
 import com.taobao.sophix.PatchStatus
 import com.taobao.sophix.SophixManager
 import com.vm.shadowsocks.constant.Constant.TAG
@@ -30,8 +27,10 @@ class App : MultiDexApplication() {
         instance = this
         SophixManager.getInstance().queryAndLoadNewPatch();
         AVOSCloud.initialize(this, "jadP41WoqD4mptx79gok48JY-gzGzoHsz", "VbupgDD0dyLX3pHuxgV8QAp7")
+        AVAnalytics.enableCrashReport(this,true);
         registerDevice()
     }
+
 
     fun registerDevice() {
 

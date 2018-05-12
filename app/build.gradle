@@ -81,6 +81,7 @@ dependencies {
     implementation 'com.aliyun.ams:alicloud-android-hotfix:3.2.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     implementation 'cn.leancloud.android:avoscloud-sdk:v4.6.4'
+    compile ('cn.leancloud.android:avoscloud-statistics:v4.6.4')
     implementation 'com.android.support:design:26.1.0'
     compile 'org.greenrobot:eventbus:3.1.1'
 }

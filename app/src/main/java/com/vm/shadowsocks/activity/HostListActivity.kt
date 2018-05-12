@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.Window
+import com.avos.avoscloud.AVAnalytics
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.vm.shadowsocks.R
@@ -116,6 +117,8 @@ class HostListActivity : BaseActivity() {
                 hostAdapter.notifyDataSetChanged()
                 hostAdapter.selected = position
                 finish()
+
+                AVAnalytics.onEvent(this@HostListActivity,"Select Proxy Server")
             }
         }
 

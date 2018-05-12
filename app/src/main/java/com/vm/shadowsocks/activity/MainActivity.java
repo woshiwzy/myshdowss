@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.avos.avoscloud.AVAnalytics;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.LogUtil;
 import com.vm.shadowsocks.App;
@@ -33,7 +34,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-public class MainActivity extends Activity implements
+public class MainActivity extends BaseActivity implements
         View.OnClickListener {
 
     private TextView textViewServerCountryName, textViewCurrentConnectCount;
@@ -237,10 +238,11 @@ public class MainActivity extends Activity implements
                 imageViewCountry.startAnimation(animationRotate);
                 toggleButton.setImageResource(R.drawable.icon_stop);
                 saveLog();
-
+                AVAnalytics.onEvent(MainActivity.this,"Start Proxy");
             } else {
                 imageViewCountry.clearAnimation();
                 toggleButton.setImageResource(R.drawable.icon_start);
+                AVAnalytics.onEvent(MainActivity.this,"Stop Proxy");
             }
         }
 
