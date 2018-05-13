@@ -32,17 +32,20 @@ android {
         applicationId 'com.flickervpn.shadowsocks'
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 10
-        versionName "2.1"
+        versionCode 12
+        versionName "2.3"
         multiDexEnabled true
     }
     buildTypes {
+
         release {
+            buildConfigField("boolean","LOG","false")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.wzy
         }
         debug {
+            buildConfigField("boolean","LOG","true")
             debuggable true
             minifyEnabled false
             signingConfig signingConfigs.wzy

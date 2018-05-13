@@ -1,6 +1,5 @@
 package com.vm.shadowsocks.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -16,8 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.avos.avoscloud.AVAnalytics;
+import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
-import com.avos.avoscloud.LogUtil;
+import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.SaveCallback;
 import com.vm.shadowsocks.App;
 import com.vm.shadowsocks.R;
 import com.vm.shadowsocks.constant.Constant;
@@ -47,8 +48,10 @@ public class MainActivity extends BaseActivity implements
 
     private int INT_GO_SELECT = 100;
     public static Server selectDefaultServer;
-
     public Animation animationRotate;
+
+    public boolean enable = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,32 +88,30 @@ public class MainActivity extends BaseActivity implements
 
     private void initView() {
         setContentView(R.layout.activity_main);
+        LocalVpnService.addOnStatusChangedListener(statusChangedListener);
+
         imageViewCountry = findViewById(R.id.imageViewCountry);
-        //draw
         textViewStatus = findViewById(R.id.textViewStatus);
 
         textViewReceived = findViewById(R.id.textViewReceived);
         textViewSent = findViewById(R.id.textViewSent);
 
         toggleButton = findViewById(R.id.toggleButton);
-
         toggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 startOrStopVpn(!LocalVpnService.IsRunning);
             }
         });
 
-
         findViewById(R.id.ProxyUrlLayout).setOnClickListener(this);
-
         textViewServerCountryName = findViewById(R.id.textViewServerCountryName);
         textViewCurrentConnectCount = findViewById(R.id.textViewCurrentConnectCount);
 
-
-        LocalVpnService.addOnStatusChangedListener(statusChangedListener);
-
+        AVUser currentUser = AVUser.getCurrentUser();
+        if (null != currentUser) {
+            enable = currentUser.getBoolean("enable");
+        }
 
         //Pre-App Proxy
         if (AppProxyManager.isLollipopOrAbove) {
@@ -144,12 +145,17 @@ public class MainActivity extends BaseActivity implements
     }
 
     private void startOrStopVpn(boolean isChecked) {
+        if (!enable) {
+            Toast.makeText(this, " Sorry, vpn service not enable for you!", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         if (isChecked && null == selectDefaultServer) {
             findViewById(R.id.ProxyUrlLayout).startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.shake));
             Toast.makeText(this, R.string.select_server, Toast.LENGTH_SHORT).show();
             return;
         }
+
 
         if (LocalVpnService.IsRunning != isChecked) {
 //                    toggleButton.setEnabled(false);
@@ -235,14 +241,32 @@ public class MainActivity extends BaseActivity implements
             onLogReceived(status);
             textViewStatus.setText((getResources().getString(R.string.app_name)) + ":" + getResources().getString(isRunning ? R.string.connected : R.string.connected_not));
             if (isRunning) {
+
                 imageViewCountry.startAnimation(animationRotate);
                 toggleButton.setImageResource(R.drawable.icon_stop);
                 saveLog();
-                AVAnalytics.onEvent(MainActivity.this,"Start Proxy");
+                AVAnalytics.onEvent(MainActivity.this, "Start Proxy");
             } else {
                 imageViewCountry.clearAnimation();
                 toggleButton.setImageResource(R.drawable.icon_start);
-                AVAnalytics.onEvent(MainActivity.this,"Stop Proxy");
+                AVAnalytics.onEvent(MainActivity.this, "Stop Proxy");
+
+                long totalbyte = (LocalVpnService.m_ReceivedBytes + LocalVpnService.m_SentBytes) / 1024;
+
+                AVUser avUser = AVUser.getCurrentUser();
+                if (null != avUser) {
+                    avUser.increment("used_bytes", totalbyte);
+                    avUser.setFetchWhenSave(true);
+                    avUser.saveEventually(new SaveCallback() {
+                        @Override
+                        public void done(AVException e) {
+                            if (null == e) {
+                                LocalVpnService.m_SentBytes = 0;
+                                LocalVpnService.m_ReceivedBytes = 0;
+                            }
+                        }
+                    });
+                }
             }
         }
 
@@ -257,25 +281,29 @@ public class MainActivity extends BaseActivity implements
             String address = Tool.getAdresseMAC(App.instance);
             String ip = Tool.getLocalIpAddress();
             String brand = SystemUtil.getDeviceBrand();
-            String model=SystemUtil.getSystemModel();
+            String model = SystemUtil.getSystemModel();
             String imei = SystemUtil.getIMEI(MainActivity.this);
 
 //            String ret = address + "," + ip + "," + brand + "," + imei;
             AVObject avObject = new AVObject("VPLOG");
 //            avObject.put("log", ret);
 
-            avObject.put("mac",address);
-            avObject.put("ip",ip);
-            avObject.put("brand",brand+","+model);
-            avObject.put("imei",imei);
+            avObject.put("mac", address);
+            avObject.put("ip", ip);
+            avObject.put("brand", brand + "," + model);
+            avObject.put("imei", imei);
 
-            avObject.put("system_version",Tool.getSystemVersion());
+            avObject.put("system_version", Tool.getSystemVersion());
             avObject.put("country", Tool.getCountryCode());
-            avObject.put("app_version",Tool.getVersionName(MainActivity.this));
+            avObject.put("app_version", Tool.getVersionName(MainActivity.this));
 
+            AVUser avUser=AVUser.getCurrentUser();
+            if(null!=avUser){
+                avObject.put("user",avUser);
+                avObject.put("tag",avUser.get("alias_tag"));
+            }
             avObject.saveEventually();
-
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
