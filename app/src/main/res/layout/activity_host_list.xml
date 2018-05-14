@@ -30,6 +30,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/margin_content"
+            android:padding="5dp"
             android:src="@drawable/back" />
 
 

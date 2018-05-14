@@ -32,8 +32,8 @@ android {
         applicationId 'com.flickervpn.shadowsocks'
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 12
-        versionName "2.3"
+        versionCode 14
+        versionName "2.4"
         multiDexEnabled true
     }
     buildTypes {

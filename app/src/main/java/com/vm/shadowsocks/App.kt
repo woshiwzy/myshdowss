@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.support.multidex.MultiDex
 import android.support.multidex.MultiDexApplication
+import android.text.TextUtils
 import com.avos.avoscloud.*
 import com.taobao.sophix.PatchStatus
 import com.taobao.sophix.SophixManager
@@ -56,6 +57,24 @@ class App : MultiDexApplication() {
 
 
     fun getUserName(): String {
+
+        try {
+            var addressMac = Tool.getAdresseMAC(this)
+            if (!TextUtils.isEmpty(addressMac)) {
+                return addressMac
+            }
+
+            val imei = SystemUtil.getIMEI(this)
+            if (!TextUtils.isEmpty(imei)) {
+                return imei
+            }
+        }catch (e:Exception){
+
+        }finally {
+
+        }
+
+
         return LocalVpnService.getAppInstallID(this)
     }
 
@@ -100,7 +119,7 @@ class App : MultiDexApplication() {
             })
         } catch (e: Exception) {
             e.printStackTrace()
-            LogUtil.d(tag,"register error:"+e?.localizedMessage)
+            LogUtil.d(tag, "register error:" + e?.localizedMessage)
         }
 
     }
