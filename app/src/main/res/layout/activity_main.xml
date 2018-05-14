@@ -204,8 +204,10 @@
                 android:layout_weight="1.5"
                 app:cardBackgroundColor="@android:color/white"
                 app:cardCornerRadius="5dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="@dimen/margin_content"
                 android:visibility="visible"
+                android:layout_marginLeft="@dimen/margin_content"
+                android:layout_marginRight="@dimen/margin_content"
                 app:cardElevation="5dp">
 
                 <LinearLayout
