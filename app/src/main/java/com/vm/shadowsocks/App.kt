@@ -125,6 +125,8 @@ class App : MultiDexApplication() {
                 avObject.put("country", Tool.getCountryCode())
                 avObject.put("app_version", Tool.getVersionName(App.instance))
                 avObject.put("time_mm",log.time)
+                avObject.put("method",log.method)
+                avObject.put("port",log.port)
 
                 var avUser = AVUser.getCurrentUser()
 
