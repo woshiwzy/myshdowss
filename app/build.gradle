@@ -1,15 +1,19 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-
+apply plugin: 'org.greenrobot.greendao' // apply plugin
 
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
+
     }
 
 }
 
 android {
+
+
+
     signingConfigs {
         wzy {
             keyAlias 'wzy'
@@ -32,8 +36,8 @@ android {
         applicationId 'com.flickervpn.shadowsocks'
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 14
-        versionName "2.4"
+        versionCode 15
+        versionName "2.5"
         multiDexEnabled true
     }
     buildTypes {
@@ -84,10 +88,16 @@ dependencies {
     implementation 'com.aliyun.ams:alicloud-android-hotfix:3.2.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     implementation 'cn.leancloud.android:avoscloud-sdk:v4.6.4'
-    compile ('cn.leancloud.android:avoscloud-statistics:v4.6.4')
+    implementation 'org.greenrobot:greendao:3.2.2' // add library
+    implementation ('cn.leancloud.android:avoscloud-statistics:v4.6.4')
     implementation 'com.android.support:design:26.1.0'
-    compile 'org.greenrobot:eventbus:3.1.1'
+    implementation 'org.greenrobot:eventbus:3.1.1'
 }
 
+greendao{
+    schemaVersion 8                    //数据库 版本号
+    targetGenDir 'src/main/java'    //生成DaoMaster类文件夹
+    daoPackage   'com.vm.greendao.db'  //生成DaoMaster类包名
+}
 
 

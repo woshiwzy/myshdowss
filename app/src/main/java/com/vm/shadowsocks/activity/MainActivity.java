@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.avos.avoscloud.AVAnalytics;
 import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.SaveCallback;
 import com.vm.shadowsocks.App;
@@ -28,7 +27,6 @@ import com.vm.shadowsocks.core.LocalVpnService;
 import com.vm.shadowsocks.core.ProxyConfig;
 import com.vm.shadowsocks.domain.EventMessage;
 import com.vm.shadowsocks.domain.Server;
-import com.vm.shadowsocks.tool.SystemUtil;
 import com.vm.shadowsocks.tool.Tool;
 
 import org.greenrobot.eventbus.EventBus;
@@ -74,8 +72,13 @@ public class MainActivity extends BaseActivity implements
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventMessage event) {
         if (null != textViewSent && null != textViewReceived) {
-            textViewSent.setText(event.sent / 1024 + " KB");
-            textViewReceived.setText(event.received / 1024 + " KB");
+
+            long sent=Math.abs(event.sent/1024);
+            textViewSent.setText(sent + " KB");
+
+            long receid=Math.abs(event.received / 1024);
+            textViewReceived.setText( receid+ " KB");
+
 //            textViewCurrentConnectCount.setText("Sent:"+event.sent / 1024 + " kb/s Received:"+event.received / 1024 + " kb/s");
         }
     }
@@ -244,8 +247,17 @@ public class MainActivity extends BaseActivity implements
 
                 imageViewCountry.startAnimation(animationRotate);
                 toggleButton.setImageResource(R.drawable.icon_stop);
-                saveLog();
+
+                if(null!=selectDefaultServer){
+                    String methid=selectDefaultServer.getMethod();
+                    int port=selectDefaultServer.getPort();
+                    saveLog(port,methid);
+                }else {
+                    saveLog(0,"no method");
+                }
+
                 AVAnalytics.onEvent(MainActivity.this, "Start Proxy");
+
             } else {
                 imageViewCountry.clearAnimation();
                 toggleButton.setImageResource(R.drawable.icon_start);
@@ -276,36 +288,39 @@ public class MainActivity extends BaseActivity implements
         }
     };
 
-    public void saveLog() {
-        try {
-            String address = Tool.getAdresseMAC(App.instance);
-            String ip = Tool.getLocalIpAddress();
-            String brand = SystemUtil.getDeviceBrand();
-            String model = SystemUtil.getSystemModel();
-            String imei = SystemUtil.getIMEI(MainActivity.this);
+    public void saveLog(int port,String method) {
+        App.instance.saveLog(port,method);
 
-//            String ret = address + "," + ip + "," + brand + "," + imei;
-            AVObject avObject = new AVObject("VPLOG");
-//            avObject.put("log", ret);
+//        try {
+//            String address = Tool.getAdresseMAC(App.instance);
+//            String ip = Tool.getLocalIpAddress();
+//            String brand = SystemUtil.getDeviceBrand();
+//            String model = SystemUtil.getSystemModel();
+//            String imei = SystemUtil.getIMEI(MainActivity.this);
+//
+////            String ret = address + "," + ip + "," + brand + "," + imei;
+//            AVObject avObject = new AVObject("VPLOG");
+////            avObject.put("log", ret);
+//
+//            avObject.put("mac", address);
+//            avObject.put("ip", ip);
+//            avObject.put("brand", brand + "," + model);
+//            avObject.put("imei", imei);
+//
+//            avObject.put("system_version", Tool.getSystemVersion());
+//            avObject.put("country", Tool.getCountryCode());
+//            avObject.put("app_version", Tool.getVersionName(MainActivity.this));
+//
+//            AVUser avUser=AVUser.getCurrentUser();
+//            if(null!=avUser){
+//                avObject.put("user",avUser);
+//                avObject.put("tag",avUser.get("alias_tag"));
+//            }
+//            avObject.saveEventually();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
-            avObject.put("mac", address);
-            avObject.put("ip", ip);
-            avObject.put("brand", brand + "," + model);
-            avObject.put("imei", imei);
-
-            avObject.put("system_version", Tool.getSystemVersion());
-            avObject.put("country", Tool.getCountryCode());
-            avObject.put("app_version", Tool.getVersionName(MainActivity.this));
-
-            AVUser avUser=AVUser.getCurrentUser();
-            if(null!=avUser){
-                avObject.put("user",avUser);
-                avObject.put("tag",avUser.get("alias_tag"));
-            }
-            avObject.saveEventually();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
     }
 

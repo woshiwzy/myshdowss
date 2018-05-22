@@ -11,7 +11,9 @@ import android.net.VpnService;
 import android.os.Build;
 import android.os.Handler;
 import android.os.ParcelFileDescriptor;
+import android.util.Log;
 
+import com.vm.shadowsocks.App;
 import com.vm.shadowsocks.R;
 import com.vm.shadowsocks.activity.MainActivity;
 import com.vm.shadowsocks.core.ProxyConfig.IPAddress;
@@ -334,7 +336,13 @@ public class LocalVpnService extends VpnService implements Runnable {
                                 System.out.printf("No host name found: %s", session.RemoteHost);
                             }
                         }
+
+                        //访问计数
 //                        Log.e(App.Companion.getTag(),"remote host:"+session.RemoteHost);
+//                        App.instance.incrementCount(session.RemoteHost);
+                        //访问计数
+
+
 
                         // 转发给本地TCP服务器
                         ipHeader.setSourceIP(ipHeader.getDestinationIP());
