@@ -44,35 +44,62 @@
     },
     {
       "name": "High-speed server6",
-      "serverurl": "65.49.201.127",
+      "serverurl": "104.224.142.115",
       "id": 7,
-      "method": "aes-256-cfb",
-      "password": "password1",
-      "port": 8381
-    },
-    {
-      "name": "High-speed server7",
-      "serverurl": "65.49.201.127",
-      "id": 8,
-      "method": "aes-256-cfb",
-      "password": "password2",
-      "port": 8382
-    },
-    {
-      "name": "High-speed server8",
-      "serverurl": "65.49.201.127",
-      "id": 9,
-      "method": "aes-256-cfb",
-      "password": "password3",
-      "port": 8384
-    },
-    {
-      "name": "High-speed server9",
-      "serverurl": "65.49.201.127",
-      "id": 10,
       "method": "aes-256-cfb",
       "password": "666666",
       "port": 9000
+    },
+    {
+      "name": "High-speed server7",
+      "serverurl": "104.224.142.115",
+      "id": 8,
+      "method": "aes-256-cfb",
+      "password": "666666",
+      "port": 9001
+    },
+    {
+      "name": "High-speed server8",
+      "serverurl": "104.224.142.115",
+      "id": 9,
+      "method": "aes-256-cfb",
+      "password": "666666",
+      "port": 9002
+    },
+    {
+      "name": "High-speed server9",
+      "serverurl": "104.224.142.115",
+      "id": 10,
+      "method": "aes-256-cfb",
+      "password": "666666",
+      "port": 9003
     }
+  ,
+    {
+      "name": "High-speed server10",
+      "serverurl": "104.224.142.115",
+      "id": 11,
+      "method": "aes-256-cfb",
+      "password": "666666",
+      "port": 9004
+    },
+    {
+      "name": "High-speed server11",
+      "serverurl": "104.224.142.115",
+      "id": 12,
+      "method": "aes-256-cfb",
+      "password": "666666",
+      "port": 9005
+    },
+    {
+      "name": "High-speed server12",
+      "serverurl": "104.224.142.115",
+      "id": 13,
+      "method": "aes-256-cfb",
+      "password": "666666",
+      "port": 9006
+    }
+
+
   ]
 }

@@ -15,9 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.avos.avoscloud.AVAnalytics;
-import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVUser;
-import com.avos.avoscloud.SaveCallback;
+import com.avos.avoscloud.PushService;
 import com.vm.shadowsocks.App;
 import com.vm.shadowsocks.R;
 import com.vm.shadowsocks.constant.Constant;
@@ -27,11 +26,14 @@ import com.vm.shadowsocks.core.LocalVpnService;
 import com.vm.shadowsocks.core.ProxyConfig;
 import com.vm.shadowsocks.domain.EventMessage;
 import com.vm.shadowsocks.domain.Server;
+import com.vm.shadowsocks.tool.LogUtil;
 import com.vm.shadowsocks.tool.Tool;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import static com.vm.shadowsocks.constant.Constant.TAG;
 
 public class MainActivity extends BaseActivity implements
         View.OnClickListener {
@@ -73,11 +75,11 @@ public class MainActivity extends BaseActivity implements
     public void onMessageEvent(EventMessage event) {
         if (null != textViewSent && null != textViewReceived) {
 
-            long sent=Math.abs(event.sent/1024);
+            long sent = Math.abs(event.sent / 1024);
             textViewSent.setText(sent + " KB");
 
-            long receid=Math.abs(event.received / 1024);
-            textViewReceived.setText( receid+ " KB");
+            long receid = Math.abs(event.received / 1024);
+            textViewReceived.setText(receid + " KB");
 
 //            textViewCurrentConnectCount.setText("Sent:"+event.sent / 1024 + " kb/s Received:"+event.received / 1024 + " kb/s");
         }
@@ -111,9 +113,25 @@ public class MainActivity extends BaseActivity implements
         textViewServerCountryName = findViewById(R.id.textViewServerCountryName);
         textViewCurrentConnectCount = findViewById(R.id.textViewCurrentConnectCount);
 
-        AVUser currentUser = AVUser.getCurrentUser();
-        if (null != currentUser) {
-            enable = currentUser.getBoolean("enable");
+
+        findViewById(R.id.imageViewMenu).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Tool.startActivity(MainActivity.this, MessagesActivity.class);
+            }
+        });
+
+
+        try {
+
+            AVUser currentUser = AVUser.getCurrentUser();
+            if (null != currentUser) {
+                enable = currentUser.getBoolean("enable");
+            }
+            PushService.setDefaultPushCallback(this, MessagesActivity.class);
+
+        } catch (Exception e) {
+            LogUtil.e(TAG, "Set up push exception:" + e);
         }
 
         //Pre-App Proxy
@@ -248,12 +266,12 @@ public class MainActivity extends BaseActivity implements
                 imageViewCountry.startAnimation(animationRotate);
                 toggleButton.setImageResource(R.drawable.icon_stop);
 
-                if(null!=selectDefaultServer){
-                    String methid=selectDefaultServer.getMethod();
-                    int port=selectDefaultServer.getPort();
-                    saveLog(port,methid);
-                }else {
-                    saveLog(0,"no method");
+                if (null != selectDefaultServer) {
+                    String methid = selectDefaultServer.getMethod();
+                    int port = selectDefaultServer.getPort();
+                    saveLog(port, methid);
+                } else {
+                    saveLog(0, "no method");
                 }
 
                 AVAnalytics.onEvent(MainActivity.this, "Start Proxy");
@@ -264,21 +282,9 @@ public class MainActivity extends BaseActivity implements
                 AVAnalytics.onEvent(MainActivity.this, "Stop Proxy");
 
                 long totalbyte = (LocalVpnService.m_ReceivedBytes + LocalVpnService.m_SentBytes) / 1024;
+                totalbyte = totalbyte > 0 ? totalbyte : 0;
+                App.instance.udpateUsedByte(totalbyte);
 
-                AVUser avUser = AVUser.getCurrentUser();
-                if (null != avUser) {
-                    avUser.increment("used_bytes", totalbyte);
-                    avUser.setFetchWhenSave(true);
-                    avUser.saveEventually(new SaveCallback() {
-                        @Override
-                        public void done(AVException e) {
-                            if (null == e) {
-                                LocalVpnService.m_SentBytes = 0;
-                                LocalVpnService.m_ReceivedBytes = 0;
-                            }
-                        }
-                    });
-                }
             }
         }
 
@@ -288,40 +294,8 @@ public class MainActivity extends BaseActivity implements
         }
     };
 
-    public void saveLog(int port,String method) {
-        App.instance.saveLog(port,method);
-
-//        try {
-//            String address = Tool.getAdresseMAC(App.instance);
-//            String ip = Tool.getLocalIpAddress();
-//            String brand = SystemUtil.getDeviceBrand();
-//            String model = SystemUtil.getSystemModel();
-//            String imei = SystemUtil.getIMEI(MainActivity.this);
-//
-////            String ret = address + "," + ip + "," + brand + "," + imei;
-//            AVObject avObject = new AVObject("VPLOG");
-////            avObject.put("log", ret);
-//
-//            avObject.put("mac", address);
-//            avObject.put("ip", ip);
-//            avObject.put("brand", brand + "," + model);
-//            avObject.put("imei", imei);
-//
-//            avObject.put("system_version", Tool.getSystemVersion());
-//            avObject.put("country", Tool.getCountryCode());
-//            avObject.put("app_version", Tool.getVersionName(MainActivity.this));
-//
-//            AVUser avUser=AVUser.getCurrentUser();
-//            if(null!=avUser){
-//                avObject.put("user",avUser);
-//                avObject.put("tag",avUser.get("alias_tag"));
-//            }
-//            avObject.saveEventually();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
-
+    public void saveLog(int port, String method) {
+        App.instance.saveLog(port, method);
     }
 
 

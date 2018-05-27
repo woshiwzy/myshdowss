@@ -30,4 +30,5 @@
     <string name="select_server_befor">Please stop first.</string>
     <string name="law">I will abide by my laws.</string>
     <string name="be_law">Please don\'t do anything illegal.</string>
+    <string name="notiy_title">Tips</string>
 </resources>

@@ -30,8 +30,10 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/margin_content"
-            android:src="@drawable/menu"
-            android:visibility="invisible" />
+            android:scaleX="0.6"
+            android:scaleY="0.6"
+            android:src="@drawable/selector_menu"
+            android:visibility="visible" />
 
         <ImageView
             android:id="@+id/imageViewCar"

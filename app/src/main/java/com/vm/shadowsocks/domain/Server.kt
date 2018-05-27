@@ -11,6 +11,12 @@ class Server(@SerializedName("serverurl") var host: String,
              @SerializedName("password") var passWord: String,
              @SerializedName("name") var name:String) {
 
+    var enable=true
+        get() = field
+        set(value) {
+            field = value
+        }
+
     override fun toString(): String {
         return "ss://${method}:${passWord}@${host}:${port}"
     }

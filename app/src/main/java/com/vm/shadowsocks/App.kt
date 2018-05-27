@@ -18,15 +18,13 @@ import com.vm.shadowsocks.domain.Log
 import com.vm.shadowsocks.domain.Server
 import com.vm.shadowsocks.greendao.Helper
 import com.vm.shadowsocks.tool.LogUtil
+import com.vm.shadowsocks.tool.SharePersistent
 import com.vm.shadowsocks.tool.SystemUtil
 import com.vm.shadowsocks.tool.Tool
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
+import java.util.*
 
-
-/**
- * Created by wangzy on 2017/11/22.
- */
 
 class App : MultiDexApplication() {
 
@@ -48,28 +46,94 @@ class App : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        SophixManager.getInstance().queryAndLoadNewPatch();
-        AVOSCloud.initialize(this, "jadP41WoqD4mptx79gok48JY-gzGzoHsz", "VbupgDD0dyLX3pHuxgV8QAp7")
+        SophixManager.getInstance().queryAndLoadNewPatch()
+
+        try {
+            PushService.setDefaultChannelId(this, "google")
+            AVOSCloud.initialize(this, "jadP41WoqD4mptx79gok48JY-gzGzoHsz", "VbupgDD0dyLX3pHuxgV8QAp7")
+        } catch (e: Exception) {
+            LogUtil.e(App.tag, "init error")
+        }
+
         AVAnalytics.enableCrashReport(this, true)
         LogUtil.DEBUG = BuildConfig.LOG
         setUpDataBase()
         loginDevice()
+
+
+        try {
+            AVInstallation.getCurrentInstallation().saveInBackground()
+        } catch (e: Exception) {
+        }
+
+    }
+
+    fun setTakePush() {
+        var avUser = AVUser.getCurrentUser()
+        if (null != avUser && null == avUser.get("installationId") && null != AVInstallation.getCurrentInstallation().installationId) {
+            avUser.put("installationId", AVInstallation.getCurrentInstallation().installationId)
+            avUser.saveEventually()
+        }
     }
 
     fun loginDevice() {
 
-        AVUser.logInInBackground(getUserName(), getPassword(), object : LogInCallback<AVUser>() {
-            override fun done(p0: AVUser?, p1: AVException?) {
-                if (p0 == null) {
-                    LogUtil.d(tag, "login fail")
-                    registerDevice()
-                } else {
-                    LogUtil.d(tag, "login success")
+        try {
+
+
+            AVUser.logInInBackground(getUserName(), getPassword(), object : LogInCallback<AVUser>() {
+                override fun done(p0: AVUser?, p1: AVException?) {
+                    if (p0 == null) {
+                        LogUtil.d(tag, "login fail")
+                        registerDevice()
+                    } else {
+                        LogUtil.d(tag, "login success")
+                        setTakePush()
+                    }
                 }
-            }
-        })
+            })
+
+
+        } catch (e: Exception) {
+            LogUtil.e(App.tag, "login fail:" + e.localizedMessage)
+        }
+
+
     }
 
+    fun udpateUsedByte(totalbyte: Long) {
+
+        launch(CommonPool) {
+            //band reset
+            var total = SharePersistent.getlong(App.instance, "totalbyte")
+            var allTotal = total + totalbyte
+            SharePersistent.savePreference(App.instance, "totalbyte", allTotal)
+            try {
+                val avUser = AVUser.getCurrentUser()
+                var calendar = Calendar.getInstance()
+
+                if (null != avUser && calendar.get(Calendar.DAY_OF_WEEK) == 2) {
+
+                    var usedByte = avUser.getLong("used_bytes")
+                    avUser.put("used_bytes", (usedByte + allTotal))
+                    avUser.isFetchWhenSave = true
+                    avUser.saveEventually(object : SaveCallback() {
+                        override fun done(e: AVException?) {
+                            if (null == e) {
+                                LocalVpnService.m_SentBytes = 0
+                                LocalVpnService.m_ReceivedBytes = 0
+                                SharePersistent.savePreference(App.instance, "totalbyte", 0)
+                            }
+                        }
+                    })
+                }
+            } catch (e: Exception) {
+                LogUtil.e(App.tag, "本地流量清0")
+            }
+
+        }
+
+    }
 
     /**
      * save log
@@ -83,7 +147,7 @@ class App : MultiDexApplication() {
                 log.init()
                 log.port = port
                 log.method = method
-                log.time=System.currentTimeMillis()
+                log.time = System.currentTimeMillis()
                 getDaoSession().logDao.save(log)
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -124,9 +188,9 @@ class App : MultiDexApplication() {
                 avObject.put("system_version", Tool.getSystemVersion())
                 avObject.put("country", Tool.getCountryCode())
                 avObject.put("app_version", Tool.getVersionName(App.instance))
-                avObject.put("time_mm",log.time)
-                avObject.put("method",log.method)
-                avObject.put("port",log.port)
+                avObject.put("time_mm", log.time)
+                avObject.put("method", log.method)
+                avObject.put("port", log.port)
 
                 var avUser = AVUser.getCurrentUser()
 
@@ -224,6 +288,7 @@ class App : MultiDexApplication() {
                 override fun done(p0: AVException?) {
                     if (null == p0) {
                         LogUtil.e(tag, "r-success")
+                        setTakePush()
                     } else {
                         LogUtil.e(tag, "r-fail:" + p0?.localizedMessage)
                     }

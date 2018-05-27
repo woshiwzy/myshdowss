@@ -13,7 +13,6 @@ buildscript {
 android {
 
 
-
     signingConfigs {
         wzy {
             keyAlias 'wzy'
@@ -23,7 +22,7 @@ android {
         }
     }
     compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    buildToolsVersion '27.0.3'
     useLibrary 'org.apache.http.legacy'
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
@@ -43,13 +42,13 @@ android {
     buildTypes {
 
         release {
-            buildConfigField("boolean","LOG","false")
+            buildConfigField("boolean", "LOG", "false")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.wzy
         }
         debug {
-            buildConfigField("boolean","LOG","true")
+            buildConfigField("boolean", "LOG", "true")
             debuggable true
             minifyEnabled false
             signingConfig signingConfigs.wzy
@@ -89,15 +88,18 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     implementation 'cn.leancloud.android:avoscloud-sdk:v4.6.4'
     implementation 'org.greenrobot:greendao:3.2.2' // add library
-    implementation ('cn.leancloud.android:avoscloud-statistics:v4.6.4')
+    implementation('cn.leancloud.android:avoscloud-statistics:v4.6.4')
     implementation 'com.android.support:design:26.1.0'
     implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation('cn.leancloud.android:avoscloud-push:v4.6.4@aar') { transitive = true }
 }
 
-greendao{
+greendao {
     schemaVersion 8                    //数据库 版本号
     targetGenDir 'src/main/java'    //生成DaoMaster类文件夹
-    daoPackage   'com.vm.greendao.db'  //生成DaoMaster类包名
+    daoPackage 'com.vm.greendao.db'  //生成DaoMaster类包名
 }
 
 
+
+apply plugin: 'kotlin-android-extensions'

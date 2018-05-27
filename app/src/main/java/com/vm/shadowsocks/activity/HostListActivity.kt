@@ -8,22 +8,22 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.Window
-import com.avos.avoscloud.AVAnalytics
+import com.avos.avoscloud.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.vm.shadowsocks.App
 import com.vm.shadowsocks.R
 import com.vm.shadowsocks.adapter.HostAdapter
+import com.vm.shadowsocks.config.Servers
 import com.vm.shadowsocks.domain.Server
-import com.wangzy.httpmodel.HttpRequester
+import com.vm.shadowsocks.tool.LogUtil
 import com.wangzy.httpmodel.JsonSelector
 import com.wangzy.httpmodel.KHttpRequester
-import com.wangzy.httpmodel.MyNetCallBack
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import okhttp3.Call
 import okhttp3.Response
 import java.io.IOException
-import java.util.*
 
 
 class HostListActivity : BaseActivity() {
@@ -37,12 +37,13 @@ class HostListActivity : BaseActivity() {
         recyclerViewHosts = findViewById(R.id.recyclerViewHosts)
 
         findViewById<View>(R.id.imageViewBack).setOnClickListener { finish() }
-        loadHosts()
+
+        loadHostsFromLean()
+//        loadHosts()
     }
 
     private fun loadHosts() {
         showCover()
-
 
         KHttpRequester.get("list_servers", onstart = { call: Call? ->
 
@@ -56,31 +57,53 @@ class HostListActivity : BaseActivity() {
         }, onFailureCallBack = { call: Call?, e: IOException? ->
             async(UI) {
                 hideCover()
-                var json = readAssetsTxt(this@HostListActivity, "proxy.json")
-                setUpAdapter(json)
+                useDefaultHosts()
             }
         })
 
-//        HttpRequester.get("list_servers", object : MyNetCallBack() {
-//
-//            override fun onSuccessFinish(call: Call, response: Response) {
-//
-//                async(UI) {
-//                    hideCover()
-//                    setUpAdapter(response.body()!!.string()!!)
-//                }
-//
-//            }
-//
-//            override fun onFailureFinish(call: Call, e: Exception) {
-//                async(UI) {
-//                    hideCover()
-//                    var json = readAssetsTxt(this@HostListActivity, "proxy.json")
-//                    setUpAdapter(json)
-//                }
-//            }
-//        })
+    }
 
+    private fun useDefaultHosts() {
+        var json = readAssetsTxt(this@HostListActivity, "proxy.json")
+        setUpAdapter(json)
+
+    }
+
+    private fun loadHostsFromLean() {
+
+        if (Servers.servers?.isEmpty()!!) {
+
+            LogUtil.i(App.tag, "request host list")
+            showCover()
+            var quer = AVQuery<AVObject>("Host")
+            quer.findInBackground(object : FindCallback<AVObject>() {
+                override fun done(p0: MutableList<AVObject>?, p1: AVException?) {
+                    hideCover()
+                    if (null == p1) {
+                        fillAdapter(leancloud2Server(p0))
+                    } else {
+                        useDefaultHosts()
+                    }
+                }
+            })
+        } else {
+            LogUtil.i(App.tag, " not need request host list")
+            fillAdapter(Servers.servers)
+        }
+    }
+
+    fun leancloud2Server(p0: MutableList<AVObject>?): ArrayList<Server> {
+
+        var list = ArrayList<Server>()
+        for (host in p0!!) {
+            var server = Server(host = host.getString("host"), method = host.getString("method"), port = (host.getString("port")).toInt(), passWord = host.getString("pwd"), name = host.getString("alias"))
+            server.enable = host.getBoolean("enable")
+            if (server.enable) {
+                list.add(server)
+            }
+        }
+
+        return list
     }
 
 
@@ -107,6 +130,14 @@ class HostListActivity : BaseActivity() {
         val servers = gson.fromJson<ArrayList<Server>>(data, object : TypeToken<ArrayList<Server>>() {}.type)
         servers.shuffle()
 
+        fillAdapter(servers)
+    }
+
+    fun fillAdapter(servers: ArrayList<Server>) {
+        Servers.servers = servers
+
+        LogUtil.e(App.tag,"host size:"+Servers.servers.size)
+
         val hostAdapter = object : HostAdapter(this@HostListActivity, servers) {
             override fun onClickServerItem(server: Server, hostAdapter: HostAdapter, position: Int) {
 
@@ -118,7 +149,7 @@ class HostListActivity : BaseActivity() {
                 hostAdapter.selected = position
                 finish()
 
-                AVAnalytics.onEvent(this@HostListActivity,"Select Proxy Server")
+                AVAnalytics.onEvent(this@HostListActivity, "Select Proxy Server")
             }
         }
 
@@ -129,6 +160,5 @@ class HostListActivity : BaseActivity() {
         recyclerViewHosts!!.adapter = hostAdapter
         recyclerViewHosts!!.layoutManager = LinearLayoutManager(this@HostListActivity, LinearLayoutManager.VERTICAL, false)
     }
-
 
 }

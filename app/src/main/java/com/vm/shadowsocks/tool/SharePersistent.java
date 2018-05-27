@@ -29,11 +29,11 @@ public class SharePersistent {
 
     }
 
-    public static void savePreference(Context context, String key, int value) {
+    public static void savePreference(Context context, String key, long value) {
         SharedPreferences settings = context
                 .getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putInt(key, value);
+        editor.putLong(key, value);
         editor.commit();
     }
 
@@ -57,6 +57,13 @@ public class SharePersistent {
                 .getSharedPreferences(PREFS_NAME, 0);
         return settings.getInt(key, 0);
     }
+
+    public static long getlong(Context context, String key) {
+        SharedPreferences settings = context
+                .getSharedPreferences(PREFS_NAME, 0);
+        return settings.getLong(key, 0);
+    }
+
 
     public static boolean getBoolean(Context context, String key) {
         SharedPreferences settings = context
