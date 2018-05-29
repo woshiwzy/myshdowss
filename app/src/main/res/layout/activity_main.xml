@@ -56,8 +56,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="This is content"
             android:background="@drawable/bg"
+            android:contentDescription="This is content"
             android:orientation="vertical">
 
             <LinearLayout
@@ -299,10 +299,10 @@
             android:layout_height="match_parent"
             android:layout_marginTop="1dp"
             android:layout_weight="1.5"
-            android:clickable="true"
             android:background="#1296db"
-            android:orientation="vertical"
-            android:gravity="top|center_horizontal">
+            android:clickable="true"
+            android:gravity="top|center_horizontal"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textViewNews"
@@ -311,11 +311,24 @@
                 android:gravity="center"
                 android:text="@string/news"
                 android:textColor="@android:color/white" />
+
             <View
                 android:layout_width="match_parent"
-                android:background="@android:color/white"
-                android:layout_height="1dp"/>
+                android:layout_height="1dp"
+                android:background="@android:color/white" />
 
+            <TextView
+                android:id="@+id/textViewSupport"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:text="@string/support"
+                android:textColor="@android:color/white" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/white" />
 
         </LinearLayout>
 

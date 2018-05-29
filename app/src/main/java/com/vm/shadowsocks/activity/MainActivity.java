@@ -54,7 +54,6 @@ public class MainActivity extends BaseActivity implements
 
     public boolean enable = true;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +63,10 @@ public class MainActivity extends BaseActivity implements
         animationRotate.setRepeatMode(Animation.RESTART);
         animationRotate.setInterpolator(new LinearInterpolator());
         initView();
+
+
     }
+
 
     @Override
     protected void onStart() {
@@ -76,13 +78,10 @@ public class MainActivity extends BaseActivity implements
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventMessage event) {
         if (null != textViewSent && null != textViewReceived) {
-
             long sent = Math.abs(event.sent / 1024);
             textViewSent.setText(sent + " KB");
-
             long receid = Math.abs(event.received / 1024);
             textViewReceived.setText(receid + " KB");
-
 //            textViewCurrentConnectCount.setText("Sent:"+event.sent / 1024 + " kb/s Received:"+event.received / 1024 + " kb/s");
         }
     }
@@ -136,10 +135,16 @@ public class MainActivity extends BaseActivity implements
         findViewById(R.id.textViewNews).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 hideMenu();
-
                 Tool.startActivity(MainActivity.this, MessagesActivity.class);
+            }
+        });
+
+        findViewById(R.id.textViewSupport).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideMenu();
+                Tool.startActivity(MainActivity.this, AdActivity.class);
             }
         });
         findViewById(R.id.viewTouchHide).setOnClickListener(new View.OnClickListener() {
@@ -285,6 +290,7 @@ public class MainActivity extends BaseActivity implements
             toggleButton.setImageResource(R.drawable.icon_start);
         }
 
+
     }
 
     @Override
@@ -357,4 +363,6 @@ public class MainActivity extends BaseActivity implements
             }
         }
     }
+
+
 }

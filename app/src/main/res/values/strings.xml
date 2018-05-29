@@ -32,4 +32,7 @@
     <string name="be_law">Please don\'t do anything illegal.</string>
     <string name="notiy_title">Tips</string>
     <string name="news">Latest news</string>
+    <string name="facebook_app_id">222090675045613</string>
+    <string name="support">Support Developer</string>
+    <string name="support_thanks">Thank you!\n If you can click the ad on this page,That\'s better!</string>
 </resources>

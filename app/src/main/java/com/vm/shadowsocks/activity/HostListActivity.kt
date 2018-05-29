@@ -8,7 +8,10 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.Window
+import android.widget.LinearLayout
 import com.avos.avoscloud.*
+import com.facebook.ads.AdSize
+import com.facebook.ads.AdView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.vm.shadowsocks.App
@@ -30,17 +33,20 @@ class HostListActivity : BaseActivity() {
 
     private var recyclerViewHosts: RecyclerView? = null
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_host_list)
         recyclerViewHosts = findViewById(R.id.recyclerViewHosts)
 
-        findViewById<View>(R.id.imageViewBack).setOnClickListener { finish() }
-
         loadHostsFromLean()
-//        loadHosts()
+        findViewById<View>(R.id.imageViewBack).setOnClickListener { finish() }
     }
+
+
+
 
     private fun loadHosts() {
         showCover()
@@ -137,7 +143,7 @@ class HostListActivity : BaseActivity() {
         Servers.servers = servers
         Servers.servers.shuffle()
 
-        LogUtil.e(App.tag,"host size:"+Servers.servers.size)
+        LogUtil.e(App.tag, "host size:" + Servers.servers.size)
 
         val hostAdapter = object : HostAdapter(this@HostListActivity, servers) {
             override fun onClickServerItem(server: Server, hostAdapter: HostAdapter, position: Int) {
