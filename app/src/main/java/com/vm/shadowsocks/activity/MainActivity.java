@@ -27,6 +27,7 @@ import com.vm.shadowsocks.core.ProxyConfig;
 import com.vm.shadowsocks.domain.EventMessage;
 import com.vm.shadowsocks.domain.Server;
 import com.vm.shadowsocks.tool.LogUtil;
+import com.vm.shadowsocks.tool.MyAnimationUtils;
 import com.vm.shadowsocks.tool.Tool;
 
 import org.greenrobot.eventbus.EventBus;
@@ -41,10 +42,11 @@ public class MainActivity extends BaseActivity implements
     private TextView textViewServerCountryName, textViewCurrentConnectCount;
     private ImageView toggleButton;
     private ImageView imageViewCountry;
+    private ImageView imageViewMenu;
     private TextView textViewStatus;
-
     private TextView textViewSent;
     private TextView textViewReceived;
+    private View drawView;
 
     private int INT_GO_SELECT = 100;
     public static Server selectDefaultServer;
@@ -112,15 +114,40 @@ public class MainActivity extends BaseActivity implements
         findViewById(R.id.ProxyUrlLayout).setOnClickListener(this);
         textViewServerCountryName = findViewById(R.id.textViewServerCountryName);
         textViewCurrentConnectCount = findViewById(R.id.textViewCurrentConnectCount);
+        drawView = findViewById(R.id.linearLayoutDraw);
 
+        imageViewMenu = findViewById(R.id.imageViewMenu);
 
-        findViewById(R.id.imageViewMenu).setOnClickListener(new View.OnClickListener() {
+        imageViewMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Tool.startActivity(MainActivity.this, MessagesActivity.class);
+                imageViewMenu.setImageResource(R.drawable.selector_back);
+
+                if (drawView.getVisibility() == View.VISIBLE) {
+                    hideMenu();
+                } else {
+                    MyAnimationUtils.animationShowView(drawView, AnimationUtils.loadAnimation(MainActivity.this, R.anim.in_to_left));
+                }
+
             }
         });
 
+
+        findViewById(R.id.textViewNews).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                hideMenu();
+
+                Tool.startActivity(MainActivity.this, MessagesActivity.class);
+            }
+        });
+        findViewById(R.id.viewTouchHide).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideMenu();
+            }
+        });
 
         try {
 
@@ -139,6 +166,22 @@ public class MainActivity extends BaseActivity implements
             new AppProxyManager(this);
         }
 
+    }
+
+    private void hideMenu() {
+        imageViewMenu.setImageResource(R.drawable.selector_menu);
+        MyAnimationUtils.animationHideview(drawView, AnimationUtils.loadAnimation(MainActivity.this, R.anim.out_to_lef));
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawView.getVisibility() == View.VISIBLE) {
+            imageViewMenu.setImageResource(R.drawable.selector_menu);
+            MyAnimationUtils.animationHideview(drawView, AnimationUtils.loadAnimation(MainActivity.this, R.anim.out_to_lef));
+            return;
+        }
+
+        super.onBackPressed();
     }
 
     private void exitApp() {
@@ -182,6 +225,7 @@ public class MainActivity extends BaseActivity implements
 //                    toggleButton.setEnabled(false);
             if (isChecked) {
 
+
                 Intent intent = LocalVpnService.prepare(MainActivity.this);
                 if (intent == null) {
                     ProxyConfig.Instance.globalMode = true;
@@ -189,6 +233,7 @@ public class MainActivity extends BaseActivity implements
                 } else {
                     startActivityForResult(intent, Constant.START_VPN_SERVICE_REQUEST_CODE);
                 }
+
             } else {
                 LocalVpnService.IsRunning = false;
             }

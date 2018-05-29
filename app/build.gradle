@@ -35,8 +35,8 @@ android {
         applicationId 'com.flickervpn.shadowsocks'
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 16
-        versionName "2.6"
+        versionCode 19
+        versionName "2.9"
         multiDexEnabled true
     }
     buildTypes {
@@ -84,7 +84,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
     implementation 'com.google.code.gson:gson:2.8.1'
-    implementation 'com.aliyun.ams:alicloud-android-hotfix:3.2.1'
+    implementation 'com.aliyun.ams:alicloud-android-hotfix:3.2.3'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     implementation 'cn.leancloud.android:avoscloud-sdk:v4.6.4'
     implementation 'org.greenrobot:greendao:3.2.2' // add library

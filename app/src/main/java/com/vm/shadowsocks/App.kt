@@ -1,13 +1,9 @@
 package com.vm.shadowsocks
 
-import android.content.Context
+import android.app.Application
 import android.database.sqlite.SQLiteDatabase
-import android.support.multidex.MultiDex
-import android.support.multidex.MultiDexApplication
 import android.text.TextUtils
 import com.avos.avoscloud.*
-import com.taobao.sophix.PatchStatus
-import com.taobao.sophix.SophixManager
 import com.vm.greendao.db.DaoMaster
 import com.vm.greendao.db.DaoSession
 import com.vm.greendao.db.HistoryDao
@@ -26,7 +22,7 @@ import kotlinx.coroutines.experimental.launch
 import java.util.*
 
 
-class App : MultiDexApplication() {
+class App : Application() {
 
 
     private var mHelper: Helper? = null
@@ -46,7 +42,7 @@ class App : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        SophixManager.getInstance().queryAndLoadNewPatch()
+//        SophixManager.getInstance().queryAndLoadNewPatch()
 
         try {
             PushService.setDefaultChannelId(this, "google")
@@ -59,7 +55,6 @@ class App : MultiDexApplication() {
         LogUtil.DEBUG = BuildConfig.LOG
         setUpDataBase()
         loginDevice()
-
 
         try {
             AVInstallation.getCurrentInstallation().saveInBackground()
@@ -79,7 +74,6 @@ class App : MultiDexApplication() {
     fun loginDevice() {
 
         try {
-
 
             AVUser.logInInBackground(getUserName(), getPassword(), object : LogInCallback<AVUser>() {
                 override fun done(p0: AVUser?, p1: AVException?) {
@@ -303,29 +297,29 @@ class App : MultiDexApplication() {
     }
 
 
-    override fun attachBaseContext(base: Context?) {
-        super.attachBaseContext(base)
-        MultiDex.install(this)
-
-        SophixManager.getInstance().setContext(this)
-                .setAppVersion(Tool.getVersionName(this))
-                .setAesKey(null)
-                .setEnableDebug(true)
-                .setPatchLoadStatusStub { mode, code, info, handlePatchVersion ->
-                    // 补丁加载回调通知
-                    if (code == PatchStatus.CODE_LOAD_SUCCESS) {
-                        // 表明补丁加载成功
-                        com.vm.shadowsocks.tool.LogUtil.e(App.tag, "hot fix success======")
-                    } else if (code == PatchStatus.CODE_LOAD_RELAUNCH) {
-                        // 表明新补丁生效需要重启. 开发者可提示用户或者强制重启;
-                        // 建议: 用户可以监听进入后台事件, 然后调用killProcessSafely自杀，以此加快应用补丁，详见1.3.2.3
-                        LogUtil.e(App.tag, "hot fix success======restart")
-                        SophixManager.getInstance().killProcessSafely()
-                    } else {
-                        // 其它错误信息, 查看PatchStatus类说明
-                    }
-                }.initialize()
-    }
+//    override fun attachBaseContext(base: Context?) {
+//        super.attachBaseContext(base)
+//        MultiDex.install(this)
+//
+//        SophixManager.getInstance().setContext(this)
+//                .setAppVersion(Tool.getVersionName(this))
+//                .setAesKey(null)
+//                .setEnableDebug(true)
+//                .setPatchLoadStatusStub { mode, code, info, handlePatchVersion ->
+//                    // 补丁加载回调通知
+//                    if (code == PatchStatus.CODE_LOAD_SUCCESS) {
+//                        // 表明补丁加载成功
+//                        com.vm.shadowsocks.tool.LogUtil.e(App.tag, "hot fix success======")
+//                    } else if (code == PatchStatus.CODE_LOAD_RELAUNCH) {
+//                        // 表明新补丁生效需要重启. 开发者可提示用户或者强制重启;
+//                        // 建议: 用户可以监听进入后台事件, 然后调用killProcessSafely自杀，以此加快应用补丁，详见1.3.2.3
+//                        LogUtil.e(App.tag, "hot fix success======restart")
+//                        SophixManager.getInstance().killProcessSafely()
+//                    } else {
+//                        // 其它错误信息, 查看PatchStatus类说明
+//                    }
+//                }.initialize()
+//    }
 
 
     /**
