@@ -58,7 +58,6 @@ public class MainActivity extends BaseActivity implements
     private int INT_GO_SELECT = 100;
     public static Server selectDefaultServer;
     public Animation animationRotate;
-
     public boolean enable = true;
     private AdView adView;
 
@@ -72,6 +71,7 @@ public class MainActivity extends BaseActivity implements
         animationRotate.setRepeatCount(Animation.INFINITE);
         animationRotate.setRepeatMode(Animation.RESTART);
         animationRotate.setInterpolator(new LinearInterpolator());
+
         initView();
 
         initAd();
@@ -208,6 +208,7 @@ public class MainActivity extends BaseActivity implements
             }
         });
 
+
         try {
 
             AVUser currentUser = AVUser.getCurrentUser();
@@ -220,11 +221,27 @@ public class MainActivity extends BaseActivity implements
             LogUtil.e(TAG, "Set up push exception:" + e);
         }
 
+        updateDataUsed();
         //Pre-App Proxy
         if (AppProxyManager.isLollipopOrAbove) {
             new AppProxyManager(this);
         }
 
+
+
+    }
+
+    private void updateDataUsed() {
+        long total = 0;
+        if (null != AVUser.getCurrentUser()) {
+            long bytesUsed = AVUser.getCurrentUser().getLong("used_bytes");
+            total += bytesUsed;
+        }
+        total += SharePersistent.getlong(App.instance, "totalbyte");
+
+        TextView totalTextView = findViewById(R.id.textViewTotalUsed);
+        String ret = String.format(getResources().getString(R.string.total_used), (total / 1024) + "M");
+        totalTextView.setText(ret);
     }
 
     private void hideMenu() {
@@ -387,6 +404,13 @@ public class MainActivity extends BaseActivity implements
 
                 AVAnalytics.onEvent(MainActivity.this, "Start Proxy");
 
+                imageViewCountry.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        initAd();
+                    }
+                },1500);
+
             } else {
                 imageViewCountry.clearAnimation();
                 toggleButton.setImageResource(R.drawable.icon_start);
@@ -396,6 +420,7 @@ public class MainActivity extends BaseActivity implements
                 totalbyte = totalbyte > 0 ? totalbyte : 0;
                 App.instance.udpateUsedByte(totalbyte);
 
+                updateDataUsed();
             }
 
             upateTotalused();
