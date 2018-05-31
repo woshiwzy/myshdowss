@@ -44,8 +44,6 @@ class AdActivity : BaseActivity() {
                 hideCover()
             }
 
-            override fun onAdImpression() {
-            }
         }
         showCover()
     }

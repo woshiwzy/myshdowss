@@ -239,7 +239,7 @@ public class MainActivity extends BaseActivity implements
         }
         total += SharePersistent.getlong(App.instance, "totalbyte");
 
-        TextView totalTextView = findViewById(R.id.textViewTotalUsed);
+        TextView totalTextView = findViewById(R.id.textViewTotal);
         String ret = String.format(getResources().getString(R.string.total_used), (total / 1024) + "M");
         totalTextView.setText(ret);
     }

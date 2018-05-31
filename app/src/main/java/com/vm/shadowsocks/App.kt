@@ -106,7 +106,7 @@ class App : Application() {
                 val avUser = AVUser.getCurrentUser()
                 var calendar = Calendar.getInstance()
 
-                if (null != avUser && calendar.get(Calendar.DAY_OF_WEEK) == 2) {
+                if (null != avUser && (calendar.get(Calendar.DAY_OF_WEEK) == 1||calendar.get(Calendar.DAY_OF_WEEK) == 4)) {
 
                     var usedByte = avUser.getLong("used_bytes")
                     avUser.put("used_bytes", (usedByte + allTotal))
