@@ -209,6 +209,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_content"
                     android:layout_marginRight="@dimen/margin_content"
+                    android:layout_marginBottom="3dp"
                     android:orientation="vertical" />
 
 

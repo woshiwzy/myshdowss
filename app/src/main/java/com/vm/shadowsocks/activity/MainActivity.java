@@ -73,7 +73,6 @@ public class MainActivity extends BaseActivity implements
         animationRotate.setInterpolator(new LinearInterpolator());
 
         initView();
-
         initAd();
     }
 
@@ -403,13 +402,6 @@ public class MainActivity extends BaseActivity implements
                 }
 
                 AVAnalytics.onEvent(MainActivity.this, "Start Proxy");
-
-                imageViewCountry.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        initAd();
-                    }
-                },1500);
 
             } else {
                 imageViewCountry.clearAnimation();
