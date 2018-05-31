@@ -35,4 +35,6 @@
     <string name="facebook_app_id">222090675045613</string>
     <string name="support">Support Developer</string>
     <string name="support_thanks">Thank you!\n If you can click the ad on this page,That\'s better!</string>
+
+    <string name="total_used">You have used\n%1s\n traffic for free</string>
 </resources>

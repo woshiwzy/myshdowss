@@ -8,10 +8,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.Window
-import android.widget.LinearLayout
 import com.avos.avoscloud.*
-import com.facebook.ads.AdSize
-import com.facebook.ads.AdView
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.vm.shadowsocks.App
@@ -34,13 +35,11 @@ class HostListActivity : BaseActivity() {
     private var recyclerViewHosts: RecyclerView? = null
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_host_list)
         recyclerViewHosts = findViewById(R.id.recyclerViewHosts)
-
         loadHostsFromLean()
         findViewById<View>(R.id.imageViewBack).setOnClickListener { finish() }
     }

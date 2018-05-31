@@ -17,6 +17,10 @@ import android.widget.Toast;
 import com.avos.avoscloud.AVAnalytics;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.PushService;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.vm.shadowsocks.App;
 import com.vm.shadowsocks.R;
 import com.vm.shadowsocks.constant.Constant;
@@ -28,6 +32,7 @@ import com.vm.shadowsocks.domain.EventMessage;
 import com.vm.shadowsocks.domain.Server;
 import com.vm.shadowsocks.tool.LogUtil;
 import com.vm.shadowsocks.tool.MyAnimationUtils;
+import com.vm.shadowsocks.tool.SharePersistent;
 import com.vm.shadowsocks.tool.Tool;
 
 import org.greenrobot.eventbus.EventBus;
@@ -51,8 +56,9 @@ public class MainActivity extends BaseActivity implements
     private int INT_GO_SELECT = 100;
     public static Server selectDefaultServer;
     public Animation animationRotate;
-
     public boolean enable = true;
+    private AdView mAdView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,11 +68,30 @@ public class MainActivity extends BaseActivity implements
         animationRotate.setRepeatCount(Animation.INFINITE);
         animationRotate.setRepeatMode(Animation.RESTART);
         animationRotate.setInterpolator(new LinearInterpolator());
+
         initView();
 
 
     }
 
+
+    private void initAd() {
+        MobileAds.initialize(this, "ca-app-pub-9033563274040080~1800036213");
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+        mAdView.setAdListener(new AdListener(){
+            @Override
+            public void onAdLoaded() {
+                LogUtil.e(TAG,"ad loaded");
+            }
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+                LogUtil.e(TAG,"ad load failed:"+i);
+            }
+        });
+    }
 
     @Override
     protected void onStart() {
@@ -154,6 +179,7 @@ public class MainActivity extends BaseActivity implements
             }
         });
 
+
         try {
 
             AVUser currentUser = AVUser.getCurrentUser();
@@ -166,11 +192,27 @@ public class MainActivity extends BaseActivity implements
             LogUtil.e(TAG, "Set up push exception:" + e);
         }
 
+        updateDataUsed();
         //Pre-App Proxy
         if (AppProxyManager.isLollipopOrAbove) {
             new AppProxyManager(this);
         }
 
+
+
+    }
+
+    private void updateDataUsed() {
+        long total = 0;
+        if (null != AVUser.getCurrentUser()) {
+            long bytesUsed = AVUser.getCurrentUser().getLong("used_bytes");
+            total += bytesUsed;
+        }
+        total += SharePersistent.getlong(App.instance, "totalbyte");
+
+        TextView totalTextView = findViewById(R.id.textViewTotalUsed);
+        String ret = String.format(getResources().getString(R.string.total_used), (total / 1024) + "M");
+        totalTextView.setText(ret);
     }
 
     private void hideMenu() {
@@ -327,6 +369,13 @@ public class MainActivity extends BaseActivity implements
 
                 AVAnalytics.onEvent(MainActivity.this, "Start Proxy");
 
+                imageViewCountry.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        initAd();
+                    }
+                },1500);
+
             } else {
                 imageViewCountry.clearAnimation();
                 toggleButton.setImageResource(R.drawable.icon_start);
@@ -336,6 +385,7 @@ public class MainActivity extends BaseActivity implements
                 totalbyte = totalbyte > 0 ? totalbyte : 0;
                 App.instance.udpateUsedByte(totalbyte);
 
+                updateDataUsed();
             }
         }
 

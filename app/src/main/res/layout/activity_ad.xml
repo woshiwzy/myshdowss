@@ -7,31 +7,23 @@
     android:background="#1296db"
     android:orientation="horizontal">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:src="@drawable/bt" />
-
-
-
-
-    <LinearLayout
-        android:id="@+id/banner_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical" />
-
 
     <TextView
+        android:id="@+id/textViewTip"
         android:layout_width="match_parent"
-        android:minHeight="@dimen/input_item_height"
         android:layout_height="wrap_content"
-        android:textStyle="italic"
-        android:gravity="center"
         android:layout_above="@id/banner_container"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:minHeight="@dimen/input_item_height"
         android:text="@string/support_thanks"
-        android:textColor="@android:color/holo_red_dark" />
+        android:textColor="@android:color/holo_red_dark"
+        android:textStyle="italic" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/textViewTip"
+        android:src="@drawable/bt" />
 </RelativeLayout>
 

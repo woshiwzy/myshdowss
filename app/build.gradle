@@ -35,8 +35,8 @@ android {
         applicationId 'com.flickervpn.shadowsocks'
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 30
-        versionName "3.0"
+        versionCode 31
+        versionName "3.1"
         multiDexEnabled true
     }
     buildTypes {
@@ -92,8 +92,7 @@ dependencies {
     implementation 'com.android.support:design:26.1.0'
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation('cn.leancloud.android:avoscloud-push:v4.6.4@aar') { transitive = true }
-    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
-    implementation 'com.facebook.android:audience-network-sdk:4.+'
+    implementation 'com.google.android.gms:play-services-ads:15.0.0'
 }
 
 greendao {

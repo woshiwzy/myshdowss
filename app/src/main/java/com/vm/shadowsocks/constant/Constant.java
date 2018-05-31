@@ -10,7 +10,7 @@ public class Constant {
 
     public static String GL_HISTORY_LOGS;
 
-    public static final String TAG = MainActivity.class.getSimpleName();
+    public static final String TAG ="ss";
 
     public static final String CONFIG_URL_KEY = "CONFIG_URL_KEY";
 

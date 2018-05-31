@@ -36,4 +36,5 @@
     <string name="support">支持一下</string>
 
     <string name="support_thanks">谢谢支持！\n如果能点一下本页面上的广告就更好了！</string>
+    <string name="total_used">你已经\n免费使用了\n%1s</string>
 </resources>
