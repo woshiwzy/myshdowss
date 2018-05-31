@@ -207,6 +207,7 @@ public class MainActivity extends BaseActivity implements
             }
         });
 
+        ((TextView)findViewById(R.id.textViewTitle)).setText(getResources().getText(R.string.app_name)+" "+Tool.getVersionName(this));
 
         try {
 
