@@ -11,12 +11,18 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.avos.avoscloud.AVAnalytics;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.PushService;
+import com.facebook.ads.Ad;
+import com.facebook.ads.AdError;
+import com.facebook.ads.AdListener;
+import com.facebook.ads.AdSize;
+import com.facebook.ads.AdView;
 import com.vm.shadowsocks.App;
 import com.vm.shadowsocks.R;
 import com.vm.shadowsocks.constant.Constant;
@@ -28,6 +34,7 @@ import com.vm.shadowsocks.domain.EventMessage;
 import com.vm.shadowsocks.domain.Server;
 import com.vm.shadowsocks.tool.LogUtil;
 import com.vm.shadowsocks.tool.MyAnimationUtils;
+import com.vm.shadowsocks.tool.SharePersistent;
 import com.vm.shadowsocks.tool.Tool;
 
 import org.greenrobot.eventbus.EventBus;
@@ -53,6 +60,9 @@ public class MainActivity extends BaseActivity implements
     public Animation animationRotate;
 
     public boolean enable = true;
+    private AdView adView;
+
+    private TextView textViewTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +74,38 @@ public class MainActivity extends BaseActivity implements
         animationRotate.setInterpolator(new LinearInterpolator());
         initView();
 
+        initAd();
+    }
 
+
+    private void initAd() {
+        adView = new AdView(this, "870289033159365_870296759825259", AdSize.BANNER_HEIGHT_50);
+        adView.setAdListener(new AdListener() {
+            @Override
+            public void onError(Ad ad, AdError adError) {
+                LogUtil.e(TAG, "ad error:" + adError.getErrorMessage());
+            }
+
+            @Override
+            public void onAdLoaded(Ad ad) {
+                LogUtil.e(TAG, "onAdLoaded");
+            }
+
+            @Override
+            public void onAdClicked(Ad ad) {
+
+            }
+
+            @Override
+            public void onLoggingImpression(Ad ad) {
+
+            }
+        });
+
+        LinearLayout adContainer = findViewById(R.id.banner_container);
+        adContainer.addView(adView);
+
+        adView.loadAd();
     }
 
 
@@ -92,12 +133,25 @@ public class MainActivity extends BaseActivity implements
         super.onStop();
     }
 
+    private void upateTotalused() {
+
+        long total = SharePersistent.getlong(App.instance, "totalbyte");
+        if(null!=AVUser.getCurrentUser()){
+            total+=AVUser.getCurrentUser().getLong("used_bytes");
+        }
+        String foramtString = getResources().getString(R.string.used_traffic);
+        String ret=String.format(foramtString,(total/1024)+"M" );
+        textViewTotal.setText(ret);
+    }
+
+
     private void initView() {
         setContentView(R.layout.activity_main);
         LocalVpnService.addOnStatusChangedListener(statusChangedListener);
 
         imageViewCountry = findViewById(R.id.imageViewCountry);
         textViewStatus = findViewById(R.id.textViewStatus);
+        textViewTotal = findViewById(R.id.textViewTotal);
 
         textViewReceived = findViewById(R.id.textViewReceived);
         textViewSent = findViewById(R.id.textViewSent);
@@ -291,10 +345,16 @@ public class MainActivity extends BaseActivity implements
         }
 
 
+        upateTotalused();
     }
 
     @Override
     protected void onDestroy() {
+        if (adView != null) {
+            adView.destroy();
+        }
+
+
         LocalVpnService.removeOnStatusChangedListener(statusChangedListener);
         super.onDestroy();
     }
@@ -337,6 +397,8 @@ public class MainActivity extends BaseActivity implements
                 App.instance.udpateUsedByte(totalbyte);
 
             }
+
+            upateTotalused();
         }
 
         @Override
