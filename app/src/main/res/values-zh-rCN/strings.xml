@@ -39,4 +39,6 @@
 
     <string name="used_traffic">免费使用了\n%1S\n流量</string>
     <string name="total_used">你已经\n免费使用了\n%1s</string>
+    <string name="server_error">服务不可用或者本月流量耗尽！</string>
+    <string name="sorrytext">抱歉，为了防止滥用，每人每月限1GB流量</string>
 </resources>

@@ -60,9 +60,11 @@ public class MainActivity extends BaseActivity implements
     public Animation animationRotate;
     public boolean enable = true;
     private String disableMessage = "";
+    private long remain = 0;
     private AdView adView;
 
     private TextView textViewTotal;
+    private View tipLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,7 @@ public class MainActivity extends BaseActivity implements
 
         initView();
         initAd();
+        showTipLayout();
     }
 
 
@@ -140,7 +143,14 @@ public class MainActivity extends BaseActivity implements
             total += AVUser.getCurrentUser().getLong("used_bytes");
         }
         String foramtString = getResources().getString(R.string.used_traffic);
-        String ret = String.format(foramtString, (total / 1024) + "M");
+        long gb = total / 2014 / 1024;
+        long m = (total / 1024);
+        String ret = "";
+        if (gb <= 0) {
+            ret = String.format(foramtString, (total / 1024) + "M");
+        } else {
+            ret = String.format(foramtString, gb + " G " + m % 1024 + "M");
+        }
         textViewTotal.setText(ret);
     }
 
@@ -148,6 +158,8 @@ public class MainActivity extends BaseActivity implements
     private void initView() {
         setContentView(R.layout.activity_main);
         LocalVpnService.addOnStatusChangedListener(statusChangedListener);
+
+        tipLayout = findViewById(R.id.tipLayout);
 
         imageViewCountry = findViewById(R.id.imageViewCountry);
         textViewStatus = findViewById(R.id.textViewStatus);
@@ -214,8 +226,15 @@ public class MainActivity extends BaseActivity implements
 
             AVUser currentUser = AVUser.getCurrentUser();
             if (null != currentUser) {
+
                 enable = currentUser.getBoolean("enable");
                 disableMessage = currentUser.getString("disableMessage");
+                remain = currentUser.getLong("remaining_bytes");
+                long remainingM = (remain / 1024);
+
+                if (remainingM <= 0) {
+                    enable = false;
+                }
             }
             PushService.setDefaultPushCallback(this, MessagesActivity.class);
 
@@ -229,8 +248,23 @@ public class MainActivity extends BaseActivity implements
             new AppProxyManager(this);
         }
 
-
     }
+
+    private void showTipLayout() {
+        MyAnimationUtils.animationShowView(tipLayout, AnimationUtils.loadAnimation(this, R.anim.fade_in));
+        tipLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                hideTipLayout();
+            }
+        }, 5 * 1000);
+    }
+
+
+    private void hideTipLayout() {
+        MyAnimationUtils.animationHideview(tipLayout, AnimationUtils.loadAnimation(this, R.anim.fade_out));
+    }
+
 
     private void updateDataUsed() {
         long total = 0;
@@ -288,9 +322,9 @@ public class MainActivity extends BaseActivity implements
     private void startOrStopVpn(boolean isChecked) {
         if (!enable) {
             if (!com.avos.avoscloud.utils.StringUtils.isBlankString(disableMessage)) {
-                Toast.makeText(this, disableMessage, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, disableMessage, Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, " Sorry, vpn service not enable for you!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, " Sorry, vpn service not enable for you!", Toast.LENGTH_LONG).show();
             }
             return;
         }
@@ -416,9 +450,13 @@ public class MainActivity extends BaseActivity implements
 
                 long totalbyte = (LocalVpnService.m_ReceivedBytes + LocalVpnService.m_SentBytes) / 1024;
                 totalbyte = totalbyte > 0 ? totalbyte : 0;
-                App.instance.udpateUsedByte(totalbyte);
 
+
+//                App.instance.udpateUsedByte(totalbyte);
+                App.instance.updateUsedByte2Server(totalbyte);
                 updateDataUsed();
+
+
             }
 
             upateTotalused();

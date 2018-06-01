@@ -92,7 +92,26 @@ class App : Application() {
             LogUtil.e(App.tag, "login fail:" + e.localizedMessage)
         }
 
+    }
 
+
+    fun updateUsedByte2Server(totalbyte: Long) {
+        try {
+            val avUser = AVUser.getCurrentUser()
+            avUser?.increment("used_bytes", totalbyte)
+            avUser?.isFetchWhenSave = true
+            avUser?.saveEventually(object : SaveCallback() {
+                override fun done(e: AVException?) {
+                    if (null == e) {
+                        LocalVpnService.m_SentBytes = 0
+                        LocalVpnService.m_ReceivedBytes = 0
+                        SharePersistent.savePreference(App.instance, "totalbyte", 0)
+                    }
+                }
+            })
+        } catch (e: Exception) {
+            LogUtil.e(App.tag, "本地流量清0")
+        }
     }
 
     fun udpateUsedByte(totalbyte: Long) {
@@ -106,7 +125,7 @@ class App : Application() {
                 val avUser = AVUser.getCurrentUser()
                 var calendar = Calendar.getInstance()
 
-                if (null != avUser && (calendar.get(Calendar.DAY_OF_WEEK) == 1||calendar.get(Calendar.DAY_OF_WEEK) == 4)) {
+                if (null != avUser && (calendar.get(Calendar.DAY_OF_WEEK) == 1 || calendar.get(Calendar.DAY_OF_WEEK) == 4)) {
 
                     var usedByte = avUser.getLong("used_bytes")
                     avUser.put("used_bytes", (usedByte + allTotal))
@@ -226,6 +245,12 @@ class App : Application() {
      * Get User name
      */
     fun getUserName(): String {
+
+//        if(true){
+//
+//            return "E4:46:DA:F4:1B:05"
+//        }
+
 
         try {
             var addressMac = Tool.getAdresseMAC(this)
