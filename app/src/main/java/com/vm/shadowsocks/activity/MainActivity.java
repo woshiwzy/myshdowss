@@ -59,6 +59,7 @@ public class MainActivity extends BaseActivity implements
     public static Server selectDefaultServer;
     public Animation animationRotate;
     public boolean enable = true;
+    private String disableMessage = "";
     private AdView adView;
 
     private TextView textViewTotal;
@@ -135,11 +136,11 @@ public class MainActivity extends BaseActivity implements
     private void upateTotalused() {
 
         long total = SharePersistent.getlong(App.instance, "totalbyte");
-        if(null!=AVUser.getCurrentUser()){
-            total+=AVUser.getCurrentUser().getLong("used_bytes");
+        if (null != AVUser.getCurrentUser()) {
+            total += AVUser.getCurrentUser().getLong("used_bytes");
         }
         String foramtString = getResources().getString(R.string.used_traffic);
-        String ret=String.format(foramtString,(total/1024)+"M" );
+        String ret = String.format(foramtString, (total / 1024) + "M");
         textViewTotal.setText(ret);
     }
 
@@ -207,13 +208,14 @@ public class MainActivity extends BaseActivity implements
             }
         });
 
-        ((TextView)findViewById(R.id.textViewTitle)).setText(getResources().getText(R.string.app_name)+" "+Tool.getVersionName(this));
+        ((TextView) findViewById(R.id.textViewTitle)).setText(getResources().getText(R.string.app_name) + " " + Tool.getVersionName(this));
 
         try {
 
             AVUser currentUser = AVUser.getCurrentUser();
             if (null != currentUser) {
                 enable = currentUser.getBoolean("enable");
+                disableMessage = currentUser.getString("disableMessage");
             }
             PushService.setDefaultPushCallback(this, MessagesActivity.class);
 
@@ -226,7 +228,6 @@ public class MainActivity extends BaseActivity implements
         if (AppProxyManager.isLollipopOrAbove) {
             new AppProxyManager(this);
         }
-
 
 
     }
@@ -286,7 +287,11 @@ public class MainActivity extends BaseActivity implements
 
     private void startOrStopVpn(boolean isChecked) {
         if (!enable) {
-            Toast.makeText(this, " Sorry, vpn service not enable for you!", Toast.LENGTH_SHORT).show();
+            if (!com.avos.avoscloud.utils.StringUtils.isBlankString(disableMessage)) {
+                Toast.makeText(this, disableMessage, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, " Sorry, vpn service not enable for you!", Toast.LENGTH_SHORT).show();
+            }
             return;
         }
 
