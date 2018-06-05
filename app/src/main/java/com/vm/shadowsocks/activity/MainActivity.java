@@ -1,10 +1,14 @@
 package com.vm.shadowsocks.activity;
 
 import android.app.AlertDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -15,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.vending.billing.IInAppBillingService;
 import com.avos.avoscloud.AVAnalytics;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.PushService;
@@ -53,6 +58,10 @@ public class MainActivity extends BaseActivity implements
     private TextView textViewStatus;
     private TextView textViewSent;
     private TextView textViewReceived;
+
+    private ImageView imageViewUp;
+    private ImageView imageVIewDown;
+
     private View drawView;
 
     private int INT_GO_SELECT = 100;
@@ -66,10 +75,32 @@ public class MainActivity extends BaseActivity implements
     private TextView textViewTotal;
     private View tipLayout;
 
+    private IInAppBillingService mService;
+    private ServiceConnection mServiceConn = new ServiceConnection() {
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mService = null;
+            LogUtil.e(TAG,"onServiceDisconnected");
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mService = IInAppBillingService.Stub.asInterface(service);
+
+            LogUtil.e(TAG,"onServiceConnected");
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+        Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
+        serviceIntent.setPackage("com.android.vending");
+        bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
+
+        //=======bind service
         animationRotate = AnimationUtils.loadAnimation(this, R.anim.rotate);
         animationRotate.setRepeatCount(Animation.INFINITE);
         animationRotate.setRepeatMode(Animation.RESTART);
@@ -124,7 +155,20 @@ public class MainActivity extends BaseActivity implements
         if (null != textViewSent && null != textViewReceived) {
             long sent = Math.abs(event.sent / 1024);
             textViewSent.setText(sent + " KB");
+            if (sent > 0) {
+                imageViewUp.setImageResource(R.drawable.icon_up_go);
+            } else {
+                imageViewUp.setImageResource(R.drawable.icon_up);
+            }
+
             long receid = Math.abs(event.received / 1024);
+
+            if (receid > 0) {
+
+                imageVIewDown.setImageResource(R.drawable.icon_down_go);
+            } else {
+                imageVIewDown.setImageResource(R.drawable.icon_down);
+            }
             textViewReceived.setText(receid + " KB");
 //            textViewCurrentConnectCount.setText("Sent:"+event.sent / 1024 + " kb/s Received:"+event.received / 1024 + " kb/s");
         }
@@ -158,6 +202,9 @@ public class MainActivity extends BaseActivity implements
     private void initView() {
         setContentView(R.layout.activity_main);
         LocalVpnService.addOnStatusChangedListener(statusChangedListener);
+
+        imageViewUp = findViewById(R.id.imageViewUp);
+        imageVIewDown = findViewById(R.id.imageViewDown);
 
         tipLayout = findViewById(R.id.tipLayout);
 
@@ -227,14 +274,14 @@ public class MainActivity extends BaseActivity implements
             AVUser currentUser = AVUser.getCurrentUser();
             if (null != currentUser) {
 
-                enable = currentUser.getBoolean("enable");
-                disableMessage = currentUser.getString("disableMessage");
-                remain = currentUser.getLong("remaining_bytes");
-                long remainingM = (remain / 1024);
-
-                if (remainingM <= 0) {
-                    enable = false;
-                }
+//                enable = currentUser.getBoolean("enable");
+//                disableMessage = currentUser.getString("disableMessage");
+//                remain = currentUser.getLong("remaining_bytes");
+//                long remainingM = (remain / 1024);
+//
+//                if (remainingM <= 0) {
+//                    enable = false;
+//                }
             }
             PushService.setDefaultPushCallback(this, MessagesActivity.class);
 
@@ -406,13 +453,17 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     protected void onDestroy() {
+
         if (adView != null) {
             adView.destroy();
         }
-
-
         LocalVpnService.removeOnStatusChangedListener(statusChangedListener);
         super.onDestroy();
+
+        if (mService != null) {
+            unbindService(mServiceConn);
+        }
+
     }
 
     private void updateInfo(Server server) {

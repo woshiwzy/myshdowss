@@ -3,103 +3,44 @@
   "code": 200,
   "data": [
     {
-      "name": "High-speed server1",
-      "serverurl": "65.49.201.127",
+      "name": "vps pro",
+      "serverurl": "69.171.72.157",
       "id": 1,
       "method": "aes-256-cfb",
       "password": "666666",
-      "port": 9000
-    },
-    {
-      "name": "High-speed server2",
-      "serverurl": "65.49.201.127",
-      "id": 3,
-      "method": "aes-256-cfb",
-      "password": "666666",
       "port": 9001
     },
     {
-      "name": "High-speed server3",
-      "serverurl": "65.49.201.127",
-      "id": 4,
+      "name": "vps pro",
+      "serverurl": "69.171.72.157",
+      "id": 1,
       "method": "aes-256-cfb",
       "password": "666666",
       "port": 9002
     },
     {
-      "name": "High-speed server4",
-      "serverurl": "65.49.201.127",
-      "id": 5,
+      "name": "vps pro",
+      "serverurl": "69.171.72.157",
+      "id": 1,
       "method": "aes-256-cfb",
       "password": "666666",
       "port": 9003
     },
     {
-      "name": "High-speed server5",
-      "serverurl": "65.49.201.127",
-      "id": 6,
+      "name": "vps pro",
+      "serverurl": "69.171.72.157",
+      "id": 1,
       "method": "aes-256-cfb",
       "password": "666666",
       "port": 9004
     },
     {
-      "name": "High-speed server6",
-      "serverurl": "104.224.142.115",
-      "id": 7,
-      "method": "aes-256-cfb",
-      "password": "666666",
-      "port": 9000
-    },
-    {
-      "name": "High-speed server7",
-      "serverurl": "104.224.142.115",
-      "id": 8,
-      "method": "aes-256-cfb",
-      "password": "666666",
-      "port": 9001
-    },
-    {
-      "name": "High-speed server8",
-      "serverurl": "104.224.142.115",
-      "id": 9,
-      "method": "aes-256-cfb",
-      "password": "666666",
-      "port": 9002
-    },
-    {
-      "name": "High-speed server9",
-      "serverurl": "104.224.142.115",
-      "id": 10,
-      "method": "aes-256-cfb",
-      "password": "666666",
-      "port": 9003
-    }
-  ,
-    {
-      "name": "High-speed server10",
-      "serverurl": "104.224.142.115",
-      "id": 11,
-      "method": "aes-256-cfb",
-      "password": "666666",
-      "port": 9004
-    },
-    {
-      "name": "High-speed server11",
-      "serverurl": "104.224.142.115",
-      "id": 12,
+      "name": "vps pro",
+      "serverurl": "69.171.72.157",
+      "id": 1,
       "method": "aes-256-cfb",
       "password": "666666",
       "port": 9005
-    },
-    {
-      "name": "High-speed server12",
-      "serverurl": "104.224.142.115",
-      "id": 13,
-      "method": "aes-256-cfb",
-      "password": "666666",
-      "port": 9006
     }
-
-
   ]
 }

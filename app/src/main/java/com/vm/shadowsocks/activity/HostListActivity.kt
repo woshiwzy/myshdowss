@@ -76,25 +76,28 @@ class HostListActivity : BaseActivity() {
 
     private fun loadHostsFromLean() {
 
-        if (Servers.servers?.isEmpty()!!) {
 
-            LogUtil.i(App.tag, "request host list")
-            showCover()
-            var quer = AVQuery<AVObject>("Host")
-            quer.findInBackground(object : FindCallback<AVObject>() {
-                override fun done(p0: MutableList<AVObject>?, p1: AVException?) {
-                    hideCover()
-                    if (null == p1) {
-                        fillAdapter(leancloud2Server(p0))
-                    } else {
-                        useDefaultHosts()
-                    }
-                }
-            })
-        } else {
-            LogUtil.i(App.tag, " not need request host list")
-            fillAdapter(Servers.servers)
-        }
+        useDefaultHosts()
+
+//        if (Servers.servers?.isEmpty()!!) {
+//
+//            LogUtil.i(App.tag, "request host list")
+//            showCover()
+//            var quer = AVQuery<AVObject>("Host")
+//            quer.findInBackground(object : FindCallback<AVObject>() {
+//                override fun done(p0: MutableList<AVObject>?, p1: AVException?) {
+//                    hideCover()
+//                    if (null == p1) {
+//                        fillAdapter(leancloud2Server(p0))
+//                    } else {
+//                        useDefaultHosts()
+//                    }
+//                }
+//            })
+//        } else {
+//            LogUtil.i(App.tag, " not need request host list")
+//            fillAdapter(Servers.servers)
+//        }
     }
 
     fun leancloud2Server(p0: MutableList<AVObject>?): ArrayList<Server> {

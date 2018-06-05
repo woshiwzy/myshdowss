@@ -48,8 +48,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/margin_content"
-                android:src="@drawable/icon_bu_car"
-                android:visibility="invisible" />
+                android:src="@drawable/icon_car2"
+                android:visibility="visible" />
 
         </RelativeLayout>
 
@@ -254,6 +254,7 @@
                             android:orientation="horizontal">
 
                             <ImageView
+                                android:id="@+id/imageViewUp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="5dp"
@@ -281,6 +282,7 @@
                             android:orientation="horizontal">
 
                             <ImageView
+                                android:id="@+id/imageViewDown"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="5dp"
@@ -376,7 +378,7 @@
         android:orientation="vertical"
         android:tag="ProxyUrl"
         android:layout_alignParentBottom="true"
-        android:visibility="visible"
+        android:visibility="gone"
         app:cardCornerRadius="5dp"
         app:cardElevation="5dp">
 
