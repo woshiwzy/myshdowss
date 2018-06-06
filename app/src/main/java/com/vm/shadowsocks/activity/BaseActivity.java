@@ -1,12 +1,15 @@
 package com.vm.shadowsocks.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.avos.avoscloud.AVAnalytics;
 import com.vm.shadowsocks.R;
+
+import java.util.Locale;
 
 public class BaseActivity extends Activity {
 
@@ -19,6 +22,14 @@ public class BaseActivity extends Activity {
     }
 
 
+    public static boolean isZh(Context context) {
+        Locale locale = context.getResources().getConfiguration().locale;
+        String language = locale.getLanguage();
+        if (language.endsWith("zh"))
+            return true;
+        else
+            return false;
+    }
     public void showCover() {
 
         runOnUiThread(new Runnable() {

@@ -1,5 +1,7 @@
 package com.wangzy.httpmodel;
 
+import android.util.Log;
+
 import java.io.IOException;
 
 import okhttp3.Call;
@@ -12,6 +14,7 @@ import okhttp3.Response;
 
 public abstract class MyNetCallBack implements Callback {
 
+
     @Override
     public final void onFailure(Call call, IOException e) {
         onFailureFinish(call, e);
@@ -20,18 +23,20 @@ public abstract class MyNetCallBack implements Callback {
     @Override
     public final void onResponse(Call call, Response response) throws IOException {
 
-        onSuccessFinish(call, response);
+        String ret = response.body().string();
+        onSuccessFinish(call, ret);
+        onSuccessResponseText(ret, call);
     }
 
-    public void onSuccessResponseText(String responseText) {
-
+    public void onSuccessResponseText(String responseText, Call call) {
     }
 
 
-    public void onSuccessFinish(Call call, Response response) throws IOException {
+    public void onSuccessFinish(Call call, String ret) {
     }
 
     public void onFailureFinish(Call call, Exception e) {
+        Log.i("", " " + e.getMessage());
     }
 
     public void onStart(Call call) {

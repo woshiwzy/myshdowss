@@ -8,25 +8,22 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.Window
-import com.avos.avoscloud.*
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.MobileAds
+import com.avos.avoscloud.AVAnalytics
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.vm.api.APIManager
 import com.vm.shadowsocks.App
 import com.vm.shadowsocks.R
 import com.vm.shadowsocks.adapter.HostAdapter
 import com.vm.shadowsocks.config.Servers
+import com.vm.shadowsocks.constant.Constant.TAG
 import com.vm.shadowsocks.domain.Server
 import com.vm.shadowsocks.tool.LogUtil
 import com.wangzy.httpmodel.JsonSelector
-import com.wangzy.httpmodel.KHttpRequester
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
-import okhttp3.Call
-import okhttp3.Response
+import com.wangzy.httpmodel.gson.ext.Result
+import rx.Subscriber
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 import java.io.IOException
 
 
@@ -40,32 +37,20 @@ class HostListActivity : BaseActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_host_list)
         recyclerViewHosts = findViewById(R.id.recyclerViewHosts)
-        loadHostsFromLean()
+
         findViewById<View>(R.id.imageViewBack).setOnClickListener { finish() }
+
+        requestServers()
     }
 
 
+    fun setUpAdapter(json: String) {
+        val data = JsonSelector.getJsonObject(json, "data")
+        val gson = Gson()
+        val servers = gson.fromJson<ArrayList<Server>>(data, object : TypeToken<ArrayList<Server>>() {}.type)
+        servers.shuffle()
 
-
-    private fun loadHosts() {
-        showCover()
-
-        KHttpRequester.get("list_servers", onstart = { call: Call? ->
-
-
-        }, onResponseCallBack = { call: Call?, response: Response? ->
-            async(UI) {
-                hideCover()
-                setUpAdapter(response?.body()!!.string()!!)
-            }
-
-        }, onFailureCallBack = { call: Call?, e: IOException? ->
-            async(UI) {
-                hideCover()
-                useDefaultHosts()
-            }
-        })
-
+        fillAdapter(servers)
     }
 
     private fun useDefaultHosts() {
@@ -73,47 +58,6 @@ class HostListActivity : BaseActivity() {
         setUpAdapter(json)
 
     }
-
-    private fun loadHostsFromLean() {
-
-
-        useDefaultHosts()
-
-//        if (Servers.servers?.isEmpty()!!) {
-//
-//            LogUtil.i(App.tag, "request host list")
-//            showCover()
-//            var quer = AVQuery<AVObject>("Host")
-//            quer.findInBackground(object : FindCallback<AVObject>() {
-//                override fun done(p0: MutableList<AVObject>?, p1: AVException?) {
-//                    hideCover()
-//                    if (null == p1) {
-//                        fillAdapter(leancloud2Server(p0))
-//                    } else {
-//                        useDefaultHosts()
-//                    }
-//                }
-//            })
-//        } else {
-//            LogUtil.i(App.tag, " not need request host list")
-//            fillAdapter(Servers.servers)
-//        }
-    }
-
-    fun leancloud2Server(p0: MutableList<AVObject>?): ArrayList<Server> {
-
-        var list = ArrayList<Server>()
-        for (host in p0!!) {
-            var server = Server(host = host.getString("host"), method = host.getString("method"), port = (host.getString("port")).toInt(), passWord = host.getString("pwd"), name = host.getString("alias"))
-            server.enable = host.getBoolean("enable")
-            if (server.enable) {
-                list.add(server)
-            }
-        }
-
-        return list
-    }
-
 
     fun readAssetsTxt(context: Context, fileName: String): String {
 
@@ -131,15 +75,37 @@ class HostListActivity : BaseActivity() {
         return ""
     }
 
+    private fun requestServers() {
 
-    fun setUpAdapter(json: String) {
-        val data = JsonSelector.getJsonObject(json, "data")
-        val gson = Gson()
-        val servers = gson.fromJson<ArrayList<Server>>(data, object : TypeToken<ArrayList<Server>>() {}.type)
-        servers.shuffle()
+        val dataManager = APIManager(this)
 
-        fillAdapter(servers)
+        val subscription = dataManager.listservers()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Subscriber<Result<List<Server>>>() {
+                    override fun onCompleted() {
+                        hideCover()
+                    }
+
+                    override fun onError(e: Throwable) {
+                        hideCover()
+                        useDefaultHosts()
+
+                    }
+
+                    override fun onNext(listResult: Result<List<Server>>) {
+                        LogUtil.i(TAG, "serversult:" + listResult.data.size)
+
+                        fillAdapter(listResult.data as ArrayList<Server>)
+                    }
+
+                    override fun onStart() {
+                        showCover()
+                    }
+                })
+
     }
+
 
     fun fillAdapter(servers: ArrayList<Server>) {
         Servers.servers = servers

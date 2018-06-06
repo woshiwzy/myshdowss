@@ -4,21 +4,25 @@ import android.app.Application
 import android.database.sqlite.SQLiteDatabase
 import android.text.TextUtils
 import com.avos.avoscloud.*
+import com.vm.api.APIManager
 import com.vm.greendao.db.DaoMaster
 import com.vm.greendao.db.DaoSession
 import com.vm.greendao.db.HistoryDao
 import com.vm.shadowsocks.constant.Constant.TAG
 import com.vm.shadowsocks.core.LocalVpnService
-import com.vm.shadowsocks.domain.History
-import com.vm.shadowsocks.domain.Log
-import com.vm.shadowsocks.domain.Server
+import com.vm.shadowsocks.domain.*
 import com.vm.shadowsocks.greendao.Helper
 import com.vm.shadowsocks.tool.LogUtil
 import com.vm.shadowsocks.tool.SharePersistent
 import com.vm.shadowsocks.tool.SystemUtil
 import com.vm.shadowsocks.tool.Tool
+import com.wangzy.httpmodel.gson.ext.Result
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
+import org.greenrobot.eventbus.EventBus
+import rx.Subscriber
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 import java.util.*
 
 
@@ -30,6 +34,9 @@ class App : Application() {
     private var db: SQLiteDatabase? = null
     private var mDaoMaster: DaoMaster? = null
     private var mDaoSession: DaoSession? = null
+
+    var user: User? = null
+
 
     companion object {
         var tag = "ss"
@@ -52,7 +59,7 @@ class App : Application() {
         }
 
         AVAnalytics.enableCrashReport(this, true)
-        LogUtil.DEBUG = BuildConfig.LOG
+        LogUtil.DEBUG = BuildConfig.DEBUG
         setUpDataBase()
         loginDevice()
 
@@ -73,24 +80,58 @@ class App : Application() {
 
     fun loginDevice() {
 
-        try {
 
-            AVUser.logInInBackground(getUserName(), getPassword(), object : LogInCallback<AVUser>() {
-                override fun done(p0: AVUser?, p1: AVException?) {
-                    if (p0 == null) {
-                        LogUtil.d(tag, "login fail")
-                        registerDevice()
-                    } else {
-                        LogUtil.d(tag, "login success")
-                        setTakePush()
+        val brand = SystemUtil.getDeviceBrand()
+        val model = SystemUtil.getSystemModel()
+        val imei = SystemUtil.getIMEI(this)
+
+        var apiManager = APIManager(this)
+        val subscription = apiManager.registerDevice(getUserName(),
+                Tool.getAdresseMAC(App.instance),
+                Tool.getLocalIpAddress(),
+                brand + " " + model, imei, Tool.getSystemVersion(),
+                Tool.getCountryCode(),
+                Tool.getVersionName(App.instance))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Subscriber<Result<User>>() {
+                    override fun onCompleted() {
+
                     }
-                }
-            })
+
+                    override fun onError(e: Throwable) {
+                        LogUtil.i(TAG, "注册设备失败重新注册:")
+                        loginDevice()
+                    }
+
+                    override fun onNext(result: Result<User>) {
+                        LogUtil.i(TAG, "注册设备成功:===================================================================")
+                        user = result.data
+
+                        var eventMsg = EventMessage()
+                        eventMsg.type = EventMessage.TYPE_MSG_REGIST
+                        EventBus.getDefault().post(eventMsg)
 
 
-        } catch (e: Exception) {
-            LogUtil.e(App.tag, "login fail:" + e.localizedMessage)
-        }
+                        try {
+
+                            AVUser.logInInBackground(getUserName(), getPassword(), object : LogInCallback<AVUser>() {
+                                override fun done(p0: AVUser?, p1: AVException?) {
+                                    if (p0 == null) {
+                                        LogUtil.d(tag, "login fail")
+                                        registerDevice()
+                                    } else {
+                                        LogUtil.d(tag, "login success")
+                                        setTakePush()
+                                    }
+                                }
+                            })
+                        } catch (e: Exception) {
+                            LogUtil.e(App.tag, "login fail:" + e.localizedMessage)
+                        }
+                    }
+                })
+
 
     }
 

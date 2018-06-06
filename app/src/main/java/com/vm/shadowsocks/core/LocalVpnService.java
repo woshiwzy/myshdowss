@@ -11,9 +11,7 @@ import android.net.VpnService;
 import android.os.Build;
 import android.os.Handler;
 import android.os.ParcelFileDescriptor;
-import android.util.Log;
 
-import com.vm.shadowsocks.App;
 import com.vm.shadowsocks.R;
 import com.vm.shadowsocks.activity.MainActivity;
 import com.vm.shadowsocks.core.ProxyConfig.IPAddress;
@@ -96,13 +94,17 @@ public class LocalVpnService extends VpnService implements Runnable {
                     @Override
                     public void run() {
 
+
                         EventMessage eventMessage = new EventMessage();
-                        eventMessage.sent = m_SentBytes-lastSent;
-                        eventMessage.received = m_ReceivedBytes-lastReceived;
+
+                        eventMessage.sent = m_SentBytes - lastSent;
+                        eventMessage.received = m_ReceivedBytes - lastReceived;
+                        eventMessage.totalUsed = eventMessage.sent + eventMessage.received;
+
                         EventBus.getDefault().post(eventMessage);
 
-                        lastReceived=m_ReceivedBytes;
-                        lastSent=m_SentBytes;
+                        lastReceived = m_ReceivedBytes;
+                        lastSent = m_SentBytes;
                     }
                 },
                 0,
@@ -110,8 +112,8 @@ public class LocalVpnService extends VpnService implements Runnable {
                 TimeUnit.SECONDS);
 
 
-        lastReceived=m_ReceivedBytes;
-        lastSent=m_SentBytes;
+        lastReceived = m_ReceivedBytes;
+        lastSent = m_SentBytes;
 
         super.onCreate();
     }
@@ -341,7 +343,6 @@ public class LocalVpnService extends VpnService implements Runnable {
 //                        Log.e(App.Companion.getTag(),"remote host:"+session.RemoteHost);
 //                        App.instance.incrementCount(session.RemoteHost);
                         //访问计数
-
 
 
                         // 转发给本地TCP服务器

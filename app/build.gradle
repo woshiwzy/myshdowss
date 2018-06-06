@@ -24,10 +24,13 @@ android {
     compileSdkVersion 26
     buildToolsVersion '27.0.3'
     useLibrary 'org.apache.http.legacy'
+
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/rxjava.properties'
     }
+
     lintOptions {
         abortOnError false
     }
@@ -42,13 +45,13 @@ android {
     buildTypes {
 
         release {
-            buildConfigField("boolean", "LOG", "false")
+//            buildConfigField("boolean", "DEBUG", "false")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.wzy
         }
         debug {
-            buildConfigField("boolean", "LOG", "true")
+//            buildConfigField("boolean", "DEBUG", "true")
             debuggable true
             minifyEnabled false
             signingConfig signingConfigs.wzy
@@ -76,7 +79,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation "org.jetbrains.anko:anko:$anko_version"
-    implementation 'com.android.support:cardview-v7:26.1.0'
+    implementation 'com.android.support:cardview-v7:27.0.2'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.orhanobut:logger:1.15'
     implementation 'com.android.support:multidex:1.0.1'
@@ -95,6 +98,11 @@ dependencies {
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
     implementation 'com.facebook.android:audience-network-sdk:4.+'
 
+    implementation 'com.squareup.retrofit2:retrofit:2.1.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    implementation 'io.reactivex:rxandroid:1.2.0'
+    implementation 'com.google.code.gson:gson:2.6.2'
 }
 
 greendao {

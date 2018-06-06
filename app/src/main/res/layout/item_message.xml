@@ -4,7 +4,7 @@
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ccffffff"
+    android:background="#66ffffff"
     app:cardCornerRadius="10dp">
 
     <LinearLayout
@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:paddingBottom="@dimen/margin_content"
+        android:background="@android:color/transparent"
         android:paddingTop="@dimen/margin_content">
 
         <TextView

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">免费VPN</string>
+    <string name="app_name">Flicker网络加速器</string>
     <string name="menu_item_switch">代理</string>
     <string name="menu_item_toggle_global">开/关全局模式</string>
     <string name="menu_item_exit">退出</string>
-    <string name="config_url">选择代理服务器</string>
+    <string name="config_url">选择服务器</string>
     <string name="config_not_set_value">未设置</string>
     <string name="config_url_scan">扫描二维码</string>
     <string name="config_url_manual">手动输入</string>
@@ -15,18 +15,18 @@
     <string name="btn_ok">确定</string>
     <string name="btn_cancel">取消</string>
     <string name="btn_more">更多&#8230;</string>
-    <string name="vpn_connected_status">已连接,你可以自由访问了！</string>
+    <string name="vpn_connected_status">已连接！</string>
     <string name="vpn_disconnected_status">已断开</string>
     <string name="exit_confirm_info">这将会断开VPN连接，确定要退出吗？</string>
     <string name="err_invalid_url">无效的配置地址</string>
     <string name="config_url_hint">ss://method:password@host:port</string>
 
-    <string name="connected">已连接,你可以自由访问了！</string>
+    <string name="connected">已连接！</string>
     <string name="connected_not">未连接</string>
     <string name="menu_feedback">反馈</string>
     <string name="current">当前在线:</string>
-    <string name="host_list">选择代理服务器</string>
-    <string name="select_server">请选择代理服务器</string>
+    <string name="host_list">选择服务器</string>
+    <string name="select_server">请选择服务器</string>
     <string name="select_server_befor">请先停止然后再选择</string>
     <string name="law">我将遵守本国法律,非法使用后果自负!</string>
     <string name="be_law">请不要做违法的事情!</string>
@@ -37,8 +37,12 @@
 
     <string name="support_thanks">谢谢支持！\n如果能点一下本页面上的广告就更好了！</string>
 
-    <string name="used_traffic">已用:\n%1S</string>
-    <string name="total_used">已使用:\nn%1s</string>
+    <string name="used_traffic">已用:%1S</string>
+    <string name="remaining_traffic">剩余:%1s</string>
+    <string name="total_used">已用:%1s</string>
     <string name="server_error">服务不可用或者本月流量耗尽！</string>
     <string name="sorrytext">抱歉，为了防止滥用，每人每月限1GB流量!</string>
+    <string name="online_pre">当前在线人数:%1s</string>
+
+    <string name="error_server">这个服务器不可用,请重新选择！</string>
 </resources>

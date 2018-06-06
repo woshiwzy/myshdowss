@@ -36,8 +36,11 @@
     <string name="support">Support Developer</string>
     <string name="support_thanks">Thank you!\n If you can click the ad on this page,That\'s better!</string>
 
-    <string name="used_traffic">Used\n %1s</string>
-    <string name="total_used">You have used\n%1s\n traffic for free</string>
+    <string name="used_traffic">Used:%1s</string>
+    <string name="remaining_traffic">Traffic:%1s</string>
+    <string name="total_used">Used:%1s</string>
     <string name="server_error">Service disable or Run out of traffic this month!</string>
     <string name="sorrytext">Sorry, 1GB per person per month to prevent abuse!</string>
+    <string name="online_pre">Current oneline:%1s</string>
+    <string name="error_server">This server looks like it is not available！</string>
 </resources>

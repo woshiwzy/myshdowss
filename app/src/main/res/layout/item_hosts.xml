@@ -47,7 +47,7 @@
                     android:layout_height="@dimen/input_item_height" />
 
                 <TextView
-                    android:id="@+id/textViewMethodPort"
+                    android:id="@+id/textViewCurrentOnline"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/input_item_height" />
 
@@ -64,6 +64,7 @@
                     android:id="@+id/imageViewHook"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:src="@drawable/icon_yes_p" />
 
             </LinearLayout>

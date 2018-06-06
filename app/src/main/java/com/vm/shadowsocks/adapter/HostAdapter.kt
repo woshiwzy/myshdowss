@@ -36,31 +36,14 @@ abstract class HostAdapter(private val context: Context, private val servers: Ar
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        //        Picasso.with(context).load(avObject.getAVFile("icon").getUrl()).placeholder(R.drawable.loading).into(holder.imageViewFlag);
-
-
         var server = servers[position]
-
-
         holder.textViewNodeName.setText(server.name)
-
-//        if(selected==position){
-//            holder.imageViewHook.imageResource=R.drawable.icon_yes
-//        }else{
-//            holder.imageViewHook.imageResource=R.drawable.icon_yes_p
-//        }
-
-        holder.textViewMethodPort.text = server.method
-
-//        holder.textViewNodeCount.setText(context.getResources().getString(R.string.current) + String.valueOf(avObject.get("client_count")));
-//        holder.imageViewSpeed.setImageResource("fast".equalsIgnoreCase(avObject.getString("speed")) ? R . drawable . icon_speed_fast : R . drawable . icon_speed_slow);
-
+        var ret=String.Companion.format(context.resources.getString(R.string.online_pre),""+(server.online))
+        holder.textViewMethodPort.text =ret
         holder.imageViewHook.imageResource =if (random?.nextInt(10)?.div(2)!=0) R.drawable.icon_speed_fast else R.drawable.icon_speed_slow
-
         holder.rootView.setOnClickListener {
             onClickServerItem(server, this, position)
         }
-
 
     }
 
@@ -79,7 +62,7 @@ abstract class HostAdapter(private val context: Context, private val servers: Ar
 
         init {
             imageViewFlag = rootView.findViewById(R.id.imageViewFlag) as ImageView
-            textViewMethodPort = rootView.findViewById(R.id.textViewMethodPort) as TextView
+            textViewMethodPort = rootView.findViewById(R.id.textViewCurrentOnline) as TextView
             textViewNodeName = rootView.findViewById(R.id.textViewHostName) as TextView
             imageViewHook = rootView.findViewById(R.id.imageViewHook) as ImageView
 

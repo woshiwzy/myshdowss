@@ -26,7 +26,9 @@ public class JsonSelector {
             if(TextUtils.isEmpty(lastJsonString)){
                 lastJsonString=jsonObject.getString(currentSelectr);
             }else {
+
                 lastJsonString=JSONObject.parseObject(lastJsonString).getString(currentSelectr);
+
             }
         }
         return  lastJsonString;
