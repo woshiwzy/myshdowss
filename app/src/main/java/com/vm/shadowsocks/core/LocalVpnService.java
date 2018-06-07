@@ -14,6 +14,7 @@ import android.os.ParcelFileDescriptor;
 
 import com.vm.shadowsocks.R;
 import com.vm.shadowsocks.activity.MainActivity;
+import com.vm.shadowsocks.constant.Constant;
 import com.vm.shadowsocks.core.ProxyConfig.IPAddress;
 import com.vm.shadowsocks.dns.DnsPacket;
 import com.vm.shadowsocks.domain.EventMessage;
@@ -21,6 +22,8 @@ import com.vm.shadowsocks.tcpip.CommonMethods;
 import com.vm.shadowsocks.tcpip.IPHeader;
 import com.vm.shadowsocks.tcpip.TCPHeader;
 import com.vm.shadowsocks.tcpip.UDPHeader;
+import com.vm.shadowsocks.tool.LogUtil;
+import com.vm.shadowsocks.tool.SharePersistent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -101,6 +104,8 @@ public class LocalVpnService extends VpnService implements Runnable {
                         eventMessage.received = m_ReceivedBytes - lastReceived;
                         eventMessage.totalUsed = eventMessage.sent + eventMessage.received;
 
+                        logDataSaved(getApplicationContext(), eventMessage.totalUsed, false);
+
                         EventBus.getDefault().post(eventMessage);
 
                         lastReceived = m_ReceivedBytes;
@@ -117,6 +122,34 @@ public class LocalVpnService extends VpnService implements Runnable {
 
         super.onCreate();
     }
+
+    /**
+     * @param used  KB
+     * @param reset
+     */
+    public static void logDataSaved(Context context, long used, boolean reset) {
+
+        if (reset) {
+            LogUtil.e(Constant.TAG, "save success reset");
+            SharePersistent.saveFloat(context, "adflaksdflasfjaldskj", 0);
+        } else {
+
+            float oldUsed = SharePersistent.getFloat(context, "adflaksdflasfjaldskj");
+            if (oldUsed <= 0) {
+                oldUsed = 0;
+            }
+
+            if (used <= 0) {
+                used = 0;
+            }
+
+            float newSaved = oldUsed + used;
+            SharePersistent.saveFloat(context, "adflaksdflasfjaldskj", newSaved);
+//            LogUtil.e(Constant.TAG, "total saved:" + newSaved);
+
+        }
+    }
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

@@ -19,6 +19,7 @@ import com.android.vending.billing.IInAppBillingService;
 import com.avos.avoscloud.AVAnalytics;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.PushService;
+import com.avos.avoscloud.utils.StringUtils;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdError;
 import com.facebook.ads.AdListener;
@@ -39,6 +40,7 @@ import com.vm.shadowsocks.domain.Server;
 import com.vm.shadowsocks.domain.User;
 import com.vm.shadowsocks.tool.LogUtil;
 import com.vm.shadowsocks.tool.MyAnimationUtils;
+import com.vm.shadowsocks.tool.SharePersistent;
 import com.vm.shadowsocks.tool.Tool;
 import com.wangzy.httpmodel.HttpRequester;
 import com.wangzy.httpmodel.MyNetCallBackExtend;
@@ -51,7 +53,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import okhttp3.Call;
 
@@ -171,7 +172,7 @@ public class MainActivity extends BaseActivity implements
             if (null != textViewSent && null != textViewReceived) {
 
                 long sent = Math.abs(event.sent / 1024);
-                textViewSent.setText(sent + " KB");
+                textViewSent.setText(sent + " KB/S");
                 if (sent > 0) {
                     imageViewUp.setImageResource(R.drawable.icon_up_go);
                 } else {
@@ -183,7 +184,7 @@ public class MainActivity extends BaseActivity implements
                 } else {
                     imageVIewDown.setImageResource(R.drawable.icon_down);
                 }
-                textViewReceived.setText(receid + " KB");
+                textViewReceived.setText(receid + " KB/S");
             }
         }
 
@@ -426,6 +427,8 @@ public class MainActivity extends BaseActivity implements
 
         Intent intent = new Intent(MainActivity.this, HostListActivity.class);
         startActivityForResult(intent, INT_GO_SELECT);
+
+        updateTraffic();
     }
 
     private void startVPNService() {
@@ -493,9 +496,17 @@ public class MainActivity extends BaseActivity implements
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+
                 textViewServerCountryName.setText(server.getName());
                 textViewCurrentConnectCount.setText(String.format(getResources().getString(R.string.online_pre), String.valueOf(server.getOnline())));
-                LocalVpnService.ProxyUrl = selectDefaultServer.toString();
+
+                if (StringUtils.isBlankString(server.getHost())) {
+                    LocalVpnService.ProxyUrl = selectDefaultServer.getBase64str();
+                } else {
+                    LocalVpnService.ProxyUrl = selectDefaultServer.toString();
+                }
+
+
             }
         });
     }
@@ -574,58 +585,75 @@ public class MainActivity extends BaseActivity implements
 
     private void updateTraffic() {
 
-        long totalbyte = (LocalVpnService.m_ReceivedBytes + LocalVpnService.m_SentBytes) / 1024;
+        long totalbyte = (long) (SharePersistent.getFloat(MainActivity.this, "adflaksdflasfjaldskj") / 1024);
 
-        LogUtil.e(Constant.TAG, "流量======>:"+totalbyte);
+        LogUtil.e(Constant.TAG, "流量======>:" + totalbyte);
         totalbyte = totalbyte > 0 ? totalbyte : 0;
+        final long finalTotalbyte = totalbyte;
 
-        if (null == timer) {
-            timer = new Timer();
-            final long finalTotalbyte = totalbyte;
-            timer.scheduleAtFixedRate(new TimerTask() {
+        if (null == App.instance.getUser()) {
+            LogUtil.e(Constant.TAG, "没有用户无法更新流量");
+            return;
+        }
+
+        if (finalTotalbyte <= 0) {
+//                        LogUtil.e(Constant.TAG, "没有正流量:"+finalTotalbyte);
+            return;
+        }
+
+        if (null != App.instance.getUser() && finalTotalbyte > 0) {
+
+            HashMap<String, String> map = new HashMap<>();
+            map.put("uuid", App.instance.getUser().getUuid());
+            map.put("cost_size", String.valueOf(finalTotalbyte));
+            HttpRequester.postHashMap(RetrofitHelper.BASE_URL + "cost_traffic", map, new MyNetCallBackExtend<User>(User.class, false) {
+
                 @Override
-                public void run() {
+                public void onFailureFinish(Call call, Exception e) {
+                    LogUtil.e(Constant.TAG, "onFailureFinish:" + e.getLocalizedMessage());
+                    call.cancel();
+                    imageViewCountry.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            updateTraffic();
+                        }
+                    }, 1 * 1000);
+                }
 
-                    if (null == App.instance.getUser()) {
-                        LogUtil.e(Constant.TAG, "没有用户无法更新流量");
-                        return;
-                    }
+                @Override
+                public void onResponseResult(Result<User> result, okhttp3.Call call) {
+                    call.cancel();
 
-                    if (finalTotalbyte <= 0) {
-                        LogUtil.e(Constant.TAG, "没有正流量:"+finalTotalbyte);
-                        return;
-                    }
+                    User user = result.getData();
+                    App.instance.setUser(user);
+                    LocalVpnService.m_ReceivedBytes = 0;
+                    LocalVpnService.m_SentBytes = 0;
+                    updateDataUsed();
 
-                    if (null != App.instance.getUser() && finalTotalbyte > 0) {
-
-                        HashMap<String, String> map = new HashMap<>();
-                        map.put("uuid", App.instance.getUser().getUuid());
-                        map.put("cost_size", String.valueOf(finalTotalbyte));
-                        HttpRequester.postHashMap(RetrofitHelper.BASE_URL + "cost_traffic", map, new MyNetCallBackExtend<User>(User.class, false) {
-                            @Override
-                            public void onResponseResult(Result<User> result, okhttp3.Call call) {
-
-                                User user = result.getData();
-                                App.instance.setUser(user);
-                                LocalVpnService.m_ReceivedBytes = 0;
-                                LocalVpnService.m_SentBytes = 0;
-                                updateDataUsed();
-                            }
-                        });
-                    } else {
-                        LogUtil.e(Constant.TAG, "条件不足无法更新流量");
-                    }
-
+                    LocalVpnService.logDataSaved(MainActivity.this, 0, true);
 
                 }
-            }, 0, 10 * 1000);
+            });
+        } else {
+            LogUtil.e(Constant.TAG, "条件不足无法更新流量");
         }
+
+//
+//                }
+//            }, 0, 10 * 1000);
+//        }
     }
 
     public void saveLog(int port, String method) {
         App.instance.saveLog(port, method);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        LogUtil.e(Constant.TAG, "-----------------------------------");
+        updateTraffic();
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
