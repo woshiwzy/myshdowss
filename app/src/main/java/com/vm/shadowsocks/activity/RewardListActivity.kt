@@ -20,13 +20,18 @@ import kotlinx.android.synthetic.main.activity_reward_list.*
 class RewardListActivity : BaseActivity(), RewardView {
 
 
-    lateinit var rewardPresenter: RewardPresenter
+     var rewardPresenter: RewardPresenter?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reward_list)
         rewardPresenter = RewardPresenterImpl(this@RewardListActivity)
-        rewardPresenter.startLoad(App.instance.user?.uuid)
+
+        var uuid=App.instance.user?.uuid
+        if(null!=uuid){
+            rewardPresenter?.startLoad(uuid)
+        }
+
 
         imageViewBack.setOnClickListener { finish() }
     }

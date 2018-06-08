@@ -50,6 +50,9 @@ class HostListActivity : BaseActivity() {
         val servers = gson.fromJson<ArrayList<Server>>(data, object : TypeToken<ArrayList<Server>>() {}.type)
         servers.shuffle()
 
+
+
+
         fillAdapter(servers)
     }
 
@@ -112,6 +115,7 @@ class HostListActivity : BaseActivity() {
 //        Servers.servers.shuffle()
 
         LogUtil.e(App.tag, "host size:" + Servers.servers.size)
+
 
         val hostAdapter = object : HostAdapter(this@HostListActivity, servers) {
             override fun onClickServerItem(server: Server, hostAdapter: HostAdapter, position: Int) {

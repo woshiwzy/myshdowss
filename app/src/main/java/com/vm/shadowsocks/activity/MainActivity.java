@@ -26,6 +26,9 @@ import com.facebook.ads.AdError;
 import com.facebook.ads.AdListener;
 import com.facebook.ads.AdSize;
 import com.facebook.ads.AdView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.vm.api.APIManager;
 import com.vm.api.RetrofitHelper;
 import com.vm.api_okapi.NetInterface;
@@ -53,7 +56,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.Timer;
 
 import okhttp3.Call;
 
@@ -101,34 +103,81 @@ public class MainActivity extends BaseActivity implements
         }
     };
     private DecimalFormat nf = new DecimalFormat("###,##0.00");
-    private Timer timer = null;
+    private InterstitialAd mInterstitialAd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+        //google 内购
 //        Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
 //        serviceIntent.setPackage("com.android.vending");
 //        bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
+
 
         //=======bind service
         animationRotate = AnimationUtils.loadAnimation(this, R.anim.rotate);
         animationRotate.setRepeatCount(Animation.INFINITE);
         animationRotate.setRepeatMode(Animation.RESTART);
         animationRotate.setInterpolator(new LinearInterpolator());
-
+        //init all view
         initView();
-        initAd();
+
+
+        if (null == App.instance.getUser() || App.instance.getUser().isShowad()) {
+            initGoogleAd();
+            initFacebookAd();
+        }
+
+
         apiManager = new APIManager(this);
+        updateTraffic();
 
         EventBus.getDefault().register(this);
-
-        updateTraffic();
-//        showTipLayout();
     }
 
 
-    private void initAd() {
+    /**
+     * 初始化Google Ad
+     */
+    private void initGoogleAd() {
+
+        //===init goole ad=======
+        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        mInterstitialAd.setAdListener(new com.google.android.gms.ads.AdListener() {
+
+            @Override
+            public void onAdLoaded() {
+                LogUtil.e(Constant.TAG, "onAdLoaded");
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                LogUtil.e(Constant.TAG, "onAdFailedToLoad:" + errorCode);
+            }
+
+            @Override
+            public void onAdClicked() {
+                LogUtil.e(Constant.TAG, "onAdClicked:");
+            }
+
+            @Override
+            public void onAdOpened() {
+                LogUtil.e(Constant.TAG, " onAdOpened onAdFailedToLoad:");
+            }
+        });
+
+    }
+
+    /**
+     * init fb ad sdk
+     */
+    private void initFacebookAd() {
         adView = new AdView(this, "870289033159365_870296759825259", AdSize.BANNER_HEIGHT_50);
         adView.setAdListener(new AdListener() {
             @Override
@@ -288,6 +337,15 @@ public class MainActivity extends BaseActivity implements
             }
         });
 
+        findViewById(R.id.textViewGetTraffic).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideMenu();
+
+                Tool.startActivity(MainActivity.this, MyGoogleAdActivity.class);
+            }
+        });
+
 
         findViewById(R.id.viewTouchHide).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -312,7 +370,7 @@ public class MainActivity extends BaseActivity implements
 //                    enable = false;
 //                }
             }
-            PushService.setDefaultPushCallback(this, MessagesActivity.class);
+            PushService.setDefaultPushCallback(this, MainActivity.class);
 
         } catch (Exception e) {
             LogUtil.e(TAG, "Set up push exception:" + e);
@@ -364,8 +422,10 @@ public class MainActivity extends BaseActivity implements
             @Override
             public void run() {
                 String ret = String.format(getResources().getString(R.string.total_used), nf.format(finalTotal) + " M");
-                textViewTotal.setText(ret);
-                String ret2 = String.format(getResources().getString(R.string.remaining_traffic), nf.format(finalRemain) + " M");
+                textViewTotal.setText(getResources().getString(R.string.remaining));
+
+//                String ret2 = String.format(getResources().getString(R.string.remaining_traffic), nf.format(finalRemain) + " M");
+                String ret2 = nf.format(finalRemain) + " M";
                 textViewRemain.setText(ret2);
 
                 User user = App.instance.getUser();
@@ -455,7 +515,6 @@ public class MainActivity extends BaseActivity implements
     private void startVPNService() {
 
         if (!Tool.isValidUrl(LocalVpnService.ProxyUrl)) {
-
             Tool.toast(R.string.err_invalid_url, this);
             return;
         }
@@ -486,10 +545,26 @@ public class MainActivity extends BaseActivity implements
         updateTraffic();
         updateDataUsed();
 
-        if(null!=App.instance.getUser() && !StringUtils.isBlankString(App.instance.getUser().getPersonalMsg())){
+        if (null != App.instance.getUser() && !StringUtils.isBlankString(App.instance.getUser().getPersonalMsg())) {
             ((TextView) findViewById(R.id.textViewAllTip)).setText(App.instance.getUser().getPersonalMsg());
             showTipLayout();
         }
+
+
+        if (null == App.instance.getUser() || App.instance.getUser().isShowad()) {
+
+            if (mInterstitialAd.isLoaded()) {
+                mInterstitialAd.show();
+            } else {
+                LogUtil.d(Constant.TAG, "The interstitial wasn't loaded yet.");
+            }
+            findViewById(R.id.viewAdLine).setVisibility(View.VISIBLE);
+            findViewById(R.id.textViewGetTraffic).setVisibility(View.VISIBLE);
+        } else {
+            findViewById(R.id.viewAdLine).setVisibility(View.GONE);
+            findViewById(R.id.textViewGetTraffic).setVisibility(View.GONE);
+        }
+
     }
 
     @Override
@@ -497,22 +572,30 @@ public class MainActivity extends BaseActivity implements
 
         updateTraffic();
 
-        if (null != timer) {
-            timer.purge();
-            timer.cancel();
+
+        if (null == App.instance.getUser() || App.instance.getUser().isShowad()) {
+
+
+            if (mInterstitialAd.isLoaded()) {
+                mInterstitialAd.show();
+            } else {
+                LogUtil.d(Constant.TAG, "The interstitial wasn't loaded yet.");
+            }
+
+            if (adView != null) {
+                adView.destroy();
+            }
         }
 
-        if (adView != null) {
-            adView.destroy();
-        }
+
         LocalVpnService.removeOnStatusChangedListener(statusChangedListener);
-
 //
 //        if (mService != null) {
 //            unbindService(mServiceConn);
 //        }
 
         EventBus.getDefault().unregister(this);
+
         super.onDestroy();
 
     }

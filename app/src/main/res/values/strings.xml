@@ -29,7 +29,7 @@
     <string name="select_server">Please select server</string>
     <string name="select_server_befor">Please stop first.</string>
     <string name="law">I will abide by my laws.</string>
-    <string name="be_law">Please don\'t do anything illegal.</string>
+    <string name="be_law">Please comply with local laws!</string>
     <string name="notiy_title">Tips</string>
     <string name="news">Latest news</string>
     <string name="facebook_app_id">222090675045613</string>
@@ -46,7 +46,14 @@
 
     <string name="reward_his">Record Today</string>
 
-    <string name="get_ward">Get reward:%1s Ms</string>
+    <string name="get_ward">Get reward:%1s M</string>
     <string name="reawason">From:%1s</string>
     <string name="feed_back">Feedback</string>
+    <string name="gettrafficfree">Get Traffic Free</string>
+    <string name="click_get_traffic">click get traffic</string>
+    <string name="remaining">Remaining</string>
+
+    <string name="retry">Retry later!</string>
+
+
 </resources>

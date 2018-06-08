@@ -199,10 +199,10 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:visibility="invisible"
                     android:text="@string/be_law"
                     android:textColor="@android:color/holo_red_dark"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="visible" />
 
                 <LinearLayout
                     android:id="@+id/banner_container"
@@ -357,6 +357,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:visibility="gone"
                 android:background="@android:color/white" />
 
             <TextView
@@ -368,11 +369,28 @@
                 android:textColor="@android:color/white"
                 android:visibility="gone" />
 
+
+            <View
+                android:id="@+id/viewAdLine"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/white"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/textViewGetTraffic"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:text="@string/gettrafficfree"
+                android:textColor="@android:color/white"
+                android:visibility="visible" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@android:color/white"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/textViewRewardHistory"
@@ -382,6 +400,7 @@
                 android:text="@string/reward_his"
                 android:textColor="@android:color/white"
                 android:visibility="visible" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -397,11 +416,14 @@
                 android:text="@string/feed_back"
                 android:textColor="@android:color/white"
                 android:visibility="visible" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@android:color/white"
                 android:visibility="visible" />
+
+
         </LinearLayout>
 
         <View
@@ -437,9 +459,6 @@
             android:textStyle="italic" />
 
     </android.support.v7.widget.CardView>
-
-
-
 
 
 </RelativeLayout>

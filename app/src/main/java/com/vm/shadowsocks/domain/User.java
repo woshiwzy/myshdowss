@@ -44,10 +44,13 @@ public class User {
     @SerializedName("personalMsg")
     private String personalMsg;
 
-    @Generated(hash = 529293500)
+    @SerializedName("showad")
+    private boolean showad;
+
+    @Generated(hash = 403504436)
     public User(Long localid, boolean enable, String uuid, String disableMessage,
             String disableMessageCn, long usedByte, long remaining_bytes,
-            long total_bytes, long remainingM, String personalMsg) {
+            long total_bytes, long remainingM, String personalMsg, boolean showad) {
         this.localid = localid;
         this.enable = enable;
         this.uuid = uuid;
@@ -58,6 +61,7 @@ public class User {
         this.total_bytes = total_bytes;
         this.remainingM = remainingM;
         this.personalMsg = personalMsg;
+        this.showad = showad;
     }
 
     @Generated(hash = 586692638)
@@ -147,5 +151,17 @@ public class User {
 
     public void setPersonalMsg(String personalMsg) {
         this.personalMsg = personalMsg;
+    }
+
+    public boolean isShowad() {
+        return showad;
+    }
+
+    public void setShowad(boolean showad) {
+        this.showad = showad;
+    }
+
+    public boolean getShowad() {
+        return this.showad;
     }
 }

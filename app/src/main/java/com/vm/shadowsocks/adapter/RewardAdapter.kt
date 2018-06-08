@@ -32,6 +32,16 @@ abstract class RewardAdapter(private val context: Context, private val messages:
     }
 
 
+
+    override fun getItemViewType(position: Int): Int {
+        return super.getItemViewType(position)
+    }
+
+
+    override fun onBindViewHolder(holder: ViewHolder?, position: Int, payloads: MutableList<Any>?) {
+        super.onBindViewHolder(holder, position, payloads)
+    }
+
     fun isZh(context: Context): Boolean {
         val locale = context.resources.configuration.locale
         val language = locale.language

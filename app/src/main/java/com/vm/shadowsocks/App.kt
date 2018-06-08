@@ -1,6 +1,7 @@
 package com.vm.shadowsocks
 
 import android.app.Application
+import android.content.pm.PackageManager
 import android.database.sqlite.SQLiteDatabase
 import android.text.TextUtils
 import com.avos.avoscloud.*
@@ -8,6 +9,7 @@ import com.vm.api.APIManager
 import com.vm.greendao.db.DaoMaster
 import com.vm.greendao.db.DaoSession
 import com.vm.greendao.db.HistoryDao
+import com.vm.shadowsocks.constant.Constant
 import com.vm.shadowsocks.constant.Constant.TAG
 import com.vm.shadowsocks.core.LocalVpnService
 import com.vm.shadowsocks.domain.*
@@ -51,6 +53,7 @@ class App : Application() {
         instance = this
 //        SophixManager.getInstance().queryAndLoadNewPatch()
 
+
         try {
             PushService.setDefaultChannelId(this, "google")
             AVOSCloud.initialize(this, "jadP41WoqD4mptx79gok48JY-gzGzoHsz", "VbupgDD0dyLX3pHuxgV8QAp7")
@@ -85,13 +88,21 @@ class App : Application() {
         val model = SystemUtil.getSystemModel()
         val imei = SystemUtil.getIMEI(this)
 
+
+        val appInfo = this.packageManager
+                .getApplicationInfo(packageName,
+                        PackageManager.GET_META_DATA)
+        val chanel = appInfo.metaData.getString("Channel ID")
+
+        LogUtil.e(Constant.TAG, "chanel:" + chanel)
+
         var apiManager = APIManager(this)
         val subscription = apiManager.registerDevice(getUserName(),
                 Tool.getAdresseMAC(App.instance),
                 Tool.getLocalIpAddress(),
                 brand + " " + model, imei, Tool.getSystemVersion(),
                 Tool.getCountryCode(),
-                Tool.getVersionName(App.instance))
+                Tool.getVersionName(App.instance), chanel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Subscriber<Result<User>>() {

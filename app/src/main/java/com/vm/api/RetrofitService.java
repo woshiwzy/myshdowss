@@ -28,7 +28,8 @@ public interface RetrofitService {
                                             @Field("imei") String imei,
                                             @Field("system_version") String system_version,
                                             @Field("country") String country,
-                                            @Field("app_version") String app_version
+                                            @Field("app_version") String app_version,
+                                            @Field("channel") String channel
     );
 
     @FormUrlEncoded
@@ -40,5 +41,9 @@ public interface RetrofitService {
     @POST("checkrewardHis")
     Observable<Result<List<RewardHistory>>> checkrewardHisToday(@Field("uuid") String uui);
 
+
+    @FormUrlEncoded
+    @POST("reward_traffic")
+    Observable<Result<User>> rewardTraffic(@Field("uuid") String uui,@Field("rewardsize") String rewardsize,@Field("descption") String descption);
 
 }

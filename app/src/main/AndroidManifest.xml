@@ -54,17 +54,9 @@
             </intent-filter>
         </receiver>
 
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="$(applicationId).fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/lc_fileprovider_path" />
-        </provider>
-
-        <activity android:name=".activity.HostListActivity" android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.HostListActivity"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.taobao.android.hotfix.IDSECRET"
@@ -77,7 +69,7 @@
             android:value="MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCBoGdH50K/LL0a8zTMl+rsY4gtfrLVLGkc+rm3IdTgEVsvvA3jG0UfblCvGksSwML+P2Y/lUO34jC8xN4ab3VAGlPy0Pl3lwsWOmOBlOgUZUgYKv2ohxxzHGCa7XiYQaEyQaN4SHmYOJAnB/tfgvCsCTJh1hjMx1ucoJeXyiJif3NDdQmelNpTrqG4OPXyITpODYVb9oNw1Nfesom9fbBELkWOahh+pmY2CfiXFOLdg7KNtclM//2Kyf615N/zWGnxskISudeFhu66goshZlcmN6BFJj+QEJ4XOyp5GjLK/8HpbSuIbutroWdjaUHgY9Q/lGrgVz8uIMQhhqCC/YVfAgMBAAECggEARbCZFj0s018YI/8RKdWbBY/VTLBLMPR5Zo0df2l+6yApqBYwWSL2HJnQYvN93Q0pSEuJizGSgK/oh/RHfGrj3JzK+UaEeFkKKt8lVCtcQmrZQbULPqm1D+X3whNdvG28XiqP2kEMrlvqlDFkYcsh3TvsjFDwcFfV1vU3yvFvXwhcwC2XZ7hqA7k0HA1FSi0hEYFcQkTxLAz2/ahjANXMrnfxQTcBXnhhv+BWFcORGGI4HzPhTMNKjX8nhZxeRVHBKVdG9AkfBZ65J65qh9QlSYOrVt1MLm99u6kay3aMzWQj4ClG5jHHlY0/t7lGFz6kgEttfDN+PaXi6Qgxj+dRAQKBgQD5Igf34cofKSzLFnTrMvwsTOwrs8ijm5d3C6999M4VegYlRZ/+v5r4dx/ppmNth+aQZzDlw+Xr0b02otRN9TkqJbFhFgfRxoQ/ymG97HtFsmFc6CUYDURdhzC0n4kiADL7N8hvo0hzCgfWsJbaO9B3ZrNM8WXuaWtyOxO3vZW7wQKBgQCFMxgBYU2s98Tm8QoHsvbhHLyiegEQQkwMIXFGzTp8JBZQBrLcT617QhMCF/0aR+poZkhvOK5ARppEPWj69JMiPx4+pabTWIWxZ8hvOvGg1iKTcStjuycwR3NJZOYO1LQXtFLMUchACIQmtrz47JpAns/0+NTYYb+W7qpmgsIJHwKBgQD18YygP7zDymg4DXFbB7g/G6lC83ctXNrIYTbcR6JzPUV34iYy3YDlrORKS0J4zOLmx5hUG3KNvT7oAxNH6sCGRTO5PoB1rV69gtO/JQgFJDZN+7cy6VYGZwHELoK4mC28J7Ot0ioht1NJtIcX5ljEpxR27xDLrjKuUHgEuhppgQKBgCG+EcS3u4+nrI+8XAgbRAM+3mJiecZ+pPklt6Zx8vDjy2s2ZzT8Ujw5Pst2/D0eHrmXv529RBcwS4Ah9mgscOFqD+Va3WoIsMWCPvo+elt+I4AqWQ2IqaLHVuMu1kDHjV+75IWx6gKepauQ+0or1d+s2415Q6IVEQ3RJAWX9kONAoGAV/J4WKP1Z7l2nn94Wm9InYVJivBaQXlz9O3+Tjtm7gyzrTcuvVq1MZs/+grp0Tmm9FhNdKlq2kGAXF5PlduolWh52sSLc68PqbvuS2Uw0rKeO4fEkaXXcPUHDSrAMS8P4pPztk3oZ47T0sM6Z7zoKPpBw9TyXw/NFo10bmORTio=" />
         <meta-data
             android:name="Channel ID"
-            android:value="Google Play" />
+            android:value="Google" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -85,17 +77,33 @@
         <activity
             android:name=".activity.MessagesActivity"
             android:launchMode="singleTop" />
-        <activity android:name=".activity.AdActivity" android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-            />
-
-        <activity android:name=".activity.RewardListActivity"/>
-
-
         <activity
-            android:name="com.avos.avoscloud.feedback.ThreadActivity" >
-        </activity>
+            android:name=".activity.AdActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity android:name=".activity.RewardListActivity" />
+        <activity android:name="com.avos.avoscloud.feedback.ThreadActivity" />
 
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="$(applicationId).fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/lc_fileprovider_path" />
+        </provider>
+        <provider
+            android:name="com.vm.provider.MyProvider"
+            android:authorities="cn.waps.d301.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/fp2" />
+        </provider>
+
+        <activity android:name=".activity.MyGoogleAdActivity"></activity>
     </application>
 
 </manifest>

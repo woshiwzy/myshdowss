@@ -29,7 +29,7 @@
     <string name="select_server">请选择服务器</string>
     <string name="select_server_befor">请先停止然后再选择</string>
     <string name="law">我将遵守本国法律,非法使用后果自负!</string>
-    <string name="be_law">请不要做违法的事情!</string>
+    <string name="be_law">请遵守本地法律！</string>
     <string name="notiy_title">通知列表</string>
     <string name="news">最新消息</string>
     <string name="facebook_app_id">222090675045613</string>
@@ -45,8 +45,12 @@
     <string name="online_pre">当前在线人数:%1s</string>
 
     <string name="error_server">这个服务器不可用,请重新选择！</string>
-    <string name="reward_his">今日奖励记录</string>
+    <string name="reward_his">奖励记录</string>
     <string name="get_ward">获取奖励:%1s M</string>
     <string name="reawason">来源:%1s</string>
     <string name="feed_back">反馈</string>
+    <string name="gettrafficfree">获取流量</string>
+    <string name="click_get_traffic">点击获取流量</string>
+    <string name="remaining">剩余</string>
+    <string name="retry">稍后再试!</string>
 </resources>

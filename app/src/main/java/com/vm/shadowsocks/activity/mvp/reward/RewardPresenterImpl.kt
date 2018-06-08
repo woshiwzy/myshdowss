@@ -8,8 +8,8 @@ class RewardPresenterImpl(rewardView: RewardView) : RewardPresenter(rewardView) 
 
     override fun startLoad(uuid: String?) {
 
-        var rewardHistory = RewardHistory()
-        rewardHistory.loadRewardList(uuid!!,
+        var rewardHistory:RewardHistory? = RewardHistory()
+        rewardHistory?.loadRewardList(uuid!!,
                 { rewars: List<RewardHistory> -> rewardView.onRewardListLoaded(rewars) }, {rewardView.startLoadRewardList()
         }, {
             rewardView.onComplete()

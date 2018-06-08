@@ -22,8 +22,8 @@ public class APIManager {
         return mRetrofitService.listServers();
     }
 
-    public Observable<Result<User>> registerDevice(String username, String mac, String ip, String brand, String imei, String system_version, String country, String app_version) {
-        return mRetrofitService.registerDevice(username, mac, ip, brand, imei, system_version, country, app_version);
+    public Observable<Result<User>> registerDevice(String username, String mac, String ip, String brand, String imei, String system_version, String country, String app_version,String channel) {
+        return mRetrofitService.registerDevice(username, mac, ip, brand, imei, system_version, country, app_version, channel);
     }
 
     public Observable<Result<User>> costtraffic(String uuid, int traffic) {
@@ -33,4 +33,8 @@ public class APIManager {
     public Observable<Result<List<RewardHistory>>> rewardList(String uuid) {
         return mRetrofitService.checkrewardHisToday(uuid);
     }
+    public Observable<Result<User>> rewardTraffic(String uuid,String rewardsize,String descption) {
+        return mRetrofitService.rewardTraffic(uuid,rewardsize,descption);
+    }
+
 }

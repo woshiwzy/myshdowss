@@ -102,7 +102,7 @@ public class LocalVpnService extends VpnService implements Runnable {
 
                         eventMessage.sent = m_SentBytes - lastSent;
                         eventMessage.received = m_ReceivedBytes - lastReceived;
-                        eventMessage.totalUsed = eventMessage.sent + eventMessage.received;
+                        eventMessage.totalUsed = Math.abs(eventMessage.sent) + Math.abs(eventMessage.received);
 
                         logDataSaved(getApplicationContext(), eventMessage.totalUsed, false);
 
