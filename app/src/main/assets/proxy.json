@@ -3,7 +3,7 @@
   "code": 200,
   "data": [
     {
-      "name": "vps pro",
+      "name": "Temp host(your network is bad)",
       "serverurl": "69.171.72.157",
       "id": 1,
       "method": "aes-256-cfb",
@@ -11,7 +11,7 @@
       "port": 9001
     },
     {
-      "name": "vps pro",
+      "name": "Temp host(your network is bad)",
       "serverurl": "69.171.72.157",
       "id": 1,
       "method": "aes-256-cfb",
@@ -19,7 +19,7 @@
       "port": 9002
     },
     {
-      "name": "vps pro",
+      "name": "Temp host(your network is bad)",
       "serverurl": "69.171.72.157",
       "id": 1,
       "method": "aes-256-cfb",
@@ -27,7 +27,7 @@
       "port": 9003
     },
     {
-      "name": "vps pro",
+      "name": "Temp host(your network is bad)",
       "serverurl": "69.171.72.157",
       "id": 1,
       "method": "aes-256-cfb",
@@ -35,7 +35,7 @@
       "port": 9004
     },
     {
-      "name": "vps pro",
+      "name": "Temp host(your network is bad)",
       "serverurl": "69.171.72.157",
       "id": 1,
       "method": "aes-256-cfb",

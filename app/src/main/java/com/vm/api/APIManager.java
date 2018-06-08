@@ -2,6 +2,7 @@ package com.vm.api;
 
 import android.content.Context;
 
+import com.vm.shadowsocks.domain.RewardHistory;
 import com.vm.shadowsocks.domain.Server;
 import com.vm.shadowsocks.domain.User;
 import com.wangzy.httpmodel.gson.ext.Result;
@@ -27,5 +28,9 @@ public class APIManager {
 
     public Observable<Result<User>> costtraffic(String uuid, int traffic) {
         return mRetrofitService.costtraffic(uuid, traffic);
+    }
+
+    public Observable<Result<List<RewardHistory>>> rewardList(String uuid) {
+        return mRetrofitService.checkrewardHisToday(uuid);
     }
 }

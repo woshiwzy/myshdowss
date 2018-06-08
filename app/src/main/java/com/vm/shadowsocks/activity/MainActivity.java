@@ -19,6 +19,7 @@ import com.android.vending.billing.IInAppBillingService;
 import com.avos.avoscloud.AVAnalytics;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.PushService;
+import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.avos.avoscloud.utils.StringUtils;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdError;
@@ -269,6 +270,25 @@ public class MainActivity extends BaseActivity implements
                 Tool.startActivity(MainActivity.this, AdActivity.class);
             }
         });
+
+        findViewById(R.id.textViewRewardHistory).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideMenu();
+                Tool.startActivity(MainActivity.this, RewardListActivity.class);
+            }
+        });
+
+        findViewById(R.id.textViewFeedBack).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideMenu();
+                FeedbackAgent agent = new FeedbackAgent(MainActivity.this);
+                agent.startDefaultThreadActivity();
+            }
+        });
+
+
         findViewById(R.id.viewTouchHide).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -304,6 +324,7 @@ public class MainActivity extends BaseActivity implements
             new AppProxyManager(this);
         }
 
+
     }
 
     private void showTipLayout() {
@@ -313,7 +334,7 @@ public class MainActivity extends BaseActivity implements
             public void run() {
                 hideTipLayout();
             }
-        }, 5 * 1000);
+        }, 4 * 1000);
     }
 
 
@@ -463,8 +484,12 @@ public class MainActivity extends BaseActivity implements
         }
 
         updateTraffic();
-
         updateDataUsed();
+
+        if(null!=App.instance.getUser() && !StringUtils.isBlankString(App.instance.getUser().getPersonalMsg())){
+            ((TextView) findViewById(R.id.textViewAllTip)).setText(App.instance.getUser().getPersonalMsg());
+            showTipLayout();
+        }
     }
 
     @Override

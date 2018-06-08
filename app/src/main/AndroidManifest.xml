@@ -88,6 +88,14 @@
         <activity android:name=".activity.AdActivity" android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             />
+
+        <activity android:name=".activity.RewardListActivity"/>
+
+
+        <activity
+            android:name="com.avos.avoscloud.feedback.ThreadActivity" >
+        </activity>
+
     </application>
 
 </manifest>

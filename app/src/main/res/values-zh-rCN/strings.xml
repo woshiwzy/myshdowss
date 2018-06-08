@@ -45,4 +45,8 @@
     <string name="online_pre">当前在线人数:%1s</string>
 
     <string name="error_server">这个服务器不可用,请重新选择！</string>
+    <string name="reward_his">今日奖励记录</string>
+    <string name="get_ward">获取奖励:%1s M</string>
+    <string name="reawason">来源:%1s</string>
+    <string name="feed_back">反馈</string>
 </resources>

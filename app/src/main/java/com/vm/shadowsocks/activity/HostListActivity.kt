@@ -109,7 +109,7 @@ class HostListActivity : BaseActivity() {
 
     fun fillAdapter(servers: ArrayList<Server>) {
         Servers.servers = servers
-        Servers.servers.shuffle()
+//        Servers.servers.shuffle()
 
         LogUtil.e(App.tag, "host size:" + Servers.servers.size)
 

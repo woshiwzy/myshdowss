@@ -43,4 +43,10 @@
     <string name="sorrytext">Sorry, 1GB per person per month to prevent abuse!</string>
     <string name="online_pre">Current oneline:%1s</string>
     <string name="error_server">This server looks like it is not available！</string>
+
+    <string name="reward_his">Record Today</string>
+
+    <string name="get_ward">Get reward:%1s Ms</string>
+    <string name="reawason">From:%1s</string>
+    <string name="feed_back">Feedback</string>
 </resources>

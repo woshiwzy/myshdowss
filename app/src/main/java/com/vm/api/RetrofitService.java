@@ -1,5 +1,6 @@
 package com.vm.api;
 
+import com.vm.shadowsocks.domain.RewardHistory;
 import com.vm.shadowsocks.domain.Server;
 import com.vm.shadowsocks.domain.User;
 import com.wangzy.httpmodel.gson.ext.Result;
@@ -35,6 +36,9 @@ public interface RetrofitService {
     Observable<Result<User>> costtraffic(@Field("uuid") String uuid,@Field("cost_size") int cost_size);
 
 
+    @FormUrlEncoded
+    @POST("checkrewardHis")
+    Observable<Result<List<RewardHistory>>> checkrewardHisToday(@Field("uuid") String uui);
 
 
 }
