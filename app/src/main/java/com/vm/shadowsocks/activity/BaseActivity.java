@@ -7,9 +7,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.avos.avoscloud.AVAnalytics;
+import com.vm.api.APIManager;
+import com.vm.shadowsocks.App;
 import com.vm.shadowsocks.R;
+import com.vm.shadowsocks.domain.User;
+import com.wangzy.httpmodel.gson.ext.Result;
 
 import java.util.Locale;
+import java.util.Random;
+
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
+import static com.vm.shadowsocks.constant.Constant.MAX_DEFAULT_REWARD_M;
 
 public class BaseActivity extends Activity {
 
@@ -41,6 +52,44 @@ public class BaseActivity extends Activity {
         });
 
     }
+
+
+
+    public void getReard(Activity activity) {
+
+
+        if (null != App.instance.getUser()) {
+
+            User user = App.instance.getUser();
+
+            Random random = new Random();
+            int reward = random.nextInt(MAX_DEFAULT_REWARD_M);
+
+            APIManager apiManager = new APIManager(activity);
+            apiManager.rewardTraffic(user.getUuid(), String.valueOf(reward), "click ad")
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<Result<User>>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onNext(Result<User> userResult) {
+
+                        }
+                    });
+
+
+        }
+    }
+
 
     public void hideCover() {
 

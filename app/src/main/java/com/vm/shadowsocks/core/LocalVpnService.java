@@ -342,7 +342,7 @@ public class LocalVpnService extends VpnService implements Runnable {
                             m_VPNOutputStream.write(ipHeader.m_Data, ipHeader.m_Offset, size);
                             m_ReceivedBytes += size;
                         } else {
-                            System.out.printf("NoSession: %s %s\n", ipHeader.toString(), tcpHeader.toString());
+//                            System.out.printf("NoSession: %s %s\n", ipHeader.toString(), tcpHeader.toString());
                         }
                     } else {
 
@@ -368,7 +368,8 @@ public class LocalVpnService extends VpnService implements Runnable {
                             if (host != null) {
                                 session.RemoteHost = host;
                             } else {
-                                System.out.printf("No host name found: %s", session.RemoteHost);
+//                                System.out.printf("No host name found: %s", session.RemoteHost);
+//                                LogUtil.e(Constant.TAG,"No host name found: "+session.RemoteHost);
                             }
                         }
 

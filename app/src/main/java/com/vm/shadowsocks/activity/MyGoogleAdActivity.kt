@@ -8,6 +8,7 @@ import com.vm.api.APIManager
 import com.vm.shadowsocks.App
 import com.vm.shadowsocks.R
 import com.vm.shadowsocks.constant.Constant
+import com.vm.shadowsocks.constant.Constant.MAX_DEFAULT_REWARD_M
 import com.vm.shadowsocks.domain.User
 import com.vm.shadowsocks.tool.LogUtil
 import com.vm.shadowsocks.tool.Tool
@@ -47,10 +48,10 @@ class MyGoogleAdActivity : BaseActivity() {
      */
     private fun initGoogleAd() {
         //===init goole ad=======
-        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713")
+        MobileAds.initialize(this, "ca-app-pub-9033563274040080~1800036213")
         mInterstitialAd = InterstitialAd(this)
-        mInterstitialAd.adUnitId = "ca-app-pub-3940256099942544/1033173712"
-        mInterstitialAd.loadAd(AdRequest.Builder().build())
+        mInterstitialAd.adUnitId = "ca-app-pub-9033563274040080/7427964504"
+        mInterstitialAd.loadAd(AdRequest.Builder().addTestDevice("A597024318FAD982551E3EEDA0E1D2C8").build())
         mInterstitialAd.adListener = object : com.google.android.gms.ads.AdListener() {
 
             override fun onAdLeftApplication() {
@@ -76,12 +77,11 @@ class MyGoogleAdActivity : BaseActivity() {
             override fun onAdFailedToLoad(errorCode: Int) {
                 Tool.ToastShow(this@MyGoogleAdActivity, R.string.retry)
                 finish()
-                LogUtil.e(Constant.TAG, "onAdFailedToLoad:$errorCode")
+                LogUtil.e(Constant.TAG, " Google onAdFailedToLoad:$errorCode")
             }
 
             override fun onAdClicked() {
                 LogUtil.e(Constant.TAG, "onAdClicked:")
-
 
 
             }
@@ -101,7 +101,8 @@ class MyGoogleAdActivity : BaseActivity() {
             var apiManager = APIManager(this@MyGoogleAdActivity)
 
             var random = Random()
-            apiManager.rewardTraffic(App.instance.user?.uuid, (random.nextInt(10)).toString(), "open ad")
+            val reward = random.nextInt(MAX_DEFAULT_REWARD_M)
+            apiManager.rewardTraffic(App.instance.user?.uuid, reward.toString(), "open ad")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(object : Subscriber<Result<User>>() {
@@ -116,6 +117,8 @@ class MyGoogleAdActivity : BaseActivity() {
                         override fun onNext(result: Result<User>) {
                             if (result.code.equals("200")) {
                                 App.instance.user = result.data
+
+                                Tool.ToastShow(this@MyGoogleAdActivity, String.Companion.format(resources.getString(R.string.getreward), reward.toString()))
                             } else {
                                 Tool.ToastShow(this@MyGoogleAdActivity, result.message)
                             }

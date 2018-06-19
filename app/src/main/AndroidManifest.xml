@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.vm.shadowsocks">
+
+    <uses-sdk tools:overrideLibrary="io.pcyan.sweetdialog" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -19,7 +22,8 @@
         android:icon="@mipmap/app_icon"
         android:label="@string/app_name"
         android:persistent="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:icon">
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name"
@@ -71,6 +75,9 @@
             android:name="Channel ID"
             android:value="Google" />
         <meta-data
+            android:name="M_CHANEL"
+            android:value="Google" />
+        <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
@@ -103,7 +110,23 @@
                 android:resource="@xml/fp2" />
         </provider>
 
-        <activity android:name=".activity.MyGoogleAdActivity"></activity>
+        <activity android:name=".activity.MyGoogleAdActivity" />
+        <activity
+            android:name="com.facebook.ads.AudienceNetworkActivity"
+            android:hardwareAccelerated="true" />
+        <activity android:name=".activity.MyFaceBookAdActivity" />
+        <activity android:name=".activity.AskActivity" />
+        <activity
+            android:name="com.inmobi.rendering.InMobiAdActivity"
+            android:configChanges="keyboardHidden|orientation|keyboard|smallestScreenSize|screenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:resizeableActivity="false"
+            android:theme="@android:style/Theme.NoTitleBar"
+            tools:ignore="UnusedAttribute" />
+
+        <service
+            android:name="com.vm.service.MyIntentService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

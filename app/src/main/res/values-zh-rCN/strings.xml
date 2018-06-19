@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Flicker网络加速器</string>
+    <string name="app_name">免费VPN</string>
     <string name="menu_item_switch">代理</string>
     <string name="menu_item_toggle_global">开/关全局模式</string>
     <string name="menu_item_exit">退出</string>
@@ -29,7 +29,7 @@
     <string name="select_server">请选择服务器</string>
     <string name="select_server_befor">请先停止然后再选择</string>
     <string name="law">我将遵守本国法律,非法使用后果自负!</string>
-    <string name="be_law">请遵守本地法律！</string>
+    <string name="be_law">请遵守所在地法律，任何时候都不要做违法的事情！</string>
     <string name="notiy_title">通知列表</string>
     <string name="news">最新消息</string>
     <string name="facebook_app_id">222090675045613</string>
@@ -41,7 +41,7 @@
     <string name="remaining_traffic">剩余:%1s</string>
     <string name="total_used">已用:%1s</string>
     <string name="server_error">服务不可用或者本月流量耗尽！</string>
-    <string name="sorrytext">抱歉，为了防止滥用，每人每月限1GB流量!</string>
+    <string name="sorrytext">为了防止滥用，每人每月限800M流量,流量可以累计!</string>
     <string name="online_pre">当前在线人数:%1s</string>
 
     <string name="error_server">这个服务器不可用,请重新选择！</string>
@@ -52,5 +52,9 @@
     <string name="gettrafficfree">获取流量</string>
     <string name="click_get_traffic">点击获取流量</string>
     <string name="remaining">剩余</string>
-    <string name="retry">稍后再试!</string>
+    <string name="retry">广告没准备好，稍后再试!</string>
+
+    <string name="getreward">获得 %1s M 流量</string>
+
+    <string name="click_ad">1.公益VPN请节省流量。\n 2.你可以通过点击广告获取免费流量。\n3.请遵守所在地法律，任何时候都不要做出违法的事情。\n4.如有问题或需要帮助请反馈给开发者。</string>
 </resources>

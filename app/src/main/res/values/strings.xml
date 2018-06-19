@@ -40,7 +40,7 @@
     <string name="remaining_traffic">Traffic:%1s</string>
     <string name="total_used">Used:%1s</string>
     <string name="server_error">Service disable or Run out of traffic this month!</string>
-    <string name="sorrytext">Sorry, 1GB per person per month to prevent abuse!</string>
+    <string name="sorrytext">In order to prevent abuse, 800M is limited to one person per month, and the flow can be accumulated!</string>
     <string name="online_pre">Current oneline:%1s</string>
     <string name="error_server">This server looks like it is not available！</string>
 
@@ -53,7 +53,10 @@
     <string name="click_get_traffic">click get traffic</string>
     <string name="remaining">Remaining</string>
 
-    <string name="retry">Retry later!</string>
+    <string name="retry">Ad not ready,Retry later!</string>
+    <string name="getreward">Get %1s M traffic</string>
+
+    <string name="click_ad">1. Charity VPN Please save your traffic. \n 2. You can get free traffic by clicking on an ad. \n3. Please observe the law of your place and do not do illegal things at any time. \n4. If you have questions or need help, please give feedback to the developer.</string>
 
 
 </resources>

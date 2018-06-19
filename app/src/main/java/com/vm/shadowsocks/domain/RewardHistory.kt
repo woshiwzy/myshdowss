@@ -44,7 +44,7 @@ class RewardHistory(@SerializedName("username") var username: String,
 
                     override fun onError(e: Throwable) {
 
-                        LogUtil.e(Constant.TAG, "error:" + e.localizedMessage)
+                        LogUtil.e(Constant.TAG, "loadRewardList error:" + e.localizedMessage)
                     }
                 })
 

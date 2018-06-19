@@ -1,6 +1,8 @@
 package com.vm.shadowsocks.core;
 
+import com.vm.shadowsocks.constant.Constant;
 import com.vm.shadowsocks.tcpip.CommonMethods;
+import com.vm.shadowsocks.tool.LogUtil;
 
 import java.util.Locale;
 
@@ -69,7 +71,7 @@ public class HttpHostHeaderParser {
             offset += compressionMethodLength;
 
             if (offset == limit) {
-                System.err.println("TLS Client Hello packet doesn't contains SNI info.(offset == limit)");
+//                LogUtil.e(Constant.TAG,"TLS Client Hello packet doesn't contains SNI info.(offset == limit)");
                 return null;
             }
 
@@ -79,7 +81,9 @@ public class HttpHostHeaderParser {
             offset += 2;
 
             if (offset + extensionsLength > limit) {
-                System.err.println("TLS Client Hello packet is incomplete.");
+//                System.err.println("TLS Client Hello packet is incomplete.");
+
+                LogUtil.e(Constant.TAG,"TLS Client Hello packet is incomplete.");
                 return null;
             }
 
@@ -95,17 +99,17 @@ public class HttpHostHeaderParser {
                     if (offset + length > limit) return null;
                     String serverName = new String(buffer, offset, length);
                     if (ProxyConfig.IS_DEBUG)
-                        System.out.printf("SNI: %s\n", serverName);
+//                       LogUtil.e(Constant.TAG,"SNI:"+ serverName);
                     return serverName;
                 } else {
                     offset += length;
                 }
             }
 
-            System.err.println("TLS Client Hello packet doesn't contains Host field info.");
+//            LogUtil.e(Constant.TAG,"TLS Client Hello packet doesn't contains Host field info.");
             return null;
         } else {
-            System.err.println("Bad TLS Client Hello packet.");
+//            LogUtil.e(Constant.TAG,"Bad TLS Client Hello packet.");
             return null;
         }
     }

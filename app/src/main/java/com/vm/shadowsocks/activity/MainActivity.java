@@ -1,6 +1,8 @@
 package com.vm.shadowsocks.activity;
 
+import android.app.AlertDialog;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -32,6 +34,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.vm.api.APIManager;
 import com.vm.api.RetrofitHelper;
 import com.vm.api_okapi.NetInterface;
+import com.vm.service.MyIntentService;
 import com.vm.shadowsocks.App;
 import com.vm.shadowsocks.R;
 import com.vm.shadowsocks.constant.Constant;
@@ -56,6 +59,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.TimerTask;
 
 import okhttp3.Call;
 
@@ -122,6 +126,7 @@ public class MainActivity extends BaseActivity implements
         animationRotate.setRepeatCount(Animation.INFINITE);
         animationRotate.setRepeatMode(Animation.RESTART);
         animationRotate.setInterpolator(new LinearInterpolator());
+
         //init all view
         initView();
 
@@ -131,11 +136,12 @@ public class MainActivity extends BaseActivity implements
             initFacebookAd();
         }
 
-
         apiManager = new APIManager(this);
-        updateTraffic();
 
         EventBus.getDefault().register(this);
+
+        showTipLayout();
+        startUpdateService();
     }
 
 
@@ -145,10 +151,11 @@ public class MainActivity extends BaseActivity implements
     private void initGoogleAd() {
 
         //===init goole ad=======
-        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+        MobileAds.initialize(this, "ca-app-pub-9033563274040080~1800036213");
         mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        mInterstitialAd.setAdUnitId("ca-app-pub-9033563274040080/2783505895");
+//        AdRequest.Builder.addTestDevice("A597024318FAD982551E3EEDA0E1D2C8") to get test ads on this device.
+        mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("A597024318FAD982551E3EEDA0E1D2C8").build());
         mInterstitialAd.setAdListener(new com.google.android.gms.ads.AdListener() {
 
             @Override
@@ -158,12 +165,13 @@ public class MainActivity extends BaseActivity implements
 
             @Override
             public void onAdFailedToLoad(int errorCode) {
-                LogUtil.e(Constant.TAG, "onAdFailedToLoad:" + errorCode);
+                LogUtil.e(Constant.TAG, "onAdFailedToLoad google:" + errorCode);
             }
 
             @Override
             public void onAdClicked() {
                 LogUtil.e(Constant.TAG, "onAdClicked:");
+                getReard(MainActivity.this);
             }
 
             @Override
@@ -182,28 +190,28 @@ public class MainActivity extends BaseActivity implements
         adView.setAdListener(new AdListener() {
             @Override
             public void onError(Ad ad, AdError adError) {
-                LogUtil.e(TAG, "ad error:" + adError.getErrorMessage());
+                LogUtil.e(TAG, " face book ad error:" + adError.getErrorMessage());
             }
 
             @Override
             public void onAdLoaded(Ad ad) {
-                LogUtil.e(TAG, "onAdLoaded");
+                LogUtil.e(TAG, "Facebook loaded");
             }
 
             @Override
             public void onAdClicked(Ad ad) {
+                LogUtil.e(TAG, "clicked fb=======");
+                getReard(MainActivity.this);
 
             }
 
             @Override
             public void onLoggingImpression(Ad ad) {
-
             }
         });
 
         LinearLayout adContainer = findViewById(R.id.banner_container);
         adContainer.addView(adView);
-
         adView.loadAd();
     }
 
@@ -241,12 +249,6 @@ public class MainActivity extends BaseActivity implements
 
     }
 
-    @Override
-    protected void onStop() {
-
-        super.onStop();
-    }
-
 
     private void initView() {
         setContentView(R.layout.activity_main);
@@ -278,7 +280,40 @@ public class MainActivity extends BaseActivity implements
         toggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startOrStopVpn(!LocalVpnService.IsRunning);
+
+                if (null != App.instance.getUser() && App.instance.getUser().isEnable()) {
+
+                    if (isZh(MainActivity.this)) {
+                        if (LocalVpnService.IsRunning == false) {
+
+                            new AlertDialog.Builder(MainActivity.this)
+                                    .setTitle("你是中国的用户吗？")
+                                    .setMessage("当前系统语言是中文，如果你是中国用户根据相关法律不能给你提供服务！")
+                                    .setPositiveButton("我是在中国的用户", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+
+                                        }
+                                    })
+                                    .setNegativeButton("我不是中国的用户，当前系统是中文", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            startOrStopVpn(!LocalVpnService.IsRunning);
+                                        }
+                                    })
+                                    .show();
+
+                        } else {
+                            startOrStopVpn(!LocalVpnService.IsRunning);
+                        }
+                    } else {
+                        startOrStopVpn(!LocalVpnService.IsRunning);
+                    }
+//                    startOrStopVpn(!LocalVpnService.IsRunning);
+                } else {
+                    Tool.ToastShow(MainActivity.this, R.string.server_error);
+                }
             }
         });
 
@@ -341,8 +376,17 @@ public class MainActivity extends BaseActivity implements
             @Override
             public void onClick(View v) {
                 hideMenu();
+//                Tool.ToastShow(MainActivity.this,R.string.select_server_befor);
+//                Tool.startActivity(MainActivity.this, MyGoogleAdActivity.class);
+                Tool.startActivity(MainActivity.this, MyFaceBookAdActivity.class);
 
-                Tool.startActivity(MainActivity.this, MyGoogleAdActivity.class);
+            }
+        });
+
+        findViewById(R.id.imageViewAsk).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Tool.startActivity(MainActivity.this, AskActivity.class);
             }
         });
 
@@ -509,7 +553,6 @@ public class MainActivity extends BaseActivity implements
         Intent intent = new Intent(MainActivity.this, HostListActivity.class);
         startActivityForResult(intent, INT_GO_SELECT);
 
-        updateTraffic();
     }
 
     private void startVPNService() {
@@ -542,7 +585,6 @@ public class MainActivity extends BaseActivity implements
             toggleButton.setImageResource(R.drawable.icon_start);
         }
 
-        updateTraffic();
         updateDataUsed();
 
         if (null != App.instance.getUser() && !StringUtils.isBlankString(App.instance.getUser().getPersonalMsg())) {
@@ -553,10 +595,10 @@ public class MainActivity extends BaseActivity implements
 
         if (null == App.instance.getUser() || App.instance.getUser().isShowad()) {
 
-            if (mInterstitialAd.isLoaded()) {
+            if (null != mInterstitialAd && mInterstitialAd.isLoaded()) {
                 mInterstitialAd.show();
             } else {
-                LogUtil.d(Constant.TAG, "The interstitial wasn't loaded yet.");
+                LogUtil.d(Constant.TAG, " face  ad The interstitial wasn't loaded yet.");
             }
             findViewById(R.id.viewAdLine).setVisibility(View.VISIBLE);
             findViewById(R.id.textViewGetTraffic).setVisibility(View.VISIBLE);
@@ -570,19 +612,17 @@ public class MainActivity extends BaseActivity implements
     @Override
     protected void onDestroy() {
 
-        updateTraffic();
-
 
         if (null == App.instance.getUser() || App.instance.getUser().isShowad()) {
 
 
-            if (mInterstitialAd.isLoaded()) {
+            if (null != mInterstitialAd && mInterstitialAd.isLoaded()) {
                 mInterstitialAd.show();
             } else {
                 LogUtil.d(Constant.TAG, "The interstitial wasn't loaded yet.");
             }
 
-            if (adView != null) {
+            if (null != adView && adView != null) {
                 adView.destroy();
             }
         }
@@ -647,14 +687,16 @@ public class MainActivity extends BaseActivity implements
 
             } else {
 
-                offline(selectDefaultServer.getId());
-
+                if (null != selectDefaultServer) {
+                    offline(selectDefaultServer.getId());
+                }
                 imageViewCountry.clearAnimation();
                 toggleButton.setImageResource(R.drawable.icon_start);
                 AVAnalytics.onEvent(MainActivity.this, "Stop Proxy");
 
             }
-            updateTraffic();
+
+
             updateDataUsed();
         }
 
@@ -664,6 +706,11 @@ public class MainActivity extends BaseActivity implements
         }
     };
 
+
+    private void startUpdateService(){
+        Intent service=new Intent(MainActivity.this, MyIntentService.class);
+        startService(service);
+    }
 
     private void online(String hostId) {
 
@@ -688,80 +735,16 @@ public class MainActivity extends BaseActivity implements
                 }
             }
         });
+
     }
 
 
-    private void updateTraffic() {
 
-        long totalbyte = (long) (SharePersistent.getFloat(MainActivity.this, "adflaksdflasfjaldskj") / 1024);
-
-        LogUtil.e(Constant.TAG, "流量======>:" + totalbyte);
-        totalbyte = totalbyte > 0 ? totalbyte : 0;
-        final long finalTotalbyte = totalbyte;
-
-        if (null == App.instance.getUser()) {
-            LogUtil.e(Constant.TAG, "没有用户无法更新流量");
-            return;
-        }
-
-        if (finalTotalbyte <= 0) {
-//                        LogUtil.e(Constant.TAG, "没有正流量:"+finalTotalbyte);
-            return;
-        }
-
-        if (null != App.instance.getUser() && finalTotalbyte > 0) {
-
-            HashMap<String, String> map = new HashMap<>();
-            map.put("uuid", App.instance.getUser().getUuid());
-            map.put("cost_size", String.valueOf(finalTotalbyte));
-            HttpRequester.postHashMap(RetrofitHelper.BASE_URL + "cost_traffic", map, new MyNetCallBackExtend<User>(User.class, false) {
-
-                @Override
-                public void onFailureFinish(Call call, Exception e) {
-                    LogUtil.e(Constant.TAG, "onFailureFinish:" + e.getLocalizedMessage());
-                    call.cancel();
-                    imageViewCountry.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            updateTraffic();
-                        }
-                    }, 1 * 1000);
-                }
-
-                @Override
-                public void onResponseResult(Result<User> result, okhttp3.Call call) {
-                    call.cancel();
-
-                    User user = result.getData();
-                    App.instance.setUser(user);
-                    LocalVpnService.m_ReceivedBytes = 0;
-                    LocalVpnService.m_SentBytes = 0;
-                    updateDataUsed();
-
-                    LocalVpnService.logDataSaved(MainActivity.this, 0, true);
-
-                }
-            });
-        } else {
-            LogUtil.e(Constant.TAG, "条件不足无法更新流量");
-        }
-
-//
-//                }
-//            }, 0, 10 * 1000);
-//        }
-    }
 
     public void saveLog(int port, String method) {
         App.instance.saveLog(port, method);
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        LogUtil.e(Constant.TAG, "-----------------------------------");
-        updateTraffic();
-        super.onSaveInstanceState(outState);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

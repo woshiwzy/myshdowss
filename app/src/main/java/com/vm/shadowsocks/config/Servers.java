@@ -7,6 +7,6 @@ import java.util.ArrayList;
 
 public class Servers {
 
-    public static ArrayList<Server> servers=new ArrayList<>();
+
     public static ArrayList<AVObject> messages=new ArrayList<>();
 }

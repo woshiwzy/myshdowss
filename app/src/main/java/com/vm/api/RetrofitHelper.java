@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitHelper {
 
-    public static String BASE_URL="http://69.171.72.157:8100/";
+    public static String BASE_URL="http://65.49.206.206:8100/";
 
 //    public static String BASE_URL="http://10.0.2.2:8000/";
 

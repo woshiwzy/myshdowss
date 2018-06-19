@@ -8,6 +8,7 @@ import com.google.android.gms.ads.MobileAds
 import com.vm.shadowsocks.App
 import com.vm.shadowsocks.R
 import com.vm.shadowsocks.tool.LogUtil
+import org.jetbrains.anko.coroutines.experimental.asReference
 
 class AdActivity : BaseActivity() {
 
@@ -27,6 +28,8 @@ class AdActivity : BaseActivity() {
         mInterstitialAd.adListener= object : AdListener() {
 
             override fun onAdLoaded() {
+
+
                 hideCover()
             }
 
